@@ -1,28 +1,22 @@
-defmodule JS2E.Mixfile do
+defmodule JsonSchema.Mixfile do
   use Mix.Project
 
   def project do
     [
-      app: :js2e,
-      version: "2.6.0",
-      elixir: "~> 1.6",
+      app: :json_schema,
+      version: "1.0.0",
+      elixir: "~> 1.7",
       deps: deps(),
       aliases: aliases(),
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
 
-      # Packaging
-      escript: [
-        main_module: JS2E,
-        name: "js2e"
-      ],
-
       # Dialyxir
       dialyzer: [plt_add_deps: :project],
 
       # Docs
-      name: "JS2E",
-      source_url: "https://github.com/dragonwasrobot/json-schema-to-elm/",
+      name: "JSON Schema",
+      source_url: "https://github.com/dragonwasrobot/json_schema/",
 
       # Test coverage
       test_coverage: [tool: ExCoveralls],
@@ -41,18 +35,17 @@ defmodule JS2E.Mixfile do
 
   defp deps do
     [
-      {:apex, "~>1.0"},
-      {:excoveralls, "~> 0.7", only: :test},
-      {:credo, "~> 0.9.1", only: [:dev, :test]},
+      {:credo, "~> 0.9.3", only: [:dev, :test]},
       {:dialyxir, "~> 1.0.0-rc.3", only: [:dev], runtime: false},
-      {:ex_doc, "~> 0.14", only: :dev, runtime: false},
-      {:poison, "~> 3.0"}
+      {:ex_doc, "~> 0.19-rc", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.9.1", only: :test},
+      {:poison, "~> 3.1"}
     ]
   end
 
   defp aliases do
     [
-      build: ["deps.get", "compile", "escript.build"]
+      build: ["deps.get", "compile"]
     ]
   end
 end

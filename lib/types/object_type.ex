@@ -1,4 +1,4 @@
-defmodule JS2E.Types.ObjectType do
+defmodule JsonSchema.Types.ObjectType do
   @moduledoc ~S"""
   Represents a custom 'object' type definition in a JSON schema.
 
@@ -80,7 +80,7 @@ defmodule JS2E.Types.ObjectType do
 
   """
 
-  alias JS2E.{TypePath, Types}
+  alias JsonSchema.{TypePath, Types}
 
   @type t :: %__MODULE__{
           name: String.t(),

@@ -1,4 +1,4 @@
-defmodule JS2E.Types.UnionType do
+defmodule JsonSchema.Types.UnionType do
   @moduledoc ~S"""
   Represents a custom 'union' type definition in a JSON schema.
 
@@ -53,7 +53,7 @@ defmodule JS2E.Types.UnionType do
 
   """
 
-  alias JS2E.TypePath
+  alias JsonSchema.TypePath
 
   @type t :: %__MODULE__{
           name: String.t(),

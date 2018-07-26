@@ -1,5 +1,5 @@
-defmodule JS2E.Parser.DefinitionsParser do
-  @behaviour JS2E.Parser.ParserBehaviour
+defmodule JsonSchema.Parser.DefinitionsParser do
+  @behaviour JsonSchema.Parser.ParserBehaviour
   @moduledoc ~S"""
   Parses a 'definitions' property in a JSON schema or subschema.
 
@@ -17,7 +17,7 @@ defmodule JS2E.Parser.DefinitionsParser do
 
   require Logger
 
-  alias JS2E.{Parser, TypePath}
+  alias JsonSchema.{Parser, TypePath}
   alias Parser.{ParserResult, Util}
 
   @doc ~S"""
@@ -32,7 +32,7 @@ defmodule JS2E.Parser.DefinitionsParser do
   true
 
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(map) :: boolean
   def type?(%{"definitions" => definitions})
       when is_map(definitions),
@@ -43,7 +43,7 @@ defmodule JS2E.Parser.DefinitionsParser do
   @doc ~S"""
   Parses a JSON schema 'definitions' property into a map of types.
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec parse(map, URI.t(), URI.t() | nil, TypePath.t(), String.t()) ::
           ParserResult.t()
   def parse(%{"definitions" => definitions}, parent_id, _id, path, _name) do

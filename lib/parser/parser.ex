@@ -1,11 +1,11 @@
-defmodule JS2E.Parser do
+defmodule JsonSchema.Parser do
   @moduledoc ~S"""
   Parses JSON schema files into an intermediate representation to be used for
   e.g. printing elm decoders.
   """
 
   require Logger
-  alias JS2E.Parser.{RootParser, SchemaResult}
+  alias JsonSchema.Parser.{RootParser, SchemaResult}
 
   @spec parse_schema_files([Path.t()]) :: SchemaResult.t()
   def parse_schema_files(schema_paths) do

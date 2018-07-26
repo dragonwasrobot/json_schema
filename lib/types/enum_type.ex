@@ -1,4 +1,4 @@
-defmodule JS2E.Types.EnumType do
+defmodule JsonSchema.Types.EnumType do
   @moduledoc ~S"""
   Represents a custom 'enum' type definition in a JSON schema.
 
@@ -90,7 +90,7 @@ defmodule JS2E.Types.EnumType do
 
   """
 
-  alias JS2E.TypePath
+  alias JsonSchema.TypePath
 
   @type t :: %__MODULE__{
           name: String.t(),

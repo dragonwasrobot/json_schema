@@ -1,8 +1,8 @@
-defmodule JS2ETest.Parser.UnionParser do
+defmodule JsonSchemaTest.Parser.UnionParser do
   use ExUnit.Case
-  doctest JS2E.Parser.UnionParser, import: true
+  doctest JsonSchema.Parser.UnionParser, import: true
 
-  alias JS2E.{Parser, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.UnionParser
   alias Types.UnionType
 

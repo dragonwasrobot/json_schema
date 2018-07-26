@@ -1,4 +1,4 @@
-defmodule JS2ETest.TypePath do
+defmodule JsonSchemaTest.TypePath do
   use ExUnit.Case
-  doctest JS2E.TypePath
+  doctest JsonSchema.TypePath
 end

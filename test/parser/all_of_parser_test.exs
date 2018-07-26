@@ -1,9 +1,9 @@
-defmodule JS2ETest.Parser.AllOfParser do
+defmodule JsonSchemaTest.Parser.AllOfParser do
   use ExUnit.Case
-  doctest JS2E.Parser.AllOfParser, import: true
+  doctest JsonSchema.Parser.AllOfParser, import: true
 
   require Logger
-  alias JS2E.{Parser, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.AllOfParser
   alias Types.{AllOfType, ObjectType, PrimitiveType, TypeReference}
 

@@ -1,5 +1,5 @@
-defmodule JS2E.Parser.TupleParser do
-  @behaviour JS2E.Parser.ParserBehaviour
+defmodule JsonSchema.Parser.TupleParser do
+  @behaviour JsonSchema.Parser.ParserBehaviour
   @moduledoc ~S"""
   Parses a JSON schema array type:
 
@@ -11,12 +11,12 @@ defmodule JS2E.Parser.TupleParser do
         ]
       }
 
-  Into a `JS2E.Types.TupleType`.
+  Into a `JsonSchema.Types.TupleType`.
   """
 
   require Logger
 
-  alias JS2E.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, TypePath, Types}
   alias Parser.{ParserResult, Util}
   alias Types.TupleType
 
@@ -33,7 +33,7 @@ defmodule JS2E.Parser.TupleParser do
   true
 
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
   def type?(schema_node) do
     items = schema_node["items"]
@@ -41,9 +41,9 @@ defmodule JS2E.Parser.TupleParser do
   end
 
   @doc ~S"""
-  Parses a JSON schema array type into an `JS2E.Types.TupleType`.
+  Parses a JSON schema array type into an `JsonSchema.Types.TupleType`.
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec parse(
           Types.schemaNode(),
           URI.t(),

@@ -1,4 +1,4 @@
-defmodule JS2E.Types.AllOfType do
+defmodule JsonSchema.Types.AllOfType do
   @moduledoc ~S"""
   Represents a custom 'all_of' type definition in a JSON schema.
 
@@ -93,7 +93,7 @@ defmodule JS2E.Types.AllOfType do
 
   """
 
-  alias JS2E.TypePath
+  alias JsonSchema.TypePath
 
   @type t :: %__MODULE__{
           name: String.t(),

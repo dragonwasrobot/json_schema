@@ -1,4 +1,4 @@
-defmodule JS2E.Types.TupleType do
+defmodule JsonSchema.Types.TupleType do
   @moduledoc ~S"""
   Represents a custom 'tuple' type definition in a JSON schema.
 
@@ -55,7 +55,7 @@ defmodule JS2E.Types.TupleType do
 
   """
 
-  alias JS2E.TypePath
+  alias JsonSchema.TypePath
 
   @type t :: %__MODULE__{
           name: String.t(),

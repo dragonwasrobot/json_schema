@@ -1,9 +1,9 @@
-defmodule JS2E.Parser.ErrorUtil do
+defmodule JsonSchema.Parser.ErrorUtil do
   @moduledoc ~S"""
   Contains helper functions for reporting parser errors.
   """
 
-  alias JS2E.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, TypePath, Types}
   alias Parser.ParserError
 
   @doc ~S"""
@@ -128,6 +128,52 @@ defmodule JS2E.Parser.ErrorUtil do
     ParserError.new(identifier, :invalid_uri, error_msg)
   end
 
+  @spec unresolved_reference(
+          Types.typeIdentifier(),
+          TypePath.t()
+        ) :: ParserError.t()
+  def unresolved_reference(identifier, parent) do
+    printed_path = TypePath.to_string(parent)
+    stringified_value = sanitize_value(identifier)
+
+    error_msg = """
+
+    The following reference at `#{printed_path}` could not be resolved
+
+        "$ref": #{stringified_value}
+                #{error_markings(stringified_value)}
+
+
+    Hint: See the specification section 9. "Base URI and dereferencing"
+    <http://json-schema.org/latest/json-schema-core.html#rfc.section.9>
+    """
+
+    ParserError.new(parent, :unresolved_reference, error_msg)
+  end
+
+  @spec unknown_type(String.t()) :: ParserError.t()
+  def unknown_type(type_name) do
+    error_msg = "Could not find parser for type: '#{type_name}'"
+    ParserError.new(type_name, :unknown_type, error_msg)
+  end
+
+  @spec unexpected_type(Types.typeIdentifier(), String.t()) :: ParserError.t()
+  def unexpected_type(identifier, error_msg) do
+    ParserError.new(identifier, :unexpected_type, error_msg)
+  end
+
+  @spec unknown_enum_type(String.t()) :: ParserError.t()
+  def unknown_enum_type(type_name) do
+    error_msg = "Unknown or unsupported enum type: '#{type_name}'"
+    ParserError.new(type_name, :unknown_enum_type, error_msg)
+  end
+
+  @spec unknown_primitive_type(String.t()) :: ParserError.t()
+  def unknown_primitive_type(type_name) do
+    error_msg = "Unknown or unsupported primitive type: '#{type_name}'"
+    ParserError.new(type_name, :unknown_primitive_type, error_msg)
+  end
+
   @spec unknown_node_type(
           Types.typeIdentifier(),
           String.t(),
@@ -170,6 +216,9 @@ defmodule JS2E.Parser.ErrorUtil do
   @spec sanitize_value(any) :: String.t()
   defp sanitize_value(raw_value) do
     cond do
+      is_map(raw_value) and raw_value.__struct__ == URI ->
+        URI.to_string(raw_value)
+
       is_map(raw_value) ->
         Poison.encode!(raw_value)
 

@@ -1,11 +1,11 @@
-defmodule JS2E.Parser.RootParser do
+defmodule JsonSchema.Parser.RootParser do
   @moduledoc ~S"""
   Contains logic for verifying the schema version of a JSON schema file.
   """
 
   require Logger
 
-  alias JS2E.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, TypePath, Types}
 
   alias Parser.{
     AllOfParser,

@@ -1,5 +1,5 @@
-defmodule JS2E.Parser.OneOfParser do
-  @behaviour JS2E.Parser.ParserBehaviour
+defmodule JsonSchema.Parser.OneOfParser do
+  @behaviour JsonSchema.Parser.ParserBehaviour
   @moduledoc ~S"""
   Parses a JSON schema oneOf type:
 
@@ -26,11 +26,11 @@ defmodule JS2E.Parser.OneOfParser do
         ]
       }
 
-  Into an `JS2E.Types.OneOfType`.
+  Into an `JsonSchema.Types.OneOfType`.
   """
 
   require Logger
-  alias JS2E.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, TypePath, Types}
   alias Parser.{ParserResult, Util}
   alias Types.OneOfType
 
@@ -49,7 +49,7 @@ defmodule JS2E.Parser.OneOfParser do
   true
 
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
   def type?(schema_node) do
     one_of = schema_node["oneOf"]
@@ -57,9 +57,9 @@ defmodule JS2E.Parser.OneOfParser do
   end
 
   @doc ~S"""
-  Parses a JSON schema oneOf type into an `JS2E.Types.OneOfType`.
+  Parses a JSON schema oneOf type into an `JsonSchema.Types.OneOfType`.
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec parse(Types.schemaNode(), URI.t(), URI.t(), TypePath.t(), String.t()) ::
           ParserResult.t()
   def parse(%{"oneOf" => one_of}, parent_id, id, path, name)

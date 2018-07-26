@@ -1,8 +1,8 @@
-defmodule JS2ETest.Parser.PrimitiveParser do
+defmodule JsonSchemaTest.Parser.PrimitiveParser do
   use ExUnit.Case
-  doctest JS2E.Parser.PrimitiveParser, import: true
+  doctest JsonSchema.Parser.PrimitiveParser, import: true
 
-  alias JS2E.{Parser, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.PrimitiveParser
   alias Types.PrimitiveType
 

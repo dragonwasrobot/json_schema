@@ -1,5 +1,5 @@
-defmodule JS2E.Parser.ObjectParser do
-  @behaviour JS2E.Parser.ParserBehaviour
+defmodule JsonSchema.Parser.ObjectParser do
+  @behaviour JsonSchema.Parser.ParserBehaviour
   @moduledoc ~S"""
   Parses a JSON schema object type:
 
@@ -19,11 +19,11 @@ defmodule JS2E.Parser.ObjectParser do
         "required": [ "color", "radius" ]
       }
 
-  Into an `JS2E.Types.ObjectType`
+  Into an `JsonSchema.Types.ObjectType`
   """
 
   require Logger
-  alias JS2E.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, TypePath, Types}
   alias Parser.{ParserResult, Util}
   alias Types.ObjectType
 
@@ -40,7 +40,7 @@ defmodule JS2E.Parser.ObjectParser do
   true
 
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(map) :: boolean
   def type?(schema_node) do
     properties = schema_node["properties"]
@@ -48,9 +48,9 @@ defmodule JS2E.Parser.ObjectParser do
   end
 
   @doc ~S"""
-  Parses a JSON schema object type into an `JS2E.Types.ObjectType`.
+  Parses a JSON schema object type into an `JsonSchema.Types.ObjectType`.
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec parse(Types.schemaNode(), URI.t(), URI.t(), TypePath.t(), String.t()) ::
           ParserResult.t()
   def parse(schema_node, parent_id, id, path, name) do
@@ -92,8 +92,8 @@ defmodule JS2E.Parser.ObjectParser do
   ## Examples
 
       iex> type_dict = %{}
-      ...> path = JS2E.TypePath.from_string("#")
-      ...> JS2E.Parser.ObjectParser.create_property_dict(type_dict, path)
+      ...> path = JsonSchema.TypePath.from_string("#")
+      ...> JsonSchema.Parser.ObjectParser.create_property_dict(type_dict, path)
       %{}
 
   """

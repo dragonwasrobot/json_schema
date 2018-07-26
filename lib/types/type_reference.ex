@@ -1,4 +1,4 @@
-defmodule JS2E.Types.TypeReference do
+defmodule JsonSchema.Types.TypeReference do
   @moduledoc ~S"""
   Represents a reference to a custom type definition in a JSON schema.
 
@@ -43,7 +43,7 @@ defmodule JS2E.Types.TypeReference do
 
   """
 
-  alias JS2E.Types
+  alias JsonSchema.Types
 
   @type t :: %__MODULE__{name: String.t(), path: Types.typeIdentifier()}
 

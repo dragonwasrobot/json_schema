@@ -10,8 +10,8 @@ When reporting a bug, please include:
 
 - A short description of the bug,
 - JSON schema example that triggers the bug,
-- expected Elm output, and the
-- actual Elm output.
+- expected output, and the
+- actual output.
 
 ## Pull requests
 
@@ -29,10 +29,6 @@ When making a pull request ensure that:
    credo warnings).
 
 ## Development
-
-The project is written in [Elixir](http://elixir-lang.org/) - as I found it to
-be a more suitable tool for the job than Elm - and uses the `mix` tool for
-building.
 
 #### Compiling
 

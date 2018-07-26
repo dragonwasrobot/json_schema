@@ -1,8 +1,8 @@
-defmodule JS2ETest.Parser.TupleParser do
+defmodule JsonSchemaTest.Parser.TupleParser do
   use ExUnit.Case
-  doctest JS2E.Parser.TupleParser, import: true
+  doctest JsonSchema.Parser.TupleParser, import: true
 
-  alias JS2E.{Parser, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.TupleParser
   alias Types.{TupleType, TypeReference}
 

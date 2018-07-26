@@ -1,4 +1,4 @@
-defmodule JS2E.Types.PrimitiveType do
+defmodule JsonSchema.Types.PrimitiveType do
   @moduledoc ~S"""
   Represents a custom 'primitive' type definition in a JSON schema.
 
@@ -40,7 +40,7 @@ defmodule JS2E.Types.PrimitiveType do
 
   """
 
-  alias JS2E.TypePath
+  alias JsonSchema.TypePath
 
   @type t :: %__MODULE__{
           name: String.t(),

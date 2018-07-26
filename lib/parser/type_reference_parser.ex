@@ -1,5 +1,5 @@
-defmodule JS2E.Parser.TypeReferenceParser do
-  @behaviour JS2E.Parser.ParserBehaviour
+defmodule JsonSchema.Parser.TypeReferenceParser do
+  @behaviour JsonSchema.Parser.ParserBehaviour
   @moduledoc ~S"""
   Parses a JSON schema type reference:
 
@@ -7,11 +7,11 @@ defmodule JS2E.Parser.TypeReferenceParser do
         "$ref": "#/definitions/link"
       }
 
-  Into an `JS2E.Types.TypeReference`.
+  Into an `JsonSchema.Types.TypeReference`.
   """
 
   require Logger
-  alias JS2E.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, TypePath, Types}
   alias Parser.{ParserResult, Util}
   alias Types.TypeReference
 
@@ -27,15 +27,15 @@ defmodule JS2E.Parser.TypeReferenceParser do
   true
 
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(map) :: boolean
   def type?(%{"$ref" => ref}) when is_binary(ref), do: true
   def type?(_schema_node), do: false
 
   @doc ~S"""
-  Parses a JSON schema type reference into an `JS2E.Types.TypeReference`.
+  Parses a JSON schema type reference into an `JsonSchema.Types.TypeReference`.
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec parse(map, URI.t(), URI.t() | nil, TypePath.t(), String.t()) ::
           ParserResult.t()
   def parse(%{"$ref" => ref}, _parent_id, id, path, name) do

@@ -1,5 +1,5 @@
-defmodule JS2E.Parser.AllOfParser do
-  @behaviour JS2E.Parser.ParserBehaviour
+defmodule JsonSchema.Parser.AllOfParser do
+  @behaviour JsonSchema.Parser.ParserBehaviour
   @moduledoc ~S"""
   Parses a JSON schema allOf type:
 
@@ -26,11 +26,11 @@ defmodule JS2E.Parser.AllOfParser do
         ]
       }
 
-  Into an `JS2E.Types.AllOfType`.
+  Into an `JsonSchema.Types.AllOfType`.
   """
 
   require Logger
-  alias JS2E.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, TypePath, Types}
   alias Parser.{ParserResult, Util}
   alias Types.AllOfType
 
@@ -49,7 +49,7 @@ defmodule JS2E.Parser.AllOfParser do
   true
 
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
   def type?(%{"allOf" => all_of})
       when is_list(all_of) and length(all_of) > 0,
@@ -58,9 +58,9 @@ defmodule JS2E.Parser.AllOfParser do
   def type?(_schema_node), do: false
 
   @doc ~S"""
-  Parses a JSON schema allOf type into an `JS2E.Types.AllOfType`.
+  Parses a JSON schema allOf type into an `JsonSchema.Types.AllOfType`.
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec parse(
           Types.schemaNode(),
           URI.t(),

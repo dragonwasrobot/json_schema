@@ -1,9 +1,9 @@
-defmodule JS2E.Types.SchemaDefinition do
+defmodule JsonSchema.Types.SchemaDefinition do
   @moduledoc ~S"""
   An intermediate representation of the root of a JSON schema document.
   """
 
-  alias JS2E.Types
+  alias JsonSchema.Types
 
   @type t :: %__MODULE__{
           file_path: Path.t(),

@@ -1,8 +1,8 @@
-defmodule JS2ETest.Parser.ArrayParser do
+defmodule JsonSchemaTest.Parser.ArrayParser do
   use ExUnit.Case
-  doctest JS2E.Parser.ArrayParser, import: true
+  doctest JsonSchema.Parser.ArrayParser, import: true
 
-  alias JS2E.{Parser, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.ArrayParser
   alias Types.{ArrayType, TypeReference}
 

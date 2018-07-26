@@ -1,9 +1,9 @@
-defmodule JS2ETest.Parser.EnumParser do
+defmodule JsonSchemaTest.Parser.EnumParser do
   use ExUnit.Case
-  doctest JS2E.Parser.EnumParser, import: true
+  doctest JsonSchema.Parser.EnumParser, import: true
 
-  alias JS2E.Parser.EnumParser
-  alias JS2E.Types.EnumType
+  alias JsonSchema.Parser.EnumParser
+  alias JsonSchema.Types.EnumType
 
   test "parse enum type with integer values" do
     parser_result =

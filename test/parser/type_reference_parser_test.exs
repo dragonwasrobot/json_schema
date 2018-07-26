@@ -1,8 +1,8 @@
-defmodule JS2ETest.Parser.TypeReferenceParser do
+defmodule JsonSchemaTest.Parser.TypeReferenceParser do
   use ExUnit.Case
-  doctest JS2E.Parser.TypeReferenceParser, import: true
+  doctest JsonSchema.Parser.TypeReferenceParser, import: true
 
-  alias JS2E.{Parser, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.TypeReferenceParser
   alias Types.TypeReference
 

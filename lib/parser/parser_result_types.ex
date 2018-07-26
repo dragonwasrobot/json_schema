@@ -1,9 +1,9 @@
-defmodule JS2E.Parser.ParserError do
+defmodule JsonSchema.Parser.ParserError do
   @moduledoc ~S"""
   Represents an error generated while parsing a JSON schema object.
   """
 
-  alias JS2E.Types
+  alias JsonSchema.Types
 
   @type t :: %__MODULE__{
           identifier: Types.typeIdentifier(),
@@ -26,12 +26,12 @@ defmodule JS2E.Parser.ParserError do
   end
 end
 
-defmodule JS2E.Parser.ParserWarning do
+defmodule JsonSchema.Parser.ParserWarning do
   @moduledoc ~S"""
   Represents a warning generated while parsing a JSON schema object.
   """
 
-  alias JS2E.Types
+  alias JsonSchema.Types
 
   @type t :: %__MODULE__{
           identifier: Types.typeIdentifier(),
@@ -54,14 +54,14 @@ defmodule JS2E.Parser.ParserWarning do
   end
 end
 
-defmodule JS2E.Parser.ParserResult do
+defmodule JsonSchema.Parser.ParserResult do
   @moduledoc ~S"""
   Represents the result of parsing a subset of a JSON schema including
   parsed types, warnings, and errors.
   """
 
   require Logger
-  alias JS2E.{Parser, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.{ErrorUtil, ParserError, ParserWarning}
 
   @type t :: %__MODULE__{
@@ -128,7 +128,7 @@ defmodule JS2E.Parser.ParserResult do
   end
 end
 
-defmodule JS2E.Parser.SchemaResult do
+defmodule JsonSchema.Parser.SchemaResult do
   @moduledoc ~S"""
   Represents the result of parsing a whole JSON schema including the parsed
   schema, along with all warnings and errors generated while parsing the schema
@@ -136,8 +136,8 @@ defmodule JS2E.Parser.SchemaResult do
   """
 
   require Logger
-  alias JS2E.Parser.{ErrorUtil, ParserError, ParserWarning}
-  alias JS2E.Types
+  alias JsonSchema.Parser.{ErrorUtil, ParserError, ParserWarning}
+  alias JsonSchema.Types
 
   @type t :: %__MODULE__{
           schema_dict: Types.schemaDictionary(),

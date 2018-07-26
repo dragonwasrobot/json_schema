@@ -1,4 +1,4 @@
-defmodule JS2E.Types.OneOfType do
+defmodule JsonSchema.Types.OneOfType do
   @moduledoc ~S"""
   Represents a custom 'one_of' type definition in a JSON schema.
 
@@ -60,7 +60,7 @@ defmodule JS2E.Types.OneOfType do
 
   """
 
-  alias JS2E.TypePath
+  alias JsonSchema.TypePath
 
   @type t :: %__MODULE__{
           name: String.t(),

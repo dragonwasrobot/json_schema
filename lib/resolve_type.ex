@@ -1,11 +1,11 @@
-defmodule JS2E.Printer.Utils.ResolveType do
+defmodule JsonSchema.Parser.Utils.ResolveType do
   @moduledoc ~S"""
   Module containing functions for resolving types. Main function being
   the `resolve_type` function.
   """
 
-  alias JS2E.{Printer, TypePath, Types}
-  alias Printer.{ErrorUtil, PrinterError}
+  alias JsonSchema.{Parser, TypePath, Types}
+  alias Parser.{ErrorUtil, ParserError}
   alias Types.{PrimitiveType, SchemaDefinition, TypeReference}
 
   @spec resolve_type(
@@ -15,7 +15,7 @@ defmodule JS2E.Printer.Utils.ResolveType do
           Types.schemaDictionary()
         ) ::
           {:ok, {Types.typeDefinition(), SchemaDefinition.t()}}
-          | {:error, PrinterError.t()}
+          | {:error, ParserError.t()}
   def resolve_type(identifier, parent, schema_def, schema_dict) do
     resolved_result =
       cond do
@@ -65,7 +65,7 @@ defmodule JS2E.Printer.Utils.ResolveType do
           SchemaDefinition.t()
         ) ::
           {:ok, {Types.typeDefinition(), SchemaDefinition.t()}}
-          | {:error, PrinterError.t()}
+          | {:error, ParserError.t()}
   defp resolve_type_path_identifier(identifier, parent, schema_def) do
     type_dict = schema_def.types
     resolved_type = type_dict[TypePath.to_string(identifier)]
@@ -83,7 +83,7 @@ defmodule JS2E.Printer.Utils.ResolveType do
           Types.schemaDictionary()
         ) ::
           {:ok, {Types.typeDefinition(), SchemaDefinition.t()}}
-          | {:error, PrinterError.t()}
+          | {:error, ParserError.t()}
   defp resolve_uri_identifier(identifier, parent, schema_dict) do
     schema_id = determine_schema_id(identifier)
     schema_def = schema_dict[schema_id]

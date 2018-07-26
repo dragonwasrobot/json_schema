@@ -1,4 +1,4 @@
-defmodule JS2E.TypePath do
+defmodule JsonSchema.TypePath do
   @moduledoc ~S"""
   Module for creating, manipulating, and printing type paths.
   """
@@ -7,17 +7,17 @@ defmodule JS2E.TypePath do
 
   @doc ~S"""
   Converts a json schema path like "#/definitions/foo" into its corresponding
-  `JS2E.TypePath`.
+  `JsonSchema.TypePath`.
 
   ## Examples
 
-      iex> JS2E.TypePath.from_string("")
+      iex> JsonSchema.TypePath.from_string("")
       []
 
-      iex> JS2E.TypePath.from_string("#")
+      iex> JsonSchema.TypePath.from_string("#")
       ["#"]
 
-      iex> JS2E.TypePath.from_string("#/definitions/foo")
+      iex> JsonSchema.TypePath.from_string("#/definitions/foo")
       ["#", "definitions", "foo"]
 
   """
@@ -29,17 +29,17 @@ defmodule JS2E.TypePath do
   end
 
   @doc ~S"""
-  Converts a `JS2E.TypePath` back to its string representation.
+  Converts a `JsonSchema.TypePath` back to its string representation.
 
   ## Examples
 
-      iex> JS2E.TypePath.to_string([])
+      iex> JsonSchema.TypePath.to_string([])
       ""
 
-      iex> JS2E.TypePath.to_string(["#"])
+      iex> JsonSchema.TypePath.to_string(["#"])
       "#"
 
-      iex> JS2E.TypePath.to_string(["#", "definitions", "foo"])
+      iex> JsonSchema.TypePath.to_string(["#", "definitions", "foo"])
       "#/definitions/foo"
 
   """
@@ -49,14 +49,14 @@ defmodule JS2E.TypePath do
   end
 
   @doc ~S"""
-  Adds a child to an existing `JS2E.TypePath`.
+  Adds a child to an existing `JsonSchema.TypePath`.
 
   ## Examples
 
-      iex> JS2E.TypePath.add_child(["#", "definitions", "foo"], "")
+      iex> JsonSchema.TypePath.add_child(["#", "definitions", "foo"], "")
       ["#", "definitions", "foo"]
 
-      iex> JS2E.TypePath.add_child(["#", "definitions"], "bar")
+      iex> JsonSchema.TypePath.add_child(["#", "definitions"], "bar")
       ["#", "definitions", "bar"]
 
   """
@@ -70,28 +70,28 @@ defmodule JS2E.TypePath do
   end
 
   @doc ~S"""
-  Returns true if the specified type can be treated as a `JS2E.TypePath`. Note
+  Returns true if the specified type can be treated as a `JsonSchema.TypePath`. Note
   that it also returns false if the specified type is a string representation of
-  a `JS2E.TypePath`.
+  a `JsonSchema.TypePath`.
 
   ## Examples
 
-      iex> JS2E.TypePath.type_path?("")
+      iex> JsonSchema.TypePath.type_path?("")
       false
 
-      iex> JS2E.TypePath.type_path?("#/definitions/foo")
+      iex> JsonSchema.TypePath.type_path?("#/definitions/foo")
       false
 
-      iex> JS2E.TypePath.type_path?([])
+      iex> JsonSchema.TypePath.type_path?([])
       false
 
-      iex> JS2E.TypePath.type_path?(["bar"])
+      iex> JsonSchema.TypePath.type_path?(["bar"])
       false
 
-      iex> JS2E.TypePath.type_path?(["#"])
+      iex> JsonSchema.TypePath.type_path?(["#"])
       true
 
-      iex> JS2E.TypePath.type_path?(["#", "foo"])
+      iex> JsonSchema.TypePath.type_path?(["#", "foo"])
       true
 
   """

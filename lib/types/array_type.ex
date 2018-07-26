@@ -1,4 +1,4 @@
-defmodule JS2E.Types.ArrayType do
+defmodule JsonSchema.Types.ArrayType do
   @moduledoc ~S"""
   Represents a custom 'array' type definition in a JSON schema.
 
@@ -41,7 +41,7 @@ defmodule JS2E.Types.ArrayType do
 
   """
 
-  alias JS2E.TypePath
+  alias JsonSchema.TypePath
 
   @type t :: %__MODULE__{
           name: String.t(),

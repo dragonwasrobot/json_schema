@@ -1,10 +1,10 @@
-defmodule JS2E.Types do
+defmodule JsonSchema.Types do
   @moduledoc ~S"""
   Specifies the main Elixir types used for describing the
   intermediate representations of JSON schema types.
   """
 
-  alias JS2E.{TypePath, Types}
+  alias JsonSchema.{TypePath, Types}
 
   alias Types.{
     AllOfType,

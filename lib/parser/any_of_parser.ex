@@ -1,5 +1,5 @@
-defmodule JS2E.Parser.AnyOfParser do
-  @behaviour JS2E.Parser.ParserBehaviour
+defmodule JsonSchema.Parser.AnyOfParser do
+  @behaviour JsonSchema.Parser.ParserBehaviour
   @moduledoc ~S"""
   Parses a JSON schema anyOf type:
 
@@ -26,13 +26,13 @@ defmodule JS2E.Parser.AnyOfParser do
         ]
       }
 
-  Into an `JS2E.Types.AnyOfType`.
+  Into an `JsonSchema.Types.AnyOfType`.
   """
 
   require Logger
-  alias JS2E.Parser.{ParserResult, Util}
-  alias JS2E.{TypePath, Types}
-  alias JS2E.Types.AnyOfType
+  alias JsonSchema.Parser.{ParserResult, Util}
+  alias JsonSchema.{TypePath, Types}
+  alias JsonSchema.Types.AnyOfType
 
   @doc ~S"""
   Returns true if the json subschema represents an anyOf type.
@@ -49,7 +49,7 @@ defmodule JS2E.Parser.AnyOfParser do
   true
 
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
   def type?(schema_node) do
     any_of = schema_node["anyOf"]
@@ -57,9 +57,9 @@ defmodule JS2E.Parser.AnyOfParser do
   end
 
   @doc ~S"""
-  Parses a JSON schema anyOf type into an `JS2E.Types.AnyOfType`.
+  Parses a JSON schema anyOf type into an `JsonSchema.Types.AnyOfType`.
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec parse(
           Types.schemaNode(),
           URI.t(),

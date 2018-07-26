@@ -1,5 +1,5 @@
-defmodule JS2E.Parser.ArrayParser do
-  @behaviour JS2E.Parser.ParserBehaviour
+defmodule JsonSchema.Parser.ArrayParser do
+  @behaviour JsonSchema.Parser.ParserBehaviour
   @moduledoc ~S"""
   Parses a JSON schema array type:
 
@@ -10,12 +10,12 @@ defmodule JS2E.Parser.ArrayParser do
         }
       }
 
-  Into an `JS2E.Types.ArrayType`.
+  Into an `JsonSchema.Types.ArrayType`.
   """
 
   require Logger
 
-  alias JS2E.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, TypePath, Types}
   alias Parser.{ParserResult, Util}
   alias Types.ArrayType
 
@@ -31,7 +31,7 @@ defmodule JS2E.Parser.ArrayParser do
   true
 
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
   def type?(schema_node) do
     items = schema_node["items"]
@@ -39,9 +39,9 @@ defmodule JS2E.Parser.ArrayParser do
   end
 
   @doc ~S"""
-  Parses a JSON schema array type into an `JS2E.Types.ArrayType`.
+  Parses a JSON schema array type into an `JsonSchema.Types.ArrayType`.
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec parse(
           Types.schemaNode(),
           URI.t(),

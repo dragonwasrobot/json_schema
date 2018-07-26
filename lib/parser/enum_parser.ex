@@ -1,5 +1,5 @@
-defmodule JS2E.Parser.EnumParser do
-  @behaviour JS2E.Parser.ParserBehaviour
+defmodule JsonSchema.Parser.EnumParser do
+  @behaviour JsonSchema.Parser.ParserBehaviour
   @moduledoc ~S"""
   Parse a JSON schema enum type:
 
@@ -8,11 +8,11 @@ defmodule JS2E.Parser.EnumParser do
         "enum": ["none", "green", "orange", "blue", "yellow", "red"]
       }
 
-  Into an `JS2E.Types.EnumType`.
+  Into an `JsonSchema.Types.EnumType`.
   """
 
   require Logger
-  alias JS2E.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, TypePath, Types}
   alias Parser.{ParserResult, Util}
   alias Types.EnumType
 
@@ -28,7 +28,7 @@ defmodule JS2E.Parser.EnumParser do
   true
 
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
   def type?(%{"enum" => enum, "type" => type})
       when is_list(enum) and is_binary(type),
@@ -37,9 +37,9 @@ defmodule JS2E.Parser.EnumParser do
   def type?(_schema_node), do: false
 
   @doc ~S"""
-  Parses a JSON schema enum type into an `JS2E.Types.EnumType`.
+  Parses a JSON schema enum type into an `JsonSchema.Types.EnumType`.
   """
-  @impl JS2E.Parser.ParserBehaviour
+  @impl JsonSchema.Parser.ParserBehaviour
   @spec parse(
           Types.schemaNode(),
           URI.t(),

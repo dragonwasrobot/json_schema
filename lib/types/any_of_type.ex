@@ -1,4 +1,4 @@
-defmodule JS2E.Types.AnyOfType do
+defmodule JsonSchema.Types.AnyOfType do
   @moduledoc ~S"""
   Represents a custom 'any_of' type definition in a JSON schema.
 
@@ -110,7 +110,7 @@ defmodule JS2E.Types.AnyOfType do
 
   """
 
-  alias JS2E.TypePath
+  alias JsonSchema.TypePath
 
   @type t :: %__MODULE__{
           name: String.t(),

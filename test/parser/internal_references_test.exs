@@ -1,7 +1,7 @@
-defmodule JS2ETest.Parser.InternalReferences do
+defmodule JsonSchemaTest.Parser.InternalReferences do
   use ExUnit.Case
 
-  alias JS2E.{Parser, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.RootParser
   alias Types.{PrimitiveType, SchemaDefinition, TypeReference}
 
