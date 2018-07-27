@@ -23,7 +23,7 @@ defmodule JsonSchemaTest.Parser.DefinitionsParser do
         }
       }
       """
-      |> Poison.decode!()
+      |> Jason.decode!()
       |> RootParser.parse_schema("examples/example.json")
 
     expected_root_type_reference = %ArrayType{

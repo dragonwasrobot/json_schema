@@ -39,7 +39,7 @@ defmodule JsonSchemaTest.Parser.AllOfParser do
   test "can parse all_of type" do
     parser_result =
       all_of_type()
-      |> Poison.decode!()
+      |> Jason.decode!()
       |> AllOfParser.parse(parent_id(), id(), path(), name())
 
     expected_all_of_type = %AllOfType{

@@ -36,7 +36,7 @@ defmodule JsonSchema.Parser do
   @spec parse_schema_document(String.t(), Path.t()) :: SchemaResult.t()
   def parse_schema_document(schema_document, schema_path) do
     schema_document
-    |> Poison.decode!()
+    |> Jason.decode!()
     |> RootParser.parse_schema(schema_path)
   end
 end

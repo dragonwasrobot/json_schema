@@ -17,7 +17,7 @@ defmodule JsonSchemaTest.Parser.TupleParser do
         ]
       }
       """
-      |> Poison.decode!()
+      |> Jason.decode!()
       |> TupleParser.parse(nil, nil, ["#", "shapePair"], "shapePair")
 
     expected_tuple_type = %TupleType{

@@ -32,7 +32,7 @@ defmodule JsonSchemaTest.Parser.OneOfParser do
         ]
       }
       """
-      |> Poison.decode!()
+      |> Jason.decode!()
       |> OneOfParser.parse(nil, nil, ["#", "schema"], "schema")
 
     expected_object_type = %ObjectType{

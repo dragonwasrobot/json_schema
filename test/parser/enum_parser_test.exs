@@ -13,7 +13,7 @@ defmodule JsonSchemaTest.Parser.EnumParser do
         "enum": [1, 2, 3]
       }
       """
-      |> Poison.decode!()
+      |> Jason.decode!()
       |> EnumParser.parse(nil, nil, ["#", "favoriteNumber"], "favoriteNumber")
 
     expected_enum_type = %EnumType{
@@ -39,7 +39,7 @@ defmodule JsonSchemaTest.Parser.EnumParser do
         "enum": ["none", "green", "orange", "blue", "yellow", "red"]
       }
       """
-      |> Poison.decode!()
+      |> Jason.decode!()
       |> EnumParser.parse(nil, nil, ["#", "color"], "color")
 
     expected_enum_type = %EnumType{

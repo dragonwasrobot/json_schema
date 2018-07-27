@@ -13,7 +13,7 @@ defmodule JsonSchemaTest.Parser.TypeReferenceParser do
         "$ref": "#/definitions/targetTypeId"
       }
       """
-      |> Poison.decode!()
+      |> Jason.decode!()
       |> TypeReferenceParser.parse(nil, nil, ["#", "typeRef"], "typeRef")
 
     expected_type_reference = %TypeReference{
