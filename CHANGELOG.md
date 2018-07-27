@@ -2,11 +2,11 @@
 
 ## v0.1.0
 
-> NOTE: This project is a fork of
-> https://github.com/dragonwasrobot/json-schema-to-elm, and so this initial
-> version contains all existing changes made in that project. As a result, the
-> parser and inspection logic found in this first version reflects which parts
-> of the JSON Schema specification was needed in the original project.
+> NOTE: This initial release is a fork of
+> https://github.com/dragonwasrobot/json-schema-to-elm, and so this version
+> contains all existing changes made in that project. As a result, the parser
+> and inspection logic found in this first version reflects which parts of
+> the JSON Schema specification was needed in the original project.
 
 ### Added
 
