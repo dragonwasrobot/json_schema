@@ -29,7 +29,7 @@ defmodule JsonSchema.Types.TypeReference do
         }
       }
 
-  Elixir intermediate representation:
+  Resulting Elixir intermediate representation:
 
       %TypeReference{name: "self",
                      path: ["#", "definitions", "foo"]}

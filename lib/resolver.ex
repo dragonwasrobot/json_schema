@@ -1,4 +1,4 @@
-defmodule JsonSchema.Parser.Utils.ResolveType do
+defmodule JsonSchema.Resolver do
   @moduledoc ~S"""
   Module containing functions for resolving types. Main function being
   the `resolve_type` function.

@@ -8,49 +8,11 @@ defmodule JsonSchema.Types.UnionType do
         "type": ["number", "integer", "null"]
       }
 
-  Elixir intermediate representation:
+  Resulting Elixir intermediate representation:
 
       %UnionType{name: "favoriteNumber",
                  path: ["#", "favoriteNumber"],
                  types: ["number", "integer", "null"]}
-
-  Elm code generated:
-
-  - Type definition
-
-      type FavoriteNumber
-          = FavoriteNumber_F Float
-          | FavoriteNumber_I Int
-
-  - Decoder definition
-
-      favoriteNumberDecoder : Decoder (Maybe FavoriteNumber)
-      favoriteNumberDecoder =
-          oneOf
-              [ null Nothing
-              , Decode.float |> andThen (succeed << FavoriteNumber_F)
-              , Decode.int |> andThen (succeed << FavoriteNumber_I)
-              ]
-
-  - Decoder usage
-
-    |> required "favoriteNumber" favoriteNumberDecoder
-
-  - Encoder definition
-
-      encodeFavoriteNumber : FavoriteNumber -> Value
-      encodeFavoriteNumber favoriteNumber =
-          case favoriteNumber of
-              FavoriteNumber_F floatValue ->
-                  Encode.float floatValue
-
-              FavoriteNumber_I intValue ->
-                  Encode.int intValue
-
-  - Encoder usage
-
-      encodeFavoriteNumber favoriteNumber
-
   """
 
   alias JsonSchema.TypePath

@@ -45,52 +45,12 @@ defmodule JsonSchema.Types.AllOfType do
          "required": [ "radius" ]
       }
 
-  Elixir intermediate representation:
+  Resulting Elixir representation:
 
       %AllOfType{name: "fancyCircle",
                  path: ["#", "definitions", "fancyCircle"],
                  types: [["#", "definitions", "fancyCircle", "allOf", "0"],
                          ["#", "definitions", "fancyCircle", "allOf", "1"]]}
-
-  Elm code generated:
-
-  - Type definition
-
-      type alias FancyCircle =
-          { zero : Zero
-          , circle : Circle
-          }
-
-  - Decoder definition
-
-      fancyCircleDecoder : Decoder FancyCircle
-      fancyCircleDecoder =
-          decode FancyCircle
-              |> custom zeroDecoder
-              |> custom circleDecoder
-
-  - Encoder definition
-
-      encodeFancyCircle : FancyCircle -> Value
-      encodeFancyCircle fancyCircle =
-          let
-              color =
-                  [ ( "color", encodeColor fancyCircle.zero.color ) ]
-
-              description =
-                  fancyCircle.zero.description
-                      |> Maybe.map
-                          (\description ->
-                              [ ( "description", Encode.string description ) ]
-                          )
-                      |> Maybe.withDefault []
-
-              radius =
-                  [ ( "radius", Encode.float fancyCircle.circle.radius ) ]
-          in
-              object <|
-                  color ++ description ++ radius
-
   """
 
   alias JsonSchema.TypePath
