@@ -11,34 +11,11 @@ defmodule JsonSchema.Types.ArrayType do
         }
       }
 
-  Elixir intermediate representation:
+  Resulting Elixir intermediate representation:
 
       %ArrayType{name: "rectangles",
                  path: ["#", "rectangles"],
                  items: ["#", "rectangles", "items"]}
-
-  Elm code generated:
-
-  - Decoder definition
-
-      rectanglesDecoder : Decoder (List Rectangle)
-      rectanglesDecoder =
-          Decode.list rectangleDecoder
-
-  - Decoder usage
-
-      |> required "rectangles" rectanglesDecoder
-
-  - Encoder definition
-
-      encodeRectangles : List Rectangle -> Value
-      encodeRectangles rectangles =
-          Encode.list <| List.map encodeRectangle <| rectangles
-
-  - Encoder usage
-
-      encodeRectangles rectangles
-
   """
 
   alias JsonSchema.TypePath

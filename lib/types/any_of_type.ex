@@ -2,6 +2,8 @@ defmodule JsonSchema.Types.AnyOfType do
   @moduledoc ~S"""
   Represents a custom 'any_of' type definition in a JSON schema.
 
+  JSON Schema:
+
   The following example schema has the path "#/definitions/fancyCircle"
 
       {
@@ -43,71 +45,12 @@ defmodule JsonSchema.Types.AnyOfType do
          "required": [ "radius" ]
       }
 
-  Elixir intermediate representation:
+  Resulting Elixir intermediate representation:
 
       %AnyOfType{name: "fancyCircle",
                  path: ["#", "definitions", "fancyCircle"],
                  types: [["#", "definitions", "fancyCircle", "allOf", "0"],
                          ["#", "definitions", "fancyCircle", "allOf", "1"]]}
-
-  Elm code generated:
-
-  - Type definition
-
-      type alias FancyCircle =
-          { zero : Maybe Zero
-          , circle : Maybe Circle
-          }
-
-  - Decoder definition
-
-      fancyCircleDecoder : Decoder FancyCircle
-      fancyCircleDecoder =
-          decode FancyCircle
-              |> custom (nullable zeroDecoder)
-              |> custom (nullable circleDecoder)
-
-  - Decoder usage
-
-      |> required "shape" shapeDecoder
-
-  - Encoder definition
-
-      encodeFancyCircle : FancyCircle -> Value
-      encodeFancyCircle fancyCircle =
-          let
-              color =
-                  fancyCircle.zero
-                      |> Maybe.map
-                          (\zero ->
-                              [ ( "color", encodeColor zero.color ) ]
-                          )
-                      |> Maybe.withDefault []
-
-              description =
-                  fancyCircle.zero
-                      |> Maybe.map
-                          (\zero ->
-                              zero.description
-                                  |> Maybe.map
-                                      (\description ->
-                                          [ ( "description", Encode.string description ) ]
-                                      )
-                                  |> Maybe.withDefault []
-                          )
-                      |> Maybe.withDefault []
-
-              radius =
-                  fancyCircle.circle
-                      |> Maybe.map
-                          (\circle ->
-                              [ ( "radius", Encode.float circle.radius ) ]
-                          )
-                      |> Maybe.withDefault []
-          in
-              object <|
-                  color ++ description ++ radius
-
   """
 
   alias JsonSchema.TypePath
