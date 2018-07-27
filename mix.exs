@@ -65,7 +65,16 @@ defmodule JsonSchema.Mixfile do
 
   defp package do
     [
-      files: ["lib", "mix.exs", "README.md", "LICENSE.md"],
+      files: [
+        "lib/json_schema.ex",
+        "lib/parser",
+        "lib/resolver.ex",
+        "lib/type_path.ex",
+        "lib/types",
+        "mix.exs",
+        "README.md",
+        "LICENSE.md"
+      ],
       maintainers: ["Peter Urbak"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/dragonwasrobot/json_schema"}
