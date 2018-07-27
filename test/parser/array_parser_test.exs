@@ -16,7 +16,7 @@ defmodule JsonSchemaTest.Parser.ArrayParser do
         }
       }
       """
-      |> Poison.decode!()
+      |> Jason.decode!()
       |> ArrayParser.parse(nil, nil, ["#", "rectangles"], "rectangles")
 
     expected_array_type = %ArrayType{

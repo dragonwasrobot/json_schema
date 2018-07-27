@@ -13,7 +13,7 @@ defmodule JsonSchemaTest.Parser.UnionParser do
         "type": ["number", "integer", "null"]
       }
       """
-      |> Poison.decode!()
+      |> Jason.decode!()
       |> UnionParser.parse(nil, nil, ["#", "union"], "union")
 
     expected_union_type = %UnionType{

@@ -25,7 +25,7 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
         "required": ["color", "radius"]
       }
       """
-      |> Poison.decode!()
+      |> Jason.decode!()
       |> ObjectParser.parse(nil, nil, ["#", "circle"], "circle")
 
     expected_object_type = %ObjectType{

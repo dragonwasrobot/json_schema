@@ -13,7 +13,7 @@ defmodule JsonSchemaTest.Parser.PrimitiveParser do
         "type": "string"
       }
       """
-      |> Poison.decode!()
+      |> Jason.decode!()
       |> PrimitiveParser.parse(nil, nil, ["#", "primitive"], "primitive")
 
     expected_primitive_type = %PrimitiveType{

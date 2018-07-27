@@ -35,7 +35,7 @@ defmodule JsonSchema.Mixfile do
       {:dialyxir, "~> 1.0.0-rc.3", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.19-rc", only: :dev, runtime: false},
       {:excoveralls, "~> 0.9.1", only: :test},
-      {:poison, "~> 3.1"}
+      {:jason, "~> 1.1"}
     ]
   end
 
