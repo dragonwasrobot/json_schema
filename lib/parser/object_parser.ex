@@ -51,36 +51,50 @@ defmodule JsonSchema.Parser.ObjectParser do
   Parses a JSON schema object type into an `JsonSchema.Types.ObjectType`.
   """
   @impl JsonSchema.Parser.ParserBehaviour
-  @spec parse(Types.schemaNode(), URI.t(), URI.t(), TypePath.t(), String.t()) ::
-          ParserResult.t()
+  @spec parse(Types.schemaNode(), URI.t(), URI.t(), TypePath.t(), String.t()) :: ParserResult.t()
   def parse(schema_node, parent_id, id, path, name) do
     required = Map.get(schema_node, "required", [])
 
-    child_path = TypePath.add_child(path, "properties")
+    properties_path = TypePath.add_child(path, "properties")
 
-    child_types_result =
+    properties_result =
       schema_node
       |> Map.get("properties")
-      |> parse_child_types(parent_id, child_path)
+      |> parse_child_types(parent_id, properties_path)
 
-    type_dict = create_property_dict(child_types_result.type_dict, child_path)
+    properties_type_dict = create_property_dict(properties_result.type_dict, properties_path)
 
-    object_type = ObjectType.new(name, path, type_dict, required)
+    pattern_properties_path = TypePath.add_child(path, "patternProperties")
+
+    pattern_properties_result =
+      if schema_node["patternProperties"] != nil do
+        schema_node
+        |> Map.get("patternProperties")
+        |> parse_child_types(parent_id, pattern_properties_path, true)
+      else
+        ParserResult.new()
+      end
+
+    pattern_properties_type_dict =
+      create_property_dict(pattern_properties_result.type_dict, pattern_properties_path)
+
+    object_type =
+      ObjectType.new(name, path, properties_type_dict, pattern_properties_type_dict, required)
 
     object_type
     |> Util.create_type_dict(path, id)
     |> ParserResult.new()
-    |> ParserResult.merge(child_types_result)
+    |> ParserResult.merge(properties_result)
+    |> ParserResult.merge(pattern_properties_result)
   end
 
-  @spec parse_child_types(map, URI.t(), TypePath.t()) :: ParserResult.t()
-  defp parse_child_types(node_properties, parent_id, child_path) do
+  @spec parse_child_types(map, URI.t(), TypePath.t(), boolean) :: ParserResult.t()
+  defp parse_child_types(node_properties, parent_id, child_path, name_is_regex \\ false) do
     init_result = ParserResult.new()
 
     node_properties
     |> Enum.reduce(init_result, fn {child_name, child_node}, acc_result ->
-      child_types =
-        Util.parse_type(child_node, parent_id, child_path, child_name)
+      child_types = Util.parse_type(child_node, parent_id, child_path, child_name, name_is_regex)
 
       ParserResult.merge(acc_result, child_types)
     end)
@@ -97,8 +111,7 @@ defmodule JsonSchema.Parser.ObjectParser do
       %{}
 
   """
-  @spec create_property_dict(Types.typeDictionary(), TypePath.t()) ::
-          Types.propertyDictionary()
+  @spec create_property_dict(Types.typeDictionary(), TypePath.t()) :: Types.propertyDictionary()
   def create_property_dict(type_dict, path) do
     type_dict
     |> Enum.reduce(%{}, fn {child_path, child_type}, acc_property_dict ->

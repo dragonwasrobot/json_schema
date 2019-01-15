@@ -45,7 +45,8 @@ defmodule JsonSchemaTest.Parser.AnyOfParser do
         "color" => ["#", "schema", "anyOf", "0", "properties", "color"],
         "title" => ["#", "schema", "anyOf", "0", "properties", "title"],
         "radius" => ["#", "schema", "anyOf", "0", "properties", "radius"]
-      }
+      },
+      patternProperties: %{}
     }
 
     expected_primitive_type = %PrimitiveType{

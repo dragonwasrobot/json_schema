@@ -17,6 +17,11 @@ defmodule JsonSchema.Types.ObjectType do
             "type": "number"
           }
         },
+        "patternProperties": {
+          "f.*o": {
+            "type": "integer"
+          }
+        },
         "required": [ "color", "radius" ]
       }
 
@@ -28,7 +33,9 @@ defmodule JsonSchema.Types.ObjectType do
                   properties: %{
                       "color" => ["#", "circle", "properties", "color"],
                       "title" => ["#", "circle", "properties", "title"],
-                      "radius" => ["#", "circle", "properties", "radius"]}}
+                      "radius" => ["#", "circle", "properties", "radius"]},
+                  patternProperties: %{
+                      "f.*o" => ["#", "circle", "patternProperties", "f.*o"]}}
   """
 
   alias JsonSchema.{TypePath, Types}
@@ -37,18 +44,25 @@ defmodule JsonSchema.Types.ObjectType do
           name: String.t(),
           path: TypePath.t(),
           properties: Types.propertyDictionary(),
+          patternProperties: Types.propertyDictionary(),
           required: [String.t()]
         }
 
-  defstruct [:name, :path, :properties, :required]
+  defstruct [:name, :path, :properties, :patternProperties, :required]
 
-  @spec new(String.t(), TypePath.t(), Types.propertyDictionary(), [String.t()]) ::
-          t
-  def new(name, path, properties, required) do
+  @spec new(
+          String.t(),
+          TypePath.t(),
+          Types.propertyDictionary(),
+          Types.propertyDictionary(),
+          [String.t()]
+        ) :: t
+  def new(name, path, properties, patternProperties, required) do
     %__MODULE__{
       name: name,
       path: path,
       properties: properties,
+      patternProperties: patternProperties,
       required: required
     }
   end

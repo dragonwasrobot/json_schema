@@ -2,12 +2,13 @@ defmodule JsonSchema.Mixfile do
   use Mix.Project
 
   @version "0.1.0"
+  @elixir_version "~> 1.7"
 
   def project do
     [
       app: :json_schema,
       version: @version,
-      elixir: "~> 1.7",
+      elixir: @elixir_version,
       aliases: aliases(),
       deps: deps(),
       description: description(),
@@ -65,16 +66,6 @@ defmodule JsonSchema.Mixfile do
 
   defp package do
     [
-      files: [
-        "lib/json_schema.ex",
-        "lib/parser",
-        "lib/resolver.ex",
-        "lib/type_path.ex",
-        "lib/types",
-        "mix.exs",
-        "README.md",
-        "LICENSE.md"
-      ],
       maintainers: ["Peter Urbak"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/dragonwasrobot/json_schema"}

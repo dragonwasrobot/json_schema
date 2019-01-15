@@ -109,8 +109,21 @@ defmodule JsonSchema.Parser.ErrorUtil do
     ParserError.new(identifier, :name_collision, error_msg)
   end
 
-  @spec invalid_uri(Types.typeIdentifier(), String.t(), String.t()) ::
-          ParserError.t()
+  @spec name_not_a_regex(Types.typeIdentifier(), String.t()) :: ParserError.t()
+  def name_not_a_regex(identifier, property) do
+    full_identifier = print_identifier(identifier)
+
+    error_msg = """
+    Could not parse pattern '#{property}' at '#{full_identifier}' into a valid Regular Expression.
+
+    Hint: See specification section 6.5.5. "patternProperties"
+    <https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.5>
+    """
+
+    ParserError.new(identifier, :name_not_a_regex, error_msg)
+  end
+
+  @spec invalid_uri(Types.typeIdentifier(), String.t(), String.t()) :: ParserError.t()
   def invalid_uri(identifier, property, actual) do
     full_identifier = print_identifier(identifier)
     stringified_value = sanitize_value(actual)

@@ -81,8 +81,7 @@ defmodule JsonSchema.Parser.Util do
   Parse a list of JSON schema objects that have a child relation to another
   schema object with the specified `parent_id`.
   """
-  @spec parse_child_types([Types.schemaNode()], URI.t(), TypePath.t()) ::
-          ParserResult.t()
+  @spec parse_child_types([Types.schemaNode()], URI.t(), TypePath.t()) :: ParserResult.t()
   def parse_child_types(child_nodes, parent_id, path)
       when is_list(child_nodes) do
     child_nodes
@@ -94,9 +93,9 @@ defmodule JsonSchema.Parser.Util do
     |> elem(0)
   end
 
-  @spec parse_type(Types.schemaNode(), URI.t(), TypePath.t(), String.t()) ::
+  @spec parse_type(Types.schemaNode(), URI.t(), TypePath.t(), String.t(), boolean) ::
           ParserResult.t()
-  def parse_type(schema_node, parent_id, path, name) do
+  def parse_type(schema_node, parent_id, path, name, name_is_regex \\ false) do
     definitions_result =
       if DefinitionsParser.type?(schema_node) do
         id = determine_id(schema_node, parent_id)
@@ -127,12 +126,28 @@ defmodule JsonSchema.Parser.Util do
           node_parser.(schema_node, child_parent_id, id, type_path, name)
       end
 
-    if Enum.empty?(definitions_result.type_dict) and
-         Enum.empty?(node_result.type_dict) do
+    regex_result =
+      if name_is_regex == true do
+        case Regex.compile(name) do
+          {:ok, _regex} ->
+            ParserResult.new()
+
+          {:error, _error} ->
+            id = TypePath.to_string(path)
+            parser_error = ErrorUtil.name_not_a_regex(id, name)
+            ParserResult.new(%{}, [], [parser_error])
+        end
+      else
+        ParserResult.new()
+      end
+
+    if Enum.empty?(definitions_result.type_dict) and Enum.empty?(node_result.type_dict) do
       unknown_type_error = ErrorUtil.unknown_node_type(path, name, schema_node)
       ParserResult.new(%{}, [], [unknown_type_error])
     else
-      ParserResult.merge(definitions_result, node_result)
+      definitions_result
+      |> ParserResult.merge(node_result)
+      |> ParserResult.merge(regex_result)
     end
   end
 

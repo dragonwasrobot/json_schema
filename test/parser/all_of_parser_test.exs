@@ -58,7 +58,8 @@ defmodule JsonSchemaTest.Parser.AllOfParser do
       properties: %{
         "color" => path() ++ ["allOf", "0", "properties", "color"],
         "description" => path() ++ ["allOf", "0", "properties", "description"]
-      }
+      },
+      patternProperties: %{}
     }
 
     expected_color_type = %TypeReference{
@@ -83,8 +84,7 @@ defmodule JsonSchemaTest.Parser.AllOfParser do
     assert parser_result.type_dict == %{
              "#/definitions/fancyCircle" => expected_all_of_type,
              "#/definitions/fancyCircle/allOf/0" => expected_object_type,
-             "#/definitions/fancyCircle/allOf/0/properties/color" =>
-               expected_color_type,
+             "#/definitions/fancyCircle/allOf/0/properties/color" => expected_color_type,
              "#/definitions/fancyCircle/allOf/0/properties/description" =>
                expected_description_type,
              "#/definitions/fancyCircle/allOf/1" => expected_circle_type

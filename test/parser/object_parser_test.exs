@@ -3,10 +3,10 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
   doctest JsonSchema.Parser.ObjectParser, import: true
 
   alias JsonSchema.{Parser, Types}
-  alias Parser.ObjectParser
+  alias Parser.{ObjectParser, ParserError}
   alias Types.{ObjectType, PrimitiveType, TypeReference}
 
-  test "parse object type" do
+  test "can parse correct object type" do
     parser_result =
       ~S"""
       {
@@ -20,6 +20,11 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
           },
           "radius": {
             "type": "number"
+          }
+        },
+        "patternProperties": {
+          "f.*o": {
+            "type": "integer"
           }
         },
         "required": ["color", "radius"]
@@ -36,12 +41,21 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
         "color" => ["#", "circle", "properties", "color"],
         "title" => ["#", "circle", "properties", "title"],
         "radius" => ["#", "circle", "properties", "radius"]
+      },
+      patternProperties: %{
+        "f.*o" => ["#", "circle", "patternProperties", "f.*o"]
       }
     }
 
     expected_color_type_reference = %TypeReference{
       name: "color",
       path: ["#", "definitions", "color"]
+    }
+
+    expected_regex_primitive_type = %PrimitiveType{
+      name: "f.*o",
+      path: ["#", "circle", "patternProperties", "f.*o"],
+      type: "integer"
     }
 
     expected_title_primitive_type = %PrimitiveType{
@@ -63,7 +77,46 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
              "#/circle" => expected_object_type,
              "#/circle/properties/color" => expected_color_type_reference,
              "#/circle/properties/title" => expected_title_primitive_type,
-             "#/circle/properties/radius" => expected_radius_primitive_type
+             "#/circle/properties/radius" => expected_radius_primitive_type,
+             "#/circle/patternProperties/f.*o" => expected_regex_primitive_type
            }
+  end
+
+  test "returns error when parsing invalid patternProperties" do
+    parser_result =
+      ~S"""
+      {
+        "type": "object",
+        "properties": {
+          "color": {
+            "$ref": "#/definitions/color"
+          },
+          "title": {
+            "type": "string"
+          },
+          "radius": {
+            "type": "number"
+          }
+        },
+        "patternProperties": {
+          "*foo": {
+            "type": "integer"
+          }
+        },
+        "required": ["color", "radius"]
+      }
+      """
+      |> Jason.decode!()
+      |> ObjectParser.parse(nil, nil, ["#", "circle"], "circle")
+
+    assert parser_result.warnings == []
+
+    %ParserError{
+      error_type: :name_not_a_regex,
+      identifier: "#/circle/patternProperties",
+      message: msg
+    } = Enum.fetch!(parser_result.errors, 0)
+
+    assert String.contains?(msg, "into a valid Regular Expression")
   end
 end
