@@ -2,13 +2,13 @@
 
 ## v0.2.0 [2019-03-24]
 
-## Added
+### Added
 
 - Support for parsing the following JSON schema types:
   - `additionalProperties`, and
   - `patternProperties`.
 
-## Changed
+### Changed
 
 - Replaced the `TypePath` type wih the `URI` type when specifying local paths in
   a JSON schema document.
