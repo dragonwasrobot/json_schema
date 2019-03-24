@@ -10,7 +10,7 @@ defmodule JsonSchemaTest.Parser.AnyOfParser do
     parent = "http://www.example.com/schema.json"
 
     parser_result =
-      ~S"""
+      """
       {
         "anyOf": [
           {
@@ -35,16 +35,16 @@ defmodule JsonSchemaTest.Parser.AnyOfParser do
       }
       """
       |> Jason.decode!()
-      |> AnyOfParser.parse(parent, nil, ["#", "schema"], "schema")
+      |> AnyOfParser.parse(parent, nil, URI.parse("#/schema"), "schema")
 
     expected_object_type = %ObjectType{
       name: "0",
-      path: ["#", "schema", "anyOf", "0"],
+      path: URI.parse("#/schema/anyOf/0"),
       required: ["color", "radius"],
       properties: %{
-        "color" => ["#", "schema", "anyOf", "0", "properties", "color"],
-        "title" => ["#", "schema", "anyOf", "0", "properties", "title"],
-        "radius" => ["#", "schema", "anyOf", "0", "properties", "radius"]
+        "color" => URI.parse("#/schema/anyOf/0/properties/color"),
+        "title" => URI.parse("#/schema/anyOf/0/properties/title"),
+        "radius" => URI.parse("#/schema/anyOf/0/properties/radius")
       },
       pattern_properties: %{},
       additional_properties: nil
@@ -52,33 +52,33 @@ defmodule JsonSchemaTest.Parser.AnyOfParser do
 
     expected_primitive_type = %PrimitiveType{
       name: "1",
-      path: ["#", "schema", "anyOf", "1"],
+      path: URI.parse("#/schema/anyOf/1"),
       type: "string"
     }
 
     expected_color_type = %TypeReference{
       name: "color",
-      path: ["#", "definitions", "color"]
+      path: URI.parse("#/definitions/color")
     }
 
     expected_radius_type = %PrimitiveType{
       name: "radius",
-      path: ["#", "schema", "anyOf", "0", "properties", "radius"],
+      path: URI.parse("#/schema/anyOf/0/properties/radius"),
       type: "number"
     }
 
     expected_title_type = %PrimitiveType{
       name: "title",
-      path: ["#", "schema", "anyOf", "0", "properties", "title"],
+      path: URI.parse("#/schema/anyOf/0/properties/title"),
       type: "string"
     }
 
     expected_any_of_type = %AnyOfType{
       name: "schema",
-      path: ["#", "schema"],
+      path: URI.parse("#/schema"),
       types: [
-        ["#", "schema", "anyOf", "0"],
-        ["#", "schema", "anyOf", "1"]
+        URI.parse("#/schema/anyOf/0"),
+        URI.parse("#/schema/anyOf/1")
       ]
     }
 

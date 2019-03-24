@@ -8,7 +8,7 @@ defmodule JsonSchemaTest.Parser.OneOfParser do
 
   test "parse primitive one_of type" do
     parser_result =
-      ~S"""
+      """
       {
         "oneOf": [
           {
@@ -33,16 +33,16 @@ defmodule JsonSchemaTest.Parser.OneOfParser do
       }
       """
       |> Jason.decode!()
-      |> OneOfParser.parse(nil, nil, ["#", "schema"], "schema")
+      |> OneOfParser.parse(nil, nil, URI.parse("#/schema"), "schema")
 
     expected_object_type = %ObjectType{
       name: "0",
-      path: ["#", "schema", "oneOf", "0"],
+      path: URI.parse("#/schema/oneOf/0"),
       required: ["color", "radius"],
       properties: %{
-        "color" => ["#", "schema", "oneOf", "0", "properties", "color"],
-        "title" => ["#", "schema", "oneOf", "0", "properties", "title"],
-        "radius" => ["#", "schema", "oneOf", "0", "properties", "radius"]
+        "color" => URI.parse("#/schema/oneOf/0/properties/color"),
+        "title" => URI.parse("#/schema/oneOf/0/properties/title"),
+        "radius" => URI.parse("#/schema/oneOf/0/properties/radius")
       },
       pattern_properties: %{},
       additional_properties: nil
@@ -50,30 +50,33 @@ defmodule JsonSchemaTest.Parser.OneOfParser do
 
     expected_primitive_type = %PrimitiveType{
       name: "1",
-      path: ["#", "schema", "oneOf", "1"],
+      path: URI.parse("#/schema/oneOf/1"),
       type: "string"
     }
 
-    expected_color_type = %TypeReference{name: "color", path: ["#", "color"]}
+    expected_color_type = %TypeReference{
+      name: "color",
+      path: URI.parse("#/color")
+    }
 
     expected_radius_type = %PrimitiveType{
       name: "radius",
-      path: ["#", "schema", "oneOf", "0", "properties", "radius"],
+      path: URI.parse("#/schema/oneOf/0/properties/radius"),
       type: "number"
     }
 
     expected_title_type = %PrimitiveType{
       name: "title",
-      path: ["#", "schema", "oneOf", "0", "properties", "title"],
+      path: URI.parse("#/schema/oneOf/0/properties/title"),
       type: "string"
     }
 
     expected_one_of_type = %OneOfType{
       name: "schema",
-      path: ["#", "schema"],
+      path: URI.parse("#/schema"),
       types: [
-        ["#", "schema", "oneOf", "0"],
-        ["#", "schema", "oneOf", "1"]
+        URI.parse("#/schema/oneOf/0"),
+        URI.parse("#/schema/oneOf/1")
       ]
     }
 

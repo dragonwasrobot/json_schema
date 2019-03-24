@@ -1,6 +1,6 @@
 defmodule JsonSchema.Parser.OneOfParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc ~S"""
+  @moduledoc """
   Parses a JSON schema oneOf type:
 
       {
@@ -30,11 +30,11 @@ defmodule JsonSchema.Parser.OneOfParser do
   """
 
   require Logger
-  alias JsonSchema.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.{ParserResult, Util}
   alias Types.OneOfType
 
-  @doc ~S"""
+  @doc """
   Returns true if the json subschema represents an oneOf type.
 
   ## Examples
@@ -56,15 +56,15 @@ defmodule JsonSchema.Parser.OneOfParser do
     is_list(one_of) && length(one_of) > 0
   end
 
-  @doc ~S"""
+  @doc """
   Parses a JSON schema oneOf type into an `JsonSchema.Types.OneOfType`.
   """
   @impl JsonSchema.Parser.ParserBehaviour
-  @spec parse(Types.schemaNode(), URI.t(), URI.t(), TypePath.t(), String.t()) ::
+  @spec parse(Types.schemaNode(), URI.t(), URI.t(), URI.t(), String.t()) ::
           ParserResult.t()
   def parse(%{"oneOf" => one_of}, parent_id, id, path, name)
       when is_list(one_of) do
-    child_path = TypePath.add_child(path, "oneOf")
+    child_path = Util.add_fragment_child(path, "oneOf")
 
     child_types_result =
       one_of

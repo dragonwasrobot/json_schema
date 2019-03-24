@@ -1,6 +1,6 @@
 defmodule JsonSchema.Parser.DefinitionsParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc ~S"""
+  @moduledoc """
   Parses a 'definitions' property in a JSON schema or subschema.
 
       {
@@ -17,10 +17,10 @@ defmodule JsonSchema.Parser.DefinitionsParser do
 
   require Logger
 
-  alias JsonSchema.{Parser, TypePath}
+  alias JsonSchema.Parser
   alias Parser.{ParserResult, Util}
 
-  @doc ~S"""
+  @doc """
   Returns true if the json schema contains a 'definitions' property.
 
   ## Examples
@@ -40,24 +40,23 @@ defmodule JsonSchema.Parser.DefinitionsParser do
 
   def type?(_schema_node), do: false
 
-  @doc ~S"""
+  @doc """
   Parses a JSON schema 'definitions' property into a map of types.
   """
   @impl JsonSchema.Parser.ParserBehaviour
-  @spec parse(map, URI.t(), URI.t() | nil, TypePath.t(), String.t()) ::
+  @spec parse(map, URI.t(), URI.t() | nil, URI.t(), String.t()) ::
           ParserResult.t()
   def parse(%{"definitions" => definitions}, parent_id, _id, path, _name) do
     child_path =
       path
-      |> TypePath.add_child("definitions")
+      |> Util.add_fragment_child("definitions")
 
     init_result = ParserResult.new()
 
     definitions_types_result =
       definitions
       |> Enum.reduce(init_result, fn {child_name, child_node}, acc_result ->
-        child_types =
-          Util.parse_type(child_node, parent_id, child_path, child_name)
+        child_types = Util.parse_type(child_node, parent_id, child_path, child_name)
 
         ParserResult.merge(acc_result, child_types)
       end)

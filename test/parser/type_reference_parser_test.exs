@@ -8,17 +8,17 @@ defmodule JsonSchemaTest.Parser.TypeReferenceParser do
 
   test "parse type reference" do
     parser_result =
-      ~S"""
+      """
       {
         "$ref": "#/definitions/targetTypeId"
       }
       """
       |> Jason.decode!()
-      |> TypeReferenceParser.parse(nil, nil, ["#", "typeRef"], "typeRef")
+      |> TypeReferenceParser.parse(nil, nil, URI.parse("#/typeRef"), "typeRef")
 
     expected_type_reference = %TypeReference{
       name: "typeRef",
-      path: ["#", "definitions", "targetTypeId"]
+      path: URI.parse("#/definitions/targetTypeId")
     }
 
     assert parser_result.errors == []

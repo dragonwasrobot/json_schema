@@ -8,17 +8,17 @@ defmodule JsonSchemaTest.Parser.UnionParser do
 
   test "parse primitive union type" do
     parser_result =
-      ~S"""
+      """
       {
         "type": ["number", "integer", "null"]
       }
       """
       |> Jason.decode!()
-      |> UnionParser.parse(nil, nil, ["#", "union"], "union")
+      |> UnionParser.parse(nil, nil, URI.parse("#/union"), "union")
 
     expected_union_type = %UnionType{
       name: "union",
-      path: ["#", "union"],
+      path: URI.parse("#/union"),
       types: ["number", "integer", "null"]
     }
 

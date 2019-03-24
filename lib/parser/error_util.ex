@@ -1,27 +1,27 @@
 defmodule JsonSchema.Parser.ErrorUtil do
-  @moduledoc ~S"""
+  @moduledoc """
   Contains helper functions for reporting parser errors.
   """
 
-  alias JsonSchema.{Parser, TypePath, Types}
-  alias Parser.ParserError
+  alias JsonSchema.{Parser, Types}
+  alias Parser.{ParserError, Util}
 
-  @doc ~S"""
+  @doc """
   Returns the name of the type of the given value.
 
   ## Examples
 
-  iex> get_type([1,2,3])
-  "list"
+      iex> get_type([1,2,3])
+      "list"
 
-  iex> get_type(%{"type" => "string"})
-  "object"
+      iex> get_type(%{"type" => "string"})
+      "object"
 
-  iex> get_type("name")
-  "string"
+      iex> get_type("name")
+      "string"
 
-  iex> get_type(42)
-  "integer"
+      iex> get_type(42)
+      "integer"
 
   """
   @spec get_type(any) :: String.t()
@@ -36,7 +36,7 @@ defmodule JsonSchema.Parser.ErrorUtil do
 
   @spec unsupported_schema_version(String.t(), [String.t()]) :: ParserError.t()
   def unsupported_schema_version(supplied_value, supported_versions) do
-    root_path = TypePath.from_string("#")
+    root_path = URI.parse("#")
     stringified_value = sanitize_value(supplied_value)
 
     error_msg = """
@@ -143,10 +143,10 @@ defmodule JsonSchema.Parser.ErrorUtil do
 
   @spec unresolved_reference(
           Types.typeIdentifier(),
-          TypePath.t()
+          URI.t()
         ) :: ParserError.t()
   def unresolved_reference(identifier, parent) do
-    printed_path = TypePath.to_string(parent)
+    printed_path = to_string(parent)
     stringified_value = sanitize_value(identifier)
 
     error_msg = """
@@ -195,8 +195,8 @@ defmodule JsonSchema.Parser.ErrorUtil do
   def unknown_node_type(identifier, name, schema_node) do
     full_identifier =
       identifier
-      |> TypePath.add_child(name)
-      |> TypePath.to_string()
+      |> Util.add_fragment_child(name)
+      |> to_string()
 
     stringified_value = sanitize_value(schema_node["type"])
 
@@ -219,11 +219,7 @@ defmodule JsonSchema.Parser.ErrorUtil do
 
   @spec print_identifier(Types.typeIdentifier()) :: String.t()
   defp print_identifier(identifier) do
-    if TypePath.type_path?(identifier) do
-      TypePath.to_string(identifier)
-    else
-      to_string(identifier)
-    end
+    to_string(identifier)
   end
 
   @spec sanitize_value(any) :: String.t()
@@ -233,10 +229,7 @@ defmodule JsonSchema.Parser.ErrorUtil do
         URI.to_string(raw_value)
 
       is_map(raw_value) ->
-        Poison.encode!(raw_value)
-
-      TypePath.type_path?(raw_value) ->
-        TypePath.to_string(raw_value)
+        Jason.encode!(raw_value)
 
       true ->
         inspect(raw_value)

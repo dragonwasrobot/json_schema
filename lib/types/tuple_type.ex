@@ -1,6 +1,6 @@
 defmodule JsonSchema.Types.TupleType do
-  @moduledoc ~S"""
-  Represents a custom 'tuple' type definition in a JSON schema.
+  @moduledoc """
+  Represents a custom `tuple` type definition in a JSON schema.
 
   JSON Schema:
 
@@ -12,25 +12,23 @@ defmodule JsonSchema.Types.TupleType do
         ]
       }
 
-  Resulting Elixir intermediate representation:
+  Resulting in the Elixir representation:
 
       %TupleType{name: "shapePair",
-                 path: ["#", "rectangles"],
-                 items: [["#", "shapePair", "items", "0"],
-                         ["#", "shapePair", "items", "1"]}
+                 path: URI.parse("#/rectangles"),
+                 items: [URI.parse("#/shapePair/items/0"],
+                         URI.parse("#/shapePair/items/1"]}
   """
-
-  alias JsonSchema.TypePath
 
   @type t :: %__MODULE__{
           name: String.t(),
-          path: TypePath.t(),
-          items: TypePath.t()
+          path: URI.t(),
+          items: [URI.t()]
         }
 
   defstruct [:name, :path, :items]
 
-  @spec new(String.t(), TypePath.t(), TypePath.t()) :: t
+  @spec new(String.t(), URI.t(), [URI.t()]) :: t
   def new(name, path, items) do
     %__MODULE__{name: name, path: path, items: items}
   end

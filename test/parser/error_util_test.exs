@@ -1,5 +1,5 @@
 defmodule JsonSchemaTest.Parser.ErrorUtil do
-  @moduledoc ~S"""
+  @moduledoc """
   Tests for the parser error reporting utilities functions.
   """
   use ExUnit.Case

@@ -1,6 +1,6 @@
 defmodule JsonSchema.Parser.ArrayParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc ~S"""
+  @moduledoc """
   Parses a JSON schema array type:
 
       {
@@ -15,11 +15,11 @@ defmodule JsonSchema.Parser.ArrayParser do
 
   require Logger
 
-  alias JsonSchema.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.{ParserResult, Util}
   alias Types.ArrayType
 
-  @doc ~S"""
+  @doc """
   Returns true if the json subschema represents an array type.
 
   ## Examples
@@ -38,7 +38,7 @@ defmodule JsonSchema.Parser.ArrayParser do
     is_map(items)
   end
 
-  @doc ~S"""
+  @doc """
   Parses a JSON schema array type into an `JsonSchema.Types.ArrayType`.
   """
   @impl JsonSchema.Parser.ParserBehaviour
@@ -46,13 +46,13 @@ defmodule JsonSchema.Parser.ArrayParser do
           Types.schemaNode(),
           URI.t(),
           URI.t() | nil,
-          TypePath.t(),
+          URI.t(),
           String.t()
         ) :: ParserResult.t()
   def parse(schema_node, parent_id, id, path, name) do
     items_abs_path =
       path
-      |> TypePath.add_child("items")
+      |> Util.add_fragment_child("items")
 
     items_result =
       schema_node

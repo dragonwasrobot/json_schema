@@ -1,6 +1,6 @@
 defmodule JsonSchema.Types.SchemaDefinition do
-  @moduledoc ~S"""
-  An intermediate representation of the root of a JSON schema document.
+  @moduledoc """
+  An intermediate representation of the root of a whole JSON schema document.
   """
 
   alias JsonSchema.Types

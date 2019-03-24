@@ -1,6 +1,6 @@
 defmodule JsonSchema.Types.UnionType do
-  @moduledoc ~S"""
-  Represents a custom 'union' type definition in a JSON schema.
+  @moduledoc """
+  Represents a custom `union` type definition in a JSON schema.
 
   JSON Schema:
 
@@ -8,24 +8,22 @@ defmodule JsonSchema.Types.UnionType do
         "type": ["number", "integer", "null"]
       }
 
-  Resulting Elixir intermediate representation:
+  Resulting in the Elixir representation:
 
       %UnionType{name: "favoriteNumber",
-                 path: ["#", "favoriteNumber"],
+                 path: URI.parse("#/favoriteNumber"),
                  types: ["number", "integer", "null"]}
   """
 
-  alias JsonSchema.TypePath
-
   @type t :: %__MODULE__{
           name: String.t(),
-          path: TypePath.t(),
+          path: URI.t(),
           types: [String.t()]
         }
 
   defstruct [:name, :path, :types]
 
-  @spec new(String.t(), TypePath.t(), [String.t()]) :: t
+  @spec new(String.t(), URI.t(), [String.t()]) :: t
   def new(name, path, types) do
     %__MODULE__{name: name, path: path, types: types}
   end

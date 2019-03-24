@@ -8,10 +8,10 @@ defmodule JsonSchemaTest.Parser.DefinitionsParser do
 
   test "parse definitions" do
     schema_result =
-      ~S"""
+      """
       {
-        "$schema": "http://json-schema.org/draft-04/schema#",
-        "id": "http://example.com/root.json",
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$id": "http://example.com/root.json",
         "type": "array",
         "items": { "$ref": "#/definitions/positiveInteger" },
         "definitions": {
@@ -28,37 +28,38 @@ defmodule JsonSchemaTest.Parser.DefinitionsParser do
 
     expected_root_type_reference = %ArrayType{
       name: "Root",
-      path: ["#"],
-      items: ["#", "items"]
+      path: URI.parse("#"),
+      items: URI.parse("#/items")
     }
 
     expected_type_reference = %TypeReference{
       name: "items",
-      path: ["#", "definitions", "positiveInteger"]
+      path: URI.parse("#/definitions/positiveInteger")
     }
 
     expected_primitive_type = %PrimitiveType{
       name: "positiveInteger",
-      path: ["#", "definitions", "positiveInteger"],
+      path: URI.parse("#/definitions/positiveInteger"),
       type: "integer"
+    }
+
+    expected_schema_definition = %SchemaDefinition{
+      file_path: "examples/example.json",
+      title: "Root",
+      id: URI.parse("http://example.com/root.json"),
+      types: %{
+        "#" => expected_root_type_reference,
+        "http://example.com/root.json#" => expected_root_type_reference,
+        "#/items" => expected_type_reference,
+        "#/definitions/positiveInteger" => expected_primitive_type
+      }
     }
 
     assert schema_result.errors == []
     assert schema_result.warnings == []
 
     assert schema_result.schema_dict == %{
-             "http://example.com/root.json" => %SchemaDefinition{
-               file_path: "examples/example.json",
-               title: "Root",
-               id: URI.parse("http://example.com/root.json"),
-               types: %{
-                 "#" => expected_root_type_reference,
-                 "http://example.com/root.json#" =>
-                   expected_root_type_reference,
-                 "#/items" => expected_type_reference,
-                 "#/definitions/positiveInteger" => expected_primitive_type
-               }
-             }
+             "http://example.com/root.json" => expected_schema_definition
            }
   end
 end

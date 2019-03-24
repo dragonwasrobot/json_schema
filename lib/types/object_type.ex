@@ -1,6 +1,6 @@
 defmodule JsonSchema.Types.ObjectType do
-  @moduledoc ~S"""
-  Represents a custom 'object' type definition in a JSON schema.
+  @moduledoc """
+  Represents a custom `object` type definition in a JSON schema.
 
   JSON Schema:
 
@@ -28,28 +28,28 @@ defmodule JsonSchema.Types.ObjectType do
         "required": [ "color", "radius" ]
       }
 
-  Resulting Elixir intermediate representation:
+  Resulting in the Elixir representation:
 
       %ObjectType{name: "circle",
-                  path: ["#", "circle"],
+                  path: URI.parse("#/circle"),
                   required: ["color", "radius"],
                   properties: %{
-                      "color" => ["#", "circle", "properties", "color"],
-                      "title" => ["#", "circle", "properties", "title"],
-                      "radius" => ["#", "circle", "properties", "radius"]},
+                      "color" => URI.parse("#/circle/properties/color"),
+                      "title" => URI.parse("#/circle/properties/title"),
+                      "radius" => URI.parse("#/circle/properties/radius")},
                   pattern_properties: %{
-                      "f.*o" => ["#", "circle", "patternProperties", "f.*o"]},
-                  additional_properties: ["#", "circle", "additionalProperties"]
+                      "f.*o" => URI.parse("#/circle/patternProperties/f.*o")},
+                  additional_properties: URI.parse("#/circle/additionalProperties")
   """
 
-  alias JsonSchema.{TypePath, Types}
+  alias JsonSchema.Types
 
   @type t :: %__MODULE__{
           name: String.t(),
-          path: TypePath.t(),
+          path: URI.t(),
           properties: Types.propertyDictionary(),
           pattern_properties: Types.propertyDictionary(),
-          additional_properties: TypePath.t() | nil,
+          additional_properties: URI.t() | nil,
           required: [String.t()]
         }
 
@@ -57,10 +57,10 @@ defmodule JsonSchema.Types.ObjectType do
 
   @spec new(
           String.t(),
-          TypePath.t(),
+          URI.t(),
           Types.propertyDictionary(),
           Types.propertyDictionary(),
-          TypePath.t() | nil,
+          URI.t() | nil,
           [String.t()]
         ) :: t
   def new(name, path, properties, pattern_properties, additional_properties, required) do

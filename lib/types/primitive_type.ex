@@ -1,6 +1,6 @@
 defmodule JsonSchema.Types.PrimitiveType do
-  @moduledoc ~S"""
-  Represents a custom 'primitive' type definition in a JSON schema.
+  @moduledoc """
+  Represents a custom `primitive` type definition in a JSON schema.
 
   JSON Schema:
 
@@ -8,24 +8,22 @@ defmodule JsonSchema.Types.PrimitiveType do
           "type": "string"
       }
 
-  Resulting Elixir intermediate representation:
+  Resulting in the Elixir representation:
 
       %PrimitiveType{name: "name",
-                     path: ["#", "name"],
+                     path: URI.parse("#/name"),
                      type: "string"}
   """
 
-  alias JsonSchema.TypePath
-
   @type t :: %__MODULE__{
           name: String.t(),
-          path: String.t() | TypePath.t(),
+          path: String.t() | URI.t(),
           type: String.t()
         }
 
   defstruct [:name, :path, :type]
 
-  @spec new(String.t(), String.t() | TypePath.t(), String.t()) :: t
+  @spec new(String.t(), String.t() | URI.t(), String.t()) :: t
   def new(name, path, type) do
     %__MODULE__{name: name, path: path, type: type}
   end

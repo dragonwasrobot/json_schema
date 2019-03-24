@@ -1,9 +1,9 @@
 defmodule JsonSchema.Parser.ParserBehaviour do
-  @moduledoc ~S"""
+  @moduledoc """
   Describes the functions needed to implement a parser for a JSON schema node.
   """
 
-  alias JsonSchema.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.ParserResult
 
   @callback type?(Types.schemaNode()) :: boolean
@@ -12,7 +12,7 @@ defmodule JsonSchema.Parser.ParserBehaviour do
               Types.schemaNode(),
               URI.t(),
               URI.t() | nil,
-              TypePath.t(),
+              URI.t(),
               String.t()
             ) :: ParserResult.t()
 end

@@ -1,5 +1,5 @@
 defmodule JsonSchema.Parser do
-  @moduledoc ~S"""
+  @moduledoc """
   Parses JSON schema files into an intermediate representation to be used for
   e.g. printing elm decoders.
   """
@@ -7,7 +7,7 @@ defmodule JsonSchema.Parser do
   require Logger
   alias JsonSchema.Parser.{RootParser, SchemaResult}
 
-  @doc ~S"""
+  @doc """
   Parses one or more JSON Schema files into a `SchemaResult`.
   """
   @spec parse_schema_files([Path.t()]) :: SchemaResult.t()
@@ -17,7 +17,7 @@ defmodule JsonSchema.Parser do
     |> parse_schema_documents()
   end
 
-  @doc ~S"""
+  @doc """
   Parses one or more JSON Schema documents into a `SchemaResult`.
   """
   @spec parse_schema_documents([{Path.t(), String.t()}]) :: SchemaResult.t()
@@ -30,7 +30,7 @@ defmodule JsonSchema.Parser do
     end)
   end
 
-  @doc ~S"""
+  @doc """
   Parses a single JSON Schema documents into a `SchemaResult`.
   """
   @spec parse_schema_document(String.t(), Path.t()) :: SchemaResult.t()

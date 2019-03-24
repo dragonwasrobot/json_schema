@@ -2,9 +2,10 @@ defmodule JsonSchema do
   @moduledoc File.read!("README.md")
 
   alias JsonSchema.{Parser, Resolver, Types}
-  alias Parser.SchemaResult
+  alias Parser.{ParserError, SchemaResult}
+  alias Types.SchemaDefinition
 
-  @doc ~S"""
+  @doc """
   Parses one or more JSON schema files into a `SchemaResult` containing a
   dictionary of parsed schemas represented as Elixir structs and two lists of
   any warnings or errors encountered while parsing the JSON schema documents.
@@ -14,7 +15,7 @@ defmodule JsonSchema do
     Parser.parse_schema_files(schema_paths)
   end
 
-  @doc ~S"""
+  @doc """
   Parses one or more JSON Schema documents into a `SchemaResult`.
   """
   @spec parse_schema_documents([{Path.t(), String.t()}]) :: SchemaResult.t()
@@ -22,7 +23,7 @@ defmodule JsonSchema do
     Parser.parse_schema_documents(schema_path_document_pairs)
   end
 
-  @doc ~S"""
+  @doc """
   Parses a single JSON Schema documents into a `SchemaResult`.
   """
   @spec parse_schema_document(Path.t(), String.t()) :: SchemaResult.t()
@@ -30,7 +31,7 @@ defmodule JsonSchema do
     Parser.parse_schema_document(schema_document, schema_path)
   end
 
-  @doc ~S"""
+  @doc """
   Resolves a JSON schema `Types.typeIdentifier`, when given a `SchemaDefinition`
   and a `Types.schemaDictionary`.
   """

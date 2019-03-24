@@ -1,6 +1,6 @@
 defmodule JsonSchema.Types.ArrayType do
-  @moduledoc ~S"""
-  Represents a custom 'array' type definition in a JSON schema.
+  @moduledoc """
+  Represents a custom `array` type definition in a JSON schema.
 
   JSON Schema:
 
@@ -11,24 +11,22 @@ defmodule JsonSchema.Types.ArrayType do
         }
       }
 
-  Resulting Elixir intermediate representation:
+  Resulting in the Elixir representation:
 
       %ArrayType{name: "rectangles",
-                 path: ["#", "rectangles"],
-                 items: ["#", "rectangles", "items"]}
+                 path: URI.parse("#/rectangles"),
+                 items: URI.parse("#/rectangles/items")}
   """
-
-  alias JsonSchema.TypePath
 
   @type t :: %__MODULE__{
           name: String.t(),
-          path: TypePath.t(),
-          items: TypePath.t()
+          path: URI.t(),
+          items: URI.t()
         }
 
   defstruct [:name, :path, :items]
 
-  @spec new(String.t(), TypePath.t(), TypePath.t()) :: t
+  @spec new(String.t(), URI.t(), URI.t()) :: t
   def new(name, path, items) do
     %__MODULE__{name: name, path: path, items: items}
   end

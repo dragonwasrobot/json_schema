@@ -8,17 +8,17 @@ defmodule JsonSchemaTest.Parser.PrimitiveParser do
 
   test "parse primitive type" do
     parser_result =
-      ~S"""
+      """
       {
         "type": "string"
       }
       """
       |> Jason.decode!()
-      |> PrimitiveParser.parse(nil, nil, ["#", "primitive"], "primitive")
+      |> PrimitiveParser.parse(nil, nil, URI.parse("#/primitive"), "primitive")
 
     expected_primitive_type = %PrimitiveType{
       name: "primitive",
-      path: ["#", "primitive"],
+      path: URI.parse("#/primitive"),
       type: "string"
     }
 

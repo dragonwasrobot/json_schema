@@ -1,5 +1,5 @@
 defmodule JsonSchema.Parser.ParserError do
-  @moduledoc ~S"""
+  @moduledoc """
   Represents an error generated while parsing a JSON schema object.
   """
 
@@ -13,7 +13,7 @@ defmodule JsonSchema.Parser.ParserError do
 
   defstruct [:identifier, :error_type, :message]
 
-  @doc ~S"""
+  @doc """
   Constructs a `ParserError`.
   """
   @spec new(Types.typeIdentifier(), atom, String.t()) :: t
@@ -27,7 +27,7 @@ defmodule JsonSchema.Parser.ParserError do
 end
 
 defmodule JsonSchema.Parser.ParserWarning do
-  @moduledoc ~S"""
+  @moduledoc """
   Represents a warning generated while parsing a JSON schema object.
   """
 
@@ -41,7 +41,7 @@ defmodule JsonSchema.Parser.ParserWarning do
 
   defstruct [:identifier, :warning_type, :message]
 
-  @doc ~S"""
+  @doc """
   Constructs a `ParserWarning`.
   """
   @spec new(Types.typeIdentifier(), atom, String.t()) :: t
@@ -55,7 +55,7 @@ defmodule JsonSchema.Parser.ParserWarning do
 end
 
 defmodule JsonSchema.Parser.ParserResult do
-  @moduledoc ~S"""
+  @moduledoc """
   Represents the result of parsing a subset of a JSON schema including
   parsed types, warnings, and errors.
   """
@@ -72,13 +72,13 @@ defmodule JsonSchema.Parser.ParserResult do
 
   defstruct [:type_dict, :warnings, :errors]
 
-  @doc ~S"""
+  @doc """
   Returns an empty `ParserResult`.
   """
   @spec new :: t
   def new, do: %__MODULE__{type_dict: %{}, warnings: [], errors: []}
 
-  @doc ~S"""
+  @doc """
   Creates a `ParserResult` from a type dictionary.
 
   A `ParserResult` consists of a type dictionary corresponding to the
@@ -90,10 +90,9 @@ defmodule JsonSchema.Parser.ParserResult do
     %__MODULE__{type_dict: type_dict, warnings: warnings, errors: errors}
   end
 
-  @doc ~S"""
+  @doc """
   Merges two `ParserResult`s and adds any collisions errors from merging their
   type dictionaries to the list of errors in the merged `ParserResult`.
-
   """
   @spec merge(t, t) :: t
   def merge(
@@ -129,7 +128,7 @@ defmodule JsonSchema.Parser.ParserResult do
 end
 
 defmodule JsonSchema.Parser.SchemaResult do
-  @moduledoc ~S"""
+  @moduledoc """
   Represents the result of parsing a whole JSON schema including the parsed
   schema, along with all warnings and errors generated while parsing the schema
   and its members.
@@ -147,13 +146,13 @@ defmodule JsonSchema.Parser.SchemaResult do
 
   defstruct [:schema_dict, :warnings, :errors]
 
-  @doc ~S"""
+  @doc """
   Returns an empty `SchemaResult`.
   """
   @spec new :: t
   def new, do: %__MODULE__{schema_dict: %{}, warnings: [], errors: []}
 
-  @doc ~S"""
+  @doc """
   Constructs a new `SchemaResult`. A `SchemaResult` consists of a schema
   dictionary corresponding to the succesfully parsed JSON schema files,
   and a list of warnings and errors encountered while parsing.
@@ -165,10 +164,9 @@ defmodule JsonSchema.Parser.SchemaResult do
     %__MODULE__{schema_dict: schema_dict, warnings: warnings, errors: errors}
   end
 
-  @doc ~S"""
+  @doc """
   Merges two `SchemaResult`s and adds any collisions errors from merging their
   schema dictionaries to the list of errors in the merged `SchemaResult`.
-
   """
   @spec merge(t, t) :: t
   def merge(

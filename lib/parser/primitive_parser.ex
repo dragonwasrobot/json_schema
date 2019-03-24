@@ -1,6 +1,6 @@
 defmodule JsonSchema.Parser.PrimitiveParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc ~S"""
+  @moduledoc """
   Parses a JSON schema primitive type:
 
       {
@@ -12,11 +12,11 @@ defmodule JsonSchema.Parser.PrimitiveParser do
 
   require Logger
 
-  alias JsonSchema.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.{ParserResult, Util}
   alias Types.PrimitiveType
 
-  @doc ~S"""
+  @doc """
   Returns true if the json subschema represents a primitive type.
 
   ## Examples
@@ -41,11 +41,11 @@ defmodule JsonSchema.Parser.PrimitiveParser do
     type in ["null", "boolean", "string", "number", "integer"]
   end
 
-  @doc ~S"""
+  @doc """
   Parses a JSON schema primitive type into an `JsonSchema.Types.PrimitiveType`.
   """
   @impl JsonSchema.Parser.ParserBehaviour
-  @spec parse(map, URI.t(), URI.t(), TypePath.t(), String.t()) ::
+  @spec parse(map, URI.t(), URI.t(), URI.t(), String.t()) ::
           ParserResult.t()
   def parse(schema_node, _parent_id, id, path, name) do
     type = schema_node["type"]

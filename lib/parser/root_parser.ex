@@ -1,11 +1,11 @@
 defmodule JsonSchema.Parser.RootParser do
-  @moduledoc ~S"""
+  @moduledoc """
   Contains logic for verifying the schema version of a JSON schema file.
   """
 
   require Logger
 
-  alias JsonSchema.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, Types}
 
   alias Parser.{
     AllOfParser,
@@ -43,8 +43,7 @@ defmodule JsonSchema.Parser.RootParser do
 
       root_parser_result = parse_root_object(root_node_no_def, schema_id, title)
 
-      definitions_parser_result =
-        parse_definitions(root_node_only_def, schema_id)
+      definitions_parser_result = parse_definitions(root_node_only_def, schema_id)
 
       %ParserResult{type_dict: type_dict, errors: errors, warnings: warnings} =
         ParserResult.merge(root_parser_result, definitions_parser_result)
@@ -86,7 +85,7 @@ defmodule JsonSchema.Parser.RootParser do
   @spec parse_definitions(Types.schemaNode(), URI.t()) :: ParserResult.t()
   defp parse_definitions(schema_root_node, schema_id) do
     if DefinitionsParser.type?(schema_root_node) do
-      DefinitionsParser.parse(schema_root_node, schema_id, nil, ["#"], "")
+      DefinitionsParser.parse(schema_root_node, schema_id, nil, URI.parse("#"), "")
     else
       ParserResult.new(%{})
     end
@@ -94,7 +93,7 @@ defmodule JsonSchema.Parser.RootParser do
 
   @spec parse_root_object(map, URI.t(), String.t()) :: ParserResult.t()
   defp parse_root_object(schema_root_node, schema_id, name) do
-    type_path = TypePath.from_string("#")
+    type_path = URI.parse("#")
 
     cond do
       AllOfParser.type?(schema_root_node) ->
@@ -131,19 +130,18 @@ defmodule JsonSchema.Parser.RootParser do
   end
 
   @supported_versions [
-    "http://json-schema.org/draft-04/schema#",
-    "http://json-schema.org/draft-06/schema#"
+    "http://json-schema.org/draft-07/schema#"
   ]
 
-  @doc ~S"""
+  @doc """
   Returns `:ok` if the given JSON schema has a known supported version,
   and an error tuple otherwise.
 
   ## Examples
 
-      iex> schema = %{"$schema" => "http://json-schema.org/draft-04/schema#"}
+      iex> schema = %{"$schema" => "http://json-schema.org/draft-07/schema#"}
       iex> parse_schema_version(schema)
-      {:ok, "http://json-schema.org/draft-04/schema#"}
+      {:ok, "http://json-schema.org/draft-07/schema#"}
 
       iex> schema = %{"$schema" => "http://example.org/my-own-schema"}
       iex> {:error, error} = parse_schema_version(schema)
@@ -164,8 +162,7 @@ defmodule JsonSchema.Parser.RootParser do
     if schema_version in @supported_versions do
       {:ok, schema_version}
     else
-      {:error,
-       ErrorUtil.unsupported_schema_version(schema_str, @supported_versions)}
+      {:error, ErrorUtil.unsupported_schema_version(schema_str, @supported_versions)}
     end
   end
 
@@ -175,13 +172,13 @@ defmodule JsonSchema.Parser.RootParser do
   end
 
   def parse_schema_version(_schema) do
-    path = TypePath.from_string("#")
+    path = URI.parse("#")
     {:error, ErrorUtil.missing_property(path, "$schema")}
   end
 
   @valid_uri_schemes ["http", "https", "urn"]
 
-  @doc ~S"""
+  @doc """
   Parses the ID of a JSON schema.
 
   ## Examples

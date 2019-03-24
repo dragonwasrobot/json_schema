@@ -1,6 +1,6 @@
 defmodule JsonSchema.Parser.ObjectParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc ~S"""
+  @moduledoc """
   Parses a JSON schema object type:
 
       {
@@ -23,11 +23,11 @@ defmodule JsonSchema.Parser.ObjectParser do
   """
 
   require Logger
-  alias JsonSchema.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.{ParserResult, Util}
   alias Types.ObjectType
 
-  @doc ~S"""
+  @doc """
   Returns true if the json subschema represents an allOf type.
 
   ## Examples
@@ -47,15 +47,16 @@ defmodule JsonSchema.Parser.ObjectParser do
     is_map(properties)
   end
 
-  @doc ~S"""
+  @doc """
   Parses a JSON schema object type into an `JsonSchema.Types.ObjectType`.
   """
   @impl JsonSchema.Parser.ParserBehaviour
-  @spec parse(Types.schemaNode(), URI.t(), URI.t(), TypePath.t(), String.t()) :: ParserResult.t()
+  @spec parse(Types.schemaNode(), URI.t(), URI.t(), URI.t(), String.t()) ::
+          ParserResult.t()
   def parse(schema_node, parent_id, id, path, name) do
     required = Map.get(schema_node, "required", [])
 
-    properties_path = TypePath.add_child(path, "properties")
+    properties_path = Util.add_fragment_child(path, "properties")
 
     properties_result =
       schema_node
@@ -64,7 +65,7 @@ defmodule JsonSchema.Parser.ObjectParser do
 
     properties_type_dict = create_property_dict(properties_result.type_dict, properties_path)
 
-    pattern_properties_path = TypePath.add_child(path, "patternProperties")
+    pattern_properties_path = Util.add_fragment_child(path, "patternProperties")
 
     pattern_properties_result =
       if schema_node["patternProperties"] != nil do
@@ -86,7 +87,7 @@ defmodule JsonSchema.Parser.ObjectParser do
           |> Util.parse_type(parent_id, path, "additionalProperties")
 
         if parser_result != nil do
-          {TypePath.add_child(path, "additionalProperties"), parser_result}
+          {Util.add_fragment_child(path, "additionalProperties"), parser_result}
         else
           {nil, ParserResult.new()}
         end
@@ -112,7 +113,7 @@ defmodule JsonSchema.Parser.ObjectParser do
     |> ParserResult.merge(additional_properties_result)
   end
 
-  @spec parse_child_types(map, URI.t(), TypePath.t(), boolean) :: ParserResult.t()
+  @spec parse_child_types(map, URI.t(), URI.t(), boolean) :: ParserResult.t()
   defp parse_child_types(node_properties, parent_id, child_path, name_is_regex \\ false) do
     init_result = ParserResult.new()
 
@@ -124,29 +125,25 @@ defmodule JsonSchema.Parser.ObjectParser do
     end)
   end
 
-  @doc ~S"""
+  @doc """
   Creates a property dictionary based on a type dictionary and a type path.
 
   ## Examples
 
       iex> type_dict = %{}
-      ...> path = JsonSchema.TypePath.from_string("#")
+      ...> path = URI.parse("#")
       ...> JsonSchema.Parser.ObjectParser.create_property_dict(type_dict, path)
       %{}
 
   """
-  @spec create_property_dict(Types.typeDictionary(), TypePath.t()) :: Types.propertyDictionary()
+  @spec create_property_dict(Types.typeDictionary(), URI.t()) ::
+          Types.propertyDictionary()
   def create_property_dict(type_dict, path) do
     type_dict
-    |> Enum.reduce(%{}, fn {child_path, child_type}, acc_property_dict ->
-      child_type_path = TypePath.add_child(path, child_type.name)
-
-      if child_type_path == TypePath.from_string(child_path) do
-        child_property_dict = %{child_type.name => child_type_path}
-        Map.merge(acc_property_dict, child_property_dict)
-      else
-        acc_property_dict
-      end
+    |> Enum.reduce(%{}, fn {_child_path, child_type}, acc_property_dict ->
+      child_type_path = Util.add_fragment_child(path, child_type.name)
+      child_property_dict = %{child_type.name => child_type_path}
+      Map.merge(acc_property_dict, child_property_dict)
     end)
   end
 end

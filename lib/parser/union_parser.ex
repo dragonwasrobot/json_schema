@@ -1,6 +1,6 @@
 defmodule JsonSchema.Parser.UnionParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc ~S"""
+  @moduledoc """
   Parses a JSON schema union type:
 
       {
@@ -11,11 +11,11 @@ defmodule JsonSchema.Parser.UnionParser do
   """
 
   require Logger
-  alias JsonSchema.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.{ParserResult, Util}
   alias Types.UnionType
 
-  @doc ~S"""
+  @doc """
   Returns true if the json subschema represents a union type.
 
   ## Examples
@@ -32,11 +32,11 @@ defmodule JsonSchema.Parser.UnionParser do
   def type?(%{"type" => types}) when is_list(types), do: true
   def type?(_schema_node), do: false
 
-  @doc ~S"""
+  @doc """
   Parses a JSON schema union type into an `JsonSchema.Types.UnionType`.
   """
   @impl JsonSchema.Parser.ParserBehaviour
-  @spec parse(map, URI.t(), URI.t(), TypePath.t(), String.t()) ::
+  @spec parse(map, URI.t(), URI.t(), URI.t(), String.t()) ::
           ParserResult.t()
   def parse(%{"type" => types}, _parent_id, id, path, name) do
     union_type = UnionType.new(name, path, types)

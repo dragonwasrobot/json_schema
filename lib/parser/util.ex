@@ -1,11 +1,11 @@
 defmodule JsonSchema.Parser.Util do
-  @moduledoc ~S"""
+  @moduledoc """
   A module containing utility functions for JSON schema parsers.
   """
 
   require Logger
 
-  alias JsonSchema.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, Types}
 
   alias Parser.{
     AllOfParser,
@@ -24,20 +24,20 @@ defmodule JsonSchema.Parser.Util do
   }
 
   @type nodeParser ::
-          (Types.schemaNode(), URI.t(), URI.t(), TypePath.t(), String.t() ->
+          (Types.schemaNode(), URI.t(), URI.t(), URI.t(), String.t() ->
              ParserResult.t())
 
-  @doc ~S"""
+  @doc """
   Creates a new type dictionary based on the given type definition
   and an optional ID.
   """
   @spec create_type_dict(
           Types.typeDefinition(),
-          TypePath.t(),
+          URI.t(),
           URI.t() | nil
         ) :: Types.typeDictionary()
   def create_type_dict(type_def, path, id) do
-    string_path = path |> TypePath.to_string()
+    string_path = path |> to_string()
 
     type_dict =
       if id != nil do
@@ -56,19 +56,19 @@ defmodule JsonSchema.Parser.Util do
     type_dict
   end
 
-  @doc ~S"""
+  @doc """
   Returns a list of type paths when given a type dictionary.
   """
-  @spec create_types_list(Types.typeDictionary(), TypePath.t()) :: [
-          TypePath.t()
+  @spec create_types_list(Types.typeDictionary(), URI.t()) :: [
+          URI.t()
         ]
   def create_types_list(type_dict, path) do
     type_dict
     |> Enum.reduce(%{}, fn {child_abs_path, child_type}, reference_dict ->
       normalized_child_name = child_type.name
-      child_type_path = TypePath.add_child(path, normalized_child_name)
+      child_type_path = add_fragment_child(path, normalized_child_name)
 
-      if child_type_path == TypePath.from_string(child_abs_path) do
+      if child_type_path == URI.parse(child_abs_path) do
         Map.merge(reference_dict, %{normalized_child_name => child_type_path})
       else
         reference_dict
@@ -77,11 +77,11 @@ defmodule JsonSchema.Parser.Util do
     |> Map.values()
   end
 
-  @doc ~S"""
+  @doc """
   Parse a list of JSON schema objects that have a child relation to another
   schema object with the specified `parent_id`.
   """
-  @spec parse_child_types([Types.schemaNode()], URI.t(), TypePath.t()) :: ParserResult.t()
+  @spec parse_child_types([Types.schemaNode()], URI.t(), URI.t()) :: ParserResult.t()
   def parse_child_types(child_nodes, parent_id, path)
       when is_list(child_nodes) do
     child_nodes
@@ -93,14 +93,17 @@ defmodule JsonSchema.Parser.Util do
     |> elem(0)
   end
 
-  @spec parse_type(Types.schemaNode(), URI.t(), TypePath.t(), String.t(), boolean) ::
+  @doc """
+  Parses a node type.
+  """
+  @spec parse_type(Types.schemaNode(), URI.t(), URI.t(), String.t(), boolean) ::
           ParserResult.t()
   def parse_type(schema_node, parent_id, path, name, name_is_regex \\ false) do
     definitions_result =
       if DefinitionsParser.type?(schema_node) do
         id = determine_id(schema_node, parent_id)
         child_parent_id = determine_parent_id(id, parent_id)
-        type_path = TypePath.add_child(path, name)
+        type_path = add_fragment_child(path, name)
 
         DefinitionsParser.parse(
           schema_node,
@@ -121,7 +124,7 @@ defmodule JsonSchema.Parser.Util do
         node_parser ->
           id = determine_id(schema_node, parent_id)
           child_parent_id = determine_parent_id(id, parent_id)
-          type_path = TypePath.add_child(path, name)
+          type_path = add_fragment_child(path, name)
 
           node_parser.(schema_node, child_parent_id, id, type_path, name)
       end
@@ -133,7 +136,7 @@ defmodule JsonSchema.Parser.Util do
             ParserResult.new()
 
           {:error, _error} ->
-            id = TypePath.to_string(path)
+            id = to_string(path)
             parser_error = ErrorUtil.name_not_a_regex(id, name)
             ParserResult.new(%{}, [], [parser_error])
         end
@@ -175,14 +178,8 @@ defmodule JsonSchema.Parser.Util do
     node_parser
   end
 
-  # Determines the ID of a schema node based on its parent's ID and its own
-  # optional '$id' or id' property.
   @spec determine_id(map, URI.t()) :: URI.t() | nil
   defp determine_id(%{"$id" => id}, parent_id) when is_binary(id) do
-    do_determine_id(id, parent_id)
-  end
-
-  defp determine_id(%{"id" => id}, parent_id) when is_binary(id) do
     do_determine_id(id, parent_id)
   end
 
@@ -206,5 +203,46 @@ defmodule JsonSchema.Parser.Util do
     else
       parent_id
     end
+  end
+
+  @doc """
+  Adds a child to the fragment of a `URI`.
+
+  ## Examples
+
+      iex> add_fragment_child(%URI{
+      ...> authority: nil,
+      ...> fragment: "/definitions/foo",
+      ...> host: nil,
+      ...> path: nil,
+      ...> port: nil,
+      ...> query: nil,
+      ...> scheme: nil,
+      ...> userinfo: nil
+      ...> }, "bar")
+      %URI{
+        authority: nil,
+        fragment: "/definitions/foo/bar",
+        host: nil,
+        path: nil,
+        port: nil,
+        query: nil,
+        scheme: nil,
+        userinfo: nil
+      }
+
+  """
+  @spec add_fragment_child(URI.t(), String.t()) :: URI.t()
+  def add_fragment_child(uri, child) do
+    old_fragment = uri.fragment
+
+    new_fragment =
+      if old_fragment == "" do
+        "/#{child}"
+      else
+        Path.join(old_fragment, child)
+      end
+
+    %{uri | fragment: new_fragment}
   end
 end

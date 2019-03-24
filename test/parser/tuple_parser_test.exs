@@ -8,7 +8,7 @@ defmodule JsonSchemaTest.Parser.TupleParser do
 
   test "parse tuple type" do
     parser_result =
-      ~S"""
+      """
       {
         "type": "array",
         "items": [
@@ -18,25 +18,25 @@ defmodule JsonSchemaTest.Parser.TupleParser do
       }
       """
       |> Jason.decode!()
-      |> TupleParser.parse(nil, nil, ["#", "shapePair"], "shapePair")
+      |> TupleParser.parse(nil, nil, URI.parse("#/shapePair"), "shapePair")
 
     expected_tuple_type = %TupleType{
       name: "shapePair",
-      path: ["#", "shapePair"],
+      path: URI.parse("#/shapePair"),
       items: [
-        ["#", "shapePair", "items", "0"],
-        ["#", "shapePair", "items", "1"]
+        URI.parse("#/shapePair/items/0"),
+        URI.parse("#/shapePair/items/1")
       ]
     }
 
     expected_rectangle_type_reference = %TypeReference{
       name: "0",
-      path: ["#", "definitions", "rectangle"]
+      path: URI.parse("#/definitions/rectangle")
     }
 
     expected_circle_type_reference = %TypeReference{
       name: "1",
-      path: ["#", "definitions", "circle"]
+      path: URI.parse("#/definitions/circle")
     }
 
     assert parser_result.errors == []

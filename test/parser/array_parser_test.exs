@@ -8,7 +8,7 @@ defmodule JsonSchemaTest.Parser.ArrayParser do
 
   test "parse array type" do
     parser_result =
-      ~S"""
+      """
       {
         "type": "array",
         "items": {
@@ -17,17 +17,17 @@ defmodule JsonSchemaTest.Parser.ArrayParser do
       }
       """
       |> Jason.decode!()
-      |> ArrayParser.parse(nil, nil, ["#", "rectangles"], "rectangles")
+      |> ArrayParser.parse(nil, nil, URI.parse("#/rectangles"), "rectangles")
 
     expected_array_type = %ArrayType{
       name: "rectangles",
-      path: ["#", "rectangles"],
-      items: ["#", "rectangles", "items"]
+      path: URI.parse("#/rectangles"),
+      items: URI.parse("#/rectangles/items")
     }
 
     expected_type_reference = %TypeReference{
       name: "items",
-      path: ["#", "definitions", "rectangle"]
+      path: URI.parse("#/definitions/rectangle")
     }
 
     assert parser_result.errors == []

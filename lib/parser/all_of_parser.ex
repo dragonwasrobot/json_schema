@@ -1,6 +1,6 @@
 defmodule JsonSchema.Parser.AllOfParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc ~S"""
+  @moduledoc """
   Parses a JSON schema allOf type:
 
       {
@@ -30,11 +30,11 @@ defmodule JsonSchema.Parser.AllOfParser do
   """
 
   require Logger
-  alias JsonSchema.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.{ParserResult, Util}
   alias Types.AllOfType
 
-  @doc ~S"""
+  @doc """
   Returns true if the JSON subschema represents an allOf type.
 
   ## Examples
@@ -57,7 +57,7 @@ defmodule JsonSchema.Parser.AllOfParser do
 
   def type?(_schema_node), do: false
 
-  @doc ~S"""
+  @doc """
   Parses a JSON schema allOf type into an `JsonSchema.Types.AllOfType`.
   """
   @impl JsonSchema.Parser.ParserBehaviour
@@ -65,12 +65,12 @@ defmodule JsonSchema.Parser.AllOfParser do
           Types.schemaNode(),
           URI.t(),
           URI.t() | nil,
-          TypePath.t(),
+          URI.t(),
           String.t()
         ) :: ParserResult.t()
   def parse(%{"allOf" => all_of}, parent_id, id, path, name)
       when is_list(all_of) do
-    child_path = TypePath.add_child(path, "allOf")
+    child_path = Util.add_fragment_child(path, "allOf")
 
     child_types_result =
       all_of

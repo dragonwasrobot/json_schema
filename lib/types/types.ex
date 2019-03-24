@@ -1,10 +1,10 @@
 defmodule JsonSchema.Types do
-  @moduledoc ~S"""
+  @moduledoc """
   Specifies the main Elixir types used for describing the
   intermediate representations of JSON schema types.
   """
 
-  alias JsonSchema.{TypePath, Types}
+  alias JsonSchema.Types
 
   alias Types.{
     AllOfType,
@@ -33,7 +33,7 @@ defmodule JsonSchema.Types do
           | UnionType.t()
 
   @type schemaNode :: map
-  @type typeIdentifier :: String.t() | TypePath.t() | URI.t()
+  @type typeIdentifier :: String.t() | URI.t()
   @type propertyDictionary :: %{required(String.t()) => typeIdentifier}
   @type typeDictionary :: %{required(String.t()) => typeDefinition}
   @type schemaDictionary :: %{required(String.t()) => SchemaDefinition.t()}

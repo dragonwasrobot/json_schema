@@ -1,10 +1,10 @@
 defmodule JsonSchema.Types.AllOfType do
-  @moduledoc ~S"""
-  Represents a custom 'all_of' type definition in a JSON schema.
+  @moduledoc """
+  Represents a custom `allOf` type definition in a JSON schema.
 
   JSON Schema:
 
-  The following example schema has the path "#/definitions/fancyCircle"
+  The following example schema has the path `"#/definitions/fancyCircle"`
 
       {
         "allOf": [
@@ -26,14 +26,14 @@ defmodule JsonSchema.Types.AllOfType do
         ]
       }
 
-  Where "#/definitions/color" resolves to:
+  where `"#/definitions/color"` resolves to:
 
       {
         "type": "string",
         "enum": ["red", "yellow", "green"]
       }
 
-  Where "#/definitions/circle" resolves to:
+  and `"#/definitions/circle"` resolves to:
 
       {
          "type": "object",
@@ -45,25 +45,23 @@ defmodule JsonSchema.Types.AllOfType do
          "required": [ "radius" ]
       }
 
-  Resulting Elixir representation:
+  Resulting in the Elixir representation:
 
       %AllOfType{name: "fancyCircle",
-                 path: ["#", "definitions", "fancyCircle"],
-                 types: [["#", "definitions", "fancyCircle", "allOf", "0"],
-                         ["#", "definitions", "fancyCircle", "allOf", "1"]]}
+                 path: URI.parse("#/definitions/fancyCircle"),
+                 types: [URI.parse("#/definitions/fancyCircle/allOf/0"),
+                         URI.parse("#/definitions/fancyCircle/allOf/1")]}
   """
-
-  alias JsonSchema.TypePath
 
   @type t :: %__MODULE__{
           name: String.t(),
-          path: TypePath.t(),
-          types: [TypePath.t()]
+          path: URI.t(),
+          types: [URI.t()]
         }
 
   defstruct [:name, :path, :types]
 
-  @spec new(String.t(), TypePath.t(), [TypePath.t()]) :: t
+  @spec new(String.t(), URI.t(), [URI.t()]) :: t
   def new(name, path, types) do
     %__MODULE__{name: name, path: path, types: types}
   end

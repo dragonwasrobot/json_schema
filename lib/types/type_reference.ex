@@ -1,5 +1,5 @@
 defmodule JsonSchema.Types.TypeReference do
-  @moduledoc ~S"""
+  @moduledoc """
   Represents a reference to a custom type definition in a JSON schema.
 
   JSON Schema:
@@ -12,7 +12,7 @@ defmodule JsonSchema.Types.TypeReference do
         "$ref": "http://www.example.com/definitions.json#bar"
       }
 
-  Where "#/definitions/foo" resolves to
+  where "#/definitions/foo" resolves to
 
       "definitions": {
         "foo": {
@@ -29,17 +29,13 @@ defmodule JsonSchema.Types.TypeReference do
         }
       }
 
-  Resulting Elixir intermediate representation:
+  Resulting in the Elixir representation:
 
       %TypeReference{name: "self",
-                     path: ["#", "definitions", "foo"]}
+                     path: URI.parse("#/definitions/foo"]}
 
       %TypeReference{name: "other",
-                     path: %URI{scheme: "http",
-                                host: "www.example.com",
-                                path: "/definitions.json",
-                                fragment: "bar",
-                                ...}}
+                     path: URI.parse("http://www.example.com/definitions.json#bar")}
 
   """
 

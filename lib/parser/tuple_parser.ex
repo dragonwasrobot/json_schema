@@ -1,6 +1,6 @@
 defmodule JsonSchema.Parser.TupleParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc ~S"""
+  @moduledoc """
   Parses a JSON schema array type:
 
       {
@@ -16,11 +16,11 @@ defmodule JsonSchema.Parser.TupleParser do
 
   require Logger
 
-  alias JsonSchema.{Parser, TypePath, Types}
+  alias JsonSchema.{Parser, Types}
   alias Parser.{ParserResult, Util}
   alias Types.TupleType
 
-  @doc ~S"""
+  @doc """
   Returns true if the json subschema represents a tuple type.
 
   ## Examples
@@ -40,7 +40,7 @@ defmodule JsonSchema.Parser.TupleParser do
     is_list(items)
   end
 
-  @doc ~S"""
+  @doc """
   Parses a JSON schema array type into an `JsonSchema.Types.TupleType`.
   """
   @impl JsonSchema.Parser.ParserBehaviour
@@ -48,12 +48,12 @@ defmodule JsonSchema.Parser.TupleParser do
           Types.schemaNode(),
           URI.t(),
           URI.t() | nil,
-          TypePath.t(),
+          URI.t(),
           String.t()
         ) :: ParserResult.t()
   def parse(%{"items" => items}, parent_id, id, path, name)
       when is_list(items) do
-    child_path = TypePath.add_child(path, "items")
+    child_path = Util.add_fragment_child(path, "items")
 
     child_types_result =
       items

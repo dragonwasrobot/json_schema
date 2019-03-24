@@ -1,7 +1,7 @@
 defmodule JsonSchema.Parser.AnyOfParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc ~S"""
-  Parses a JSON schema anyOf type:
+  @moduledoc """
+  Parses a JSON schema `anyOf` type:
 
       {
         "anyOf": [
@@ -30,11 +30,11 @@ defmodule JsonSchema.Parser.AnyOfParser do
   """
 
   require Logger
-  alias JsonSchema.Parser.{ParserResult, Util}
-  alias JsonSchema.{TypePath, Types}
-  alias JsonSchema.Types.AnyOfType
+  alias JsonSchema.{Parser, Types}
+  alias Parser.{ParserResult, Util}
+  alias Types.AnyOfType
 
-  @doc ~S"""
+  @doc """
   Returns true if the json subschema represents an anyOf type.
 
   ## Examples
@@ -56,7 +56,7 @@ defmodule JsonSchema.Parser.AnyOfParser do
     is_list(any_of) && length(any_of) > 0
   end
 
-  @doc ~S"""
+  @doc """
   Parses a JSON schema anyOf type into an `JsonSchema.Types.AnyOfType`.
   """
   @impl JsonSchema.Parser.ParserBehaviour
@@ -64,12 +64,12 @@ defmodule JsonSchema.Parser.AnyOfParser do
           Types.schemaNode(),
           URI.t(),
           URI.t() | nil,
-          TypePath.t(),
+          URI.t(),
           String.t()
         ) :: ParserResult.t()
   def parse(%{"anyOf" => any_of}, parent_id, id, path, name)
       when is_list(any_of) do
-    child_path = TypePath.add_child(path, "anyOf")
+    child_path = Util.add_fragment_child(path, "anyOf")
 
     child_types_result =
       any_of

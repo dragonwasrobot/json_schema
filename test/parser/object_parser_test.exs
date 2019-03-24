@@ -8,7 +8,7 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
 
   test "can parse correct object type" do
     parser_result =
-      ~S"""
+      """
       {
         "type": "object",
         "properties": {
@@ -34,49 +34,49 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
       }
       """
       |> Jason.decode!()
-      |> ObjectParser.parse(nil, nil, ["#", "circle"], "circle")
+      |> ObjectParser.parse(nil, nil, URI.parse("#/circle"), "circle")
 
     expected_object_type = %ObjectType{
       name: "circle",
-      path: ["#", "circle"],
+      path: URI.parse("#/circle"),
       required: ["color", "radius"],
       properties: %{
-        "color" => ["#", "circle", "properties", "color"],
-        "title" => ["#", "circle", "properties", "title"],
-        "radius" => ["#", "circle", "properties", "radius"]
+        "color" => URI.parse("#/circle/properties/color"),
+        "title" => URI.parse("#/circle/properties/title"),
+        "radius" => URI.parse("#/circle/properties/radius")
       },
       pattern_properties: %{
-        "f.*o" => ["#", "circle", "patternProperties", "f.*o"]
+        "f.*o" => URI.parse("#/circle/patternProperties/f.*o")
       },
-      additional_properties: ["#", "circle", "additionalProperties"]
+      additional_properties: URI.parse("#/circle/additionalProperties")
     }
 
     expected_color_type_reference = %TypeReference{
       name: "color",
-      path: ["#", "definitions", "color"]
+      path: URI.parse("#/definitions/color")
     }
 
     expected_regex_primitive_type = %PrimitiveType{
       name: "f.*o",
-      path: ["#", "circle", "patternProperties", "f.*o"],
+      path: URI.parse("#/circle/patternProperties/f.*o"),
       type: "integer"
     }
 
     expected_title_primitive_type = %PrimitiveType{
       name: "title",
-      path: ["#", "circle", "properties", "title"],
+      path: URI.parse("#/circle/properties/title"),
       type: "string"
     }
 
     expected_radius_primitive_type = %PrimitiveType{
       name: "radius",
-      path: ["#", "circle", "properties", "radius"],
+      path: URI.parse("#/circle/properties/radius"),
       type: "number"
     }
 
     expected_additional_properties_type = %PrimitiveType{
       name: "additionalProperties",
-      path: ["#", "circle", "additionalProperties"],
+      path: URI.parse("#/circle/additionalProperties"),
       type: "boolean"
     }
 
@@ -95,7 +95,7 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
 
   test "returns error when parsing invalid patternProperties" do
     parser_result =
-      ~S"""
+      """
       {
         "type": "object",
         "properties": {
@@ -121,7 +121,7 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
       }
       """
       |> Jason.decode!()
-      |> ObjectParser.parse(nil, nil, ["#", "circle"], "circle")
+      |> ObjectParser.parse(nil, nil, URI.parse("#/circle"), "circle")
 
     assert parser_result.warnings == []
 
