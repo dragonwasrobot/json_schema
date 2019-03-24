@@ -44,7 +44,8 @@ defmodule JsonSchemaTest.Parser.OneOfParser do
         "title" => ["#", "schema", "oneOf", "0", "properties", "title"],
         "radius" => ["#", "schema", "oneOf", "0", "properties", "radius"]
       },
-      patternProperties: %{}
+      pattern_properties: %{},
+      additional_properties: nil
     }
 
     expected_primitive_type = %PrimitiveType{

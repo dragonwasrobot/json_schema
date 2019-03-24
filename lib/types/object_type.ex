@@ -22,6 +22,9 @@ defmodule JsonSchema.Types.ObjectType do
             "type": "integer"
           }
         },
+        "additionalProperties": {
+          "type": "boolean"
+        },
         "required": [ "color", "radius" ]
       }
 
@@ -34,8 +37,9 @@ defmodule JsonSchema.Types.ObjectType do
                       "color" => ["#", "circle", "properties", "color"],
                       "title" => ["#", "circle", "properties", "title"],
                       "radius" => ["#", "circle", "properties", "radius"]},
-                  patternProperties: %{
-                      "f.*o" => ["#", "circle", "patternProperties", "f.*o"]}}
+                  pattern_properties: %{
+                      "f.*o" => ["#", "circle", "patternProperties", "f.*o"]},
+                  additional_properties: ["#", "circle", "additionalProperties"]
   """
 
   alias JsonSchema.{TypePath, Types}
@@ -44,25 +48,28 @@ defmodule JsonSchema.Types.ObjectType do
           name: String.t(),
           path: TypePath.t(),
           properties: Types.propertyDictionary(),
-          patternProperties: Types.propertyDictionary(),
+          pattern_properties: Types.propertyDictionary(),
+          additional_properties: TypePath.t() | nil,
           required: [String.t()]
         }
 
-  defstruct [:name, :path, :properties, :patternProperties, :required]
+  defstruct [:name, :path, :properties, :pattern_properties, :additional_properties, :required]
 
   @spec new(
           String.t(),
           TypePath.t(),
           Types.propertyDictionary(),
           Types.propertyDictionary(),
+          TypePath.t() | nil,
           [String.t()]
         ) :: t
-  def new(name, path, properties, patternProperties, required) do
+  def new(name, path, properties, pattern_properties, additional_properties, required) do
     %__MODULE__{
       name: name,
       path: path,
       properties: properties,
-      patternProperties: patternProperties,
+      pattern_properties: pattern_properties,
+      additional_properties: additional_properties,
       required: required
     }
   end

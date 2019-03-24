@@ -27,6 +27,9 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
             "type": "integer"
           }
         },
+        "additionalProperties": {
+          "type": "boolean"
+        },
         "required": ["color", "radius"]
       }
       """
@@ -42,9 +45,10 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
         "title" => ["#", "circle", "properties", "title"],
         "radius" => ["#", "circle", "properties", "radius"]
       },
-      patternProperties: %{
+      pattern_properties: %{
         "f.*o" => ["#", "circle", "patternProperties", "f.*o"]
-      }
+      },
+      additional_properties: ["#", "circle", "additionalProperties"]
     }
 
     expected_color_type_reference = %TypeReference{
@@ -70,6 +74,12 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
       type: "number"
     }
 
+    expected_additional_properties_type = %PrimitiveType{
+      name: "additionalProperties",
+      path: ["#", "circle", "additionalProperties"],
+      type: "boolean"
+    }
+
     assert parser_result.errors == []
     assert parser_result.warnings == []
 
@@ -78,7 +88,8 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
              "#/circle/properties/color" => expected_color_type_reference,
              "#/circle/properties/title" => expected_title_primitive_type,
              "#/circle/properties/radius" => expected_radius_primitive_type,
-             "#/circle/patternProperties/f.*o" => expected_regex_primitive_type
+             "#/circle/patternProperties/f.*o" => expected_regex_primitive_type,
+             "#/circle/additionalProperties" => expected_additional_properties_type
            }
   end
 
@@ -102,6 +113,9 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
           "*foo": {
             "type": "integer"
           }
+        },
+        "additionalProperties": {
+            "type": "boolean"
         },
         "required": ["color", "radius"]
       }

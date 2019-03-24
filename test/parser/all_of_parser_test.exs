@@ -59,7 +59,8 @@ defmodule JsonSchemaTest.Parser.AllOfParser do
         "color" => path() ++ ["allOf", "0", "properties", "color"],
         "description" => path() ++ ["allOf", "0", "properties", "description"]
       },
-      patternProperties: %{}
+      pattern_properties: %{},
+      additional_properties: nil
     }
 
     expected_color_type = %TypeReference{

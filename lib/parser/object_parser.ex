@@ -78,14 +78,38 @@ defmodule JsonSchema.Parser.ObjectParser do
     pattern_properties_type_dict =
       create_property_dict(pattern_properties_result.type_dict, pattern_properties_path)
 
+    {additional_properties_path, additional_properties_result} =
+      if schema_node["additionalProperties"] != nil do
+        parser_result =
+          schema_node
+          |> Map.get("additionalProperties")
+          |> Util.parse_type(parent_id, path, "additionalProperties")
+
+        if parser_result != nil do
+          {TypePath.add_child(path, "additionalProperties"), parser_result}
+        else
+          {nil, ParserResult.new()}
+        end
+      else
+        {nil, ParserResult.new()}
+      end
+
     object_type =
-      ObjectType.new(name, path, properties_type_dict, pattern_properties_type_dict, required)
+      ObjectType.new(
+        name,
+        path,
+        properties_type_dict,
+        pattern_properties_type_dict,
+        additional_properties_path,
+        required
+      )
 
     object_type
     |> Util.create_type_dict(path, id)
     |> ParserResult.new()
     |> ParserResult.merge(properties_result)
     |> ParserResult.merge(pattern_properties_result)
+    |> ParserResult.merge(additional_properties_result)
   end
 
   @spec parse_child_types(map, URI.t(), TypePath.t(), boolean) :: ParserResult.t()
