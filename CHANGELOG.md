@@ -13,7 +13,7 @@
 - Replaced the `TypePath` type wih the `URI` type when specifying local paths in
   a JSON schema document.
 
-## v0.1.0 [2019-01-12]
+## v0.1.0 [2018-07-27]
 
 > NOTE: This initial release is a fork of
 > https://github.com/dragonwasrobot/json-schema-to-elm, and so this version
