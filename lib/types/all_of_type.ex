@@ -7,6 +7,7 @@ defmodule JsonSchema.Types.AllOfType do
   The following example schema has the path `"#/definitions/fancyCircle"`
 
       {
+        "description": "A fancy circle",
         "allOf": [
           {
             "type": "object",
@@ -48,21 +49,18 @@ defmodule JsonSchema.Types.AllOfType do
   Resulting in the Elixir representation:
 
       %AllOfType{name: "fancyCircle",
+                 description: "A fancy circle",
                  path: URI.parse("#/definitions/fancyCircle"),
                  types: [URI.parse("#/definitions/fancyCircle/allOf/0"),
                          URI.parse("#/definitions/fancyCircle/allOf/1")]}
   """
 
-  @type t :: %__MODULE__{
-          name: String.t(),
-          path: URI.t(),
-          types: [URI.t()]
-        }
+  use TypedStruct
 
-  defstruct [:name, :path, :types]
-
-  @spec new(String.t(), URI.t(), [URI.t()]) :: t
-  def new(name, path, types) do
-    %__MODULE__{name: name, path: path, types: types}
+  typedstruct do
+    field :name, String.t(), enforce: true
+    field :description, String.t() | nil, default: nil
+    field :path, URI.t(), enforce: true
+    field :types, [URI.t()], enforce: true
   end
 end

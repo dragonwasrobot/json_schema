@@ -40,13 +40,10 @@ defmodule JsonSchema.Types.TypeReference do
   """
 
   alias JsonSchema.Types
+  use TypedStruct
 
-  @type t :: %__MODULE__{name: String.t(), path: Types.typeIdentifier()}
-
-  defstruct [:name, :path]
-
-  @spec new(String.t(), Types.typeIdentifier()) :: t
-  def new(name, path) do
-    %__MODULE__{name: name, path: path}
+  typedstruct do
+    field :name, String.t(), enforce: true
+    field :path, Types.typeIdentifier(), enforce: true
   end
 end

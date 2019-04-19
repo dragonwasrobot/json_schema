@@ -5,26 +5,24 @@ defmodule JsonSchema.Types.UnionType do
   JSON Schema:
 
       "favoriteNumber": {
+        "description": "Your favorite number",
         "type": ["number", "integer", "null"]
       }
 
   Resulting in the Elixir representation:
 
       %UnionType{name: "favoriteNumber",
+                 description: "Your favorite number",
                  path: URI.parse("#/favoriteNumber"),
                  types: ["number", "integer", "null"]}
   """
 
-  @type t :: %__MODULE__{
-          name: String.t(),
-          path: URI.t(),
-          types: [String.t()]
-        }
+  use TypedStruct
 
-  defstruct [:name, :path, :types]
-
-  @spec new(String.t(), URI.t(), [String.t()]) :: t
-  def new(name, path, types) do
-    %__MODULE__{name: name, path: path, types: types}
+  typedstruct do
+    field :name, String.t(), enforce: true
+    field :description, String.t() | nil, default: nil
+    field :path, URI.t(), enforce: true
+    field :types, [String.t()], enforce: true
   end
 end

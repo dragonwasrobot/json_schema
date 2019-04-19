@@ -38,8 +38,15 @@ defmodule JsonSchema.Parser.UnionParser do
   @impl JsonSchema.Parser.ParserBehaviour
   @spec parse(map, URI.t(), URI.t(), URI.t(), String.t()) ::
           ParserResult.t()
-  def parse(%{"type" => types}, _parent_id, id, path, name) do
-    union_type = UnionType.new(name, path, types)
+  def parse(%{"type" => types} = schema_node, _parent_id, id, path, name) do
+    description = Map.get(schema_node, "description")
+
+    union_type = %UnionType{
+      name: name,
+      description: description,
+      path: path,
+      types: types
+    }
 
     union_type
     |> Util.create_type_dict(path, id)

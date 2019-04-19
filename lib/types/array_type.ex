@@ -5,6 +5,7 @@ defmodule JsonSchema.Types.ArrayType do
   JSON Schema:
 
       "rectangles": {
+        "description": "A list of rectangles",
         "type": "array",
         "items": {
           "$ref": "#/rectangle"
@@ -14,20 +15,17 @@ defmodule JsonSchema.Types.ArrayType do
   Resulting in the Elixir representation:
 
       %ArrayType{name: "rectangles",
+                 description: "A list of rectangles",
                  path: URI.parse("#/rectangles"),
                  items: URI.parse("#/rectangles/items")}
   """
 
-  @type t :: %__MODULE__{
-          name: String.t(),
-          path: URI.t(),
-          items: URI.t()
-        }
+  use TypedStruct
 
-  defstruct [:name, :path, :items]
-
-  @spec new(String.t(), URI.t(), URI.t()) :: t
-  def new(name, path, items) do
-    %__MODULE__{name: name, path: path, items: items}
+  typedstruct do
+    field :name, String.t(), enforce: true
+    field :description, String.t() | nil, default: nil
+    field :path, URI.t(), enforce: true
+    field :items, URI.t(), enforce: true
   end
 end

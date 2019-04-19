@@ -5,6 +5,7 @@ defmodule JsonSchema.Types.OneOfType do
   JSON Schema:
 
       "shape": {
+        "description": "A union type of shapes",
         "oneOf": [
           {
             "$ref": "#/definitions/circle"
@@ -18,21 +19,18 @@ defmodule JsonSchema.Types.OneOfType do
   Resulting in the Elixir representation:
 
       %OneOfType{name: "shape",
+                 description: "A union type of shapes",
                  path: URI.parse("#/shape"),
                  types: [URI.parse("#/shape/oneOf/0"),
                          URI.parse("#/shape/oneOf/1")]}
   """
 
-  @type t :: %__MODULE__{
-          name: String.t(),
-          path: URI.t(),
-          types: [URI.t()]
-        }
+  use TypedStruct
 
-  defstruct [:name, :path, :types]
-
-  @spec new(String.t(), URI.t(), [URI.t()]) :: t
-  def new(name, path, types) do
-    %__MODULE__{name: name, path: path, types: types}
+  typedstruct do
+    field :name, String.t(), enforce: true
+    field :description, String.t() | nil, default: nil
+    field :path, URI.t(), enforce: true
+    field :types, [URI.t()], enforce: true
   end
 end

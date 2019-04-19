@@ -4,26 +4,13 @@ defmodule JsonSchema.Types.SchemaDefinition do
   """
 
   alias JsonSchema.Types
+  use TypedStruct
 
-  @type t :: %__MODULE__{
-          file_path: Path.t(),
-          id: URI.t(),
-          title: String.t(),
-          description: String.t(),
-          types: Types.typeDictionary()
-        }
-
-  defstruct [:file_path, :id, :title, :description, :types]
-
-  @spec new(Path.t(), URI.t(), String.t(), String.t(), Types.typeDictionary()) ::
-          t
-  def new(file_path, id, title, description, types) do
-    %__MODULE__{
-      file_path: file_path,
-      id: id,
-      title: title,
-      description: description,
-      types: types
-    }
+  typedstruct do
+    field :file_path, Path.t(), enforce: true
+    field :id, URI.t(), enforce: true
+    field :title, String.t(), enforce: true
+    field :description, String.t(), enforce: nil
+    field :types, Types.typeDictionary(), enforce: true
   end
 end

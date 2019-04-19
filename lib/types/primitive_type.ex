@@ -5,26 +5,24 @@ defmodule JsonSchema.Types.PrimitiveType do
   JSON Schema:
 
       "name": {
-          "type": "string"
+        "description": "A name",
+        "type": "string"
       }
 
   Resulting in the Elixir representation:
 
       %PrimitiveType{name: "name",
+                     description: "A name",
                      path: URI.parse("#/name"),
                      type: "string"}
   """
 
-  @type t :: %__MODULE__{
-          name: String.t(),
-          path: String.t() | URI.t(),
-          type: String.t()
-        }
+  use TypedStruct
 
-  defstruct [:name, :path, :type]
-
-  @spec new(String.t(), String.t() | URI.t(), String.t()) :: t
-  def new(name, path, type) do
-    %__MODULE__{name: name, path: path, type: type}
+  typedstruct do
+    field :name, String.t(), enforce: true
+    field :description, String.t() | nil, default: nil
+    field :path, String.t() | URI.t(), enforce: true
+    field :type, String.t(), enforce: true
   end
 end

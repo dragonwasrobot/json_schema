@@ -29,7 +29,6 @@ defmodule JsonSchema.Parser.ArrayParser do
 
   iex> type?(%{"items" => %{"$ref" => "#foo"}})
   true
-
   """
   @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
@@ -49,17 +48,23 @@ defmodule JsonSchema.Parser.ArrayParser do
           URI.t(),
           String.t()
         ) :: ParserResult.t()
-  def parse(schema_node, parent_id, id, path, name) do
+  def parse(%{"items" => items} = schema_node, parent_id, id, path, name) do
+    description = Map.get(schema_node, "description")
+
     items_abs_path =
       path
       |> Util.add_fragment_child("items")
 
     items_result =
-      schema_node
-      |> Map.get("items")
+      items
       |> Util.parse_type(parent_id, path, "items")
 
-    array_type = ArrayType.new(name, path, items_abs_path)
+    array_type = %ArrayType{
+      name: name,
+      description: description,
+      path: path,
+      items: items_abs_path
+    }
 
     array_type
     |> Util.create_type_dict(path, id)

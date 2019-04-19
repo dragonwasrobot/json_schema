@@ -47,9 +47,15 @@ defmodule JsonSchema.Parser.PrimitiveParser do
   @impl JsonSchema.Parser.ParserBehaviour
   @spec parse(map, URI.t(), URI.t(), URI.t(), String.t()) ::
           ParserResult.t()
-  def parse(schema_node, _parent_id, id, path, name) do
-    type = schema_node["type"]
-    primitive_type = PrimitiveType.new(name, path, type)
+  def parse(%{"type" => type} = schema_node, _parent_id, id, path, name) do
+    description = Map.get(schema_node, "description")
+
+    primitive_type = %PrimitiveType{
+      name: name,
+      description: description,
+      path: path,
+      type: type
+    }
 
     primitive_type
     |> Util.create_type_dict(path, id)

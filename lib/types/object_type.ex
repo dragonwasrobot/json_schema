@@ -6,6 +6,7 @@ defmodule JsonSchema.Types.ObjectType do
 
       "circle": {
         "type": "object",
+        "description": "A circle object",
         "properties": {
           "color": {
             "$ref": "#/color"
@@ -31,6 +32,7 @@ defmodule JsonSchema.Types.ObjectType do
   Resulting in the Elixir representation:
 
       %ObjectType{name: "circle",
+                  description: "A circle object",
                   path: URI.parse("#/circle"),
                   required: ["color", "radius"],
                   properties: %{
@@ -43,34 +45,15 @@ defmodule JsonSchema.Types.ObjectType do
   """
 
   alias JsonSchema.Types
+  use TypedStruct
 
-  @type t :: %__MODULE__{
-          name: String.t(),
-          path: URI.t(),
-          properties: Types.propertyDictionary(),
-          pattern_properties: Types.propertyDictionary(),
-          additional_properties: URI.t() | nil,
-          required: [String.t()]
-        }
-
-  defstruct [:name, :path, :properties, :pattern_properties, :additional_properties, :required]
-
-  @spec new(
-          String.t(),
-          URI.t(),
-          Types.propertyDictionary(),
-          Types.propertyDictionary(),
-          URI.t() | nil,
-          [String.t()]
-        ) :: t
-  def new(name, path, properties, pattern_properties, additional_properties, required) do
-    %__MODULE__{
-      name: name,
-      path: path,
-      properties: properties,
-      pattern_properties: pattern_properties,
-      additional_properties: additional_properties,
-      required: required
-    }
+  typedstruct do
+    field :name, String.t(), enforce: true
+    field :description, String.t(), default: nil
+    field :path, URI.t(), enforce: true
+    field :properties, Types.propertyDictionary(), enforce: true
+    field :pattern_properties, Types.propertyDictionary(), enforce: true
+    field :additional_properties, URI.t(), default: nil
+    field :required, [String.t()], default: []
   end
 end

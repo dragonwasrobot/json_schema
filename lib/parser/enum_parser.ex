@@ -47,10 +47,17 @@ defmodule JsonSchema.Parser.EnumParser do
           URI.t(),
           String.t()
         ) :: ParserResult.t()
-  def parse(%{"enum" => enum, "type" => type}, _parent_id, id, path, name) do
-    # TODO: Check that the enum values all have the same type
+  def parse(%{"enum" => values} = schema_node, _parent_id, id, path, name) do
+    description = Map.get(schema_node, "description")
+    type = Map.get(schema_node, "type")
 
-    enum_type = EnumType.new(name, path, type, enum)
+    enum_type = %EnumType{
+      name: name,
+      description: description,
+      path: path,
+      type: type,
+      values: values
+    }
 
     enum_type
     |> Util.create_type_dict(path, id)
