@@ -1,5 +1,9 @@
 # JSON Schema
 
+### Status
+
+[![Build Status](https://travis-ci.org/dragonwasrobot/json_schema.svg?branch=master)](https://travis-ci.org/dragonwasrobot/json_schema)
+
 A JSON schema parser written in Elixir.
 
 JsonSchema is an Elixir library that parses JSON schema documents into Elixir
