@@ -40,7 +40,7 @@ defmodule JsonSchema.Parser.TypeReferenceParser do
           ParserResult.t()
   def parse(%{"$ref" => ref}, _parent_id, id, path, name) do
     ref_path = URI.parse(ref)
-    type_reference = TypeReference.new(name, ref_path)
+    type_reference = %TypeReference{name: name, path: ref_path}
 
     type_reference
     |> Util.create_type_dict(path, id)

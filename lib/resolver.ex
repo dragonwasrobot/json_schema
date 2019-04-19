@@ -27,10 +27,18 @@ defmodule JsonSchema.Resolver do
           resolve_primitive_identifier(identifier, schema_def)
 
         URI.parse(identifier).scheme == nil ->
-          resolve_uri_fragment_identifier(URI.parse(identifier), parent, schema_def)
+          resolve_uri_fragment_identifier(
+            URI.parse(identifier),
+            parent,
+            schema_def
+          )
 
         URI.parse(identifier).scheme != nil ->
-          resolve_fully_qualified_uri_identifier(URI.parse(identifier), parent, schema_dict)
+          resolve_fully_qualified_uri_identifier(
+            URI.parse(identifier),
+            parent,
+            schema_dict
+          )
 
         true ->
           {:error, ErrorUtil.unresolved_reference(identifier, parent)}
@@ -59,7 +67,12 @@ defmodule JsonSchema.Resolver do
   @spec resolve_primitive_identifier(String.t(), SchemaDefinition.t()) ::
           {:ok, {Types.typeDefinition(), SchemaDefinition.t()}}
   defp resolve_primitive_identifier(identifier, schema_def) do
-    primitive_type = PrimitiveType.new(identifier, identifier, identifier)
+    primitive_type = %PrimitiveType{
+      name: identifier,
+      path: identifier,
+      type: identifier
+    }
+
     {:ok, {primitive_type, schema_def}}
   end
 

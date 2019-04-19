@@ -55,7 +55,7 @@ defmodule JsonSchema.Parser.ObjectParser do
           ParserResult.t()
   def parse(schema_node, parent_id, id, path, name) do
     required = Map.get(schema_node, "required", [])
-
+    description = Map.get(schema_node, "description")
     properties_path = Util.add_fragment_child(path, "properties")
 
     properties_result =
@@ -63,7 +63,8 @@ defmodule JsonSchema.Parser.ObjectParser do
       |> Map.get("properties")
       |> parse_child_types(parent_id, properties_path)
 
-    properties_type_dict = create_property_dict(properties_result.type_dict, properties_path)
+    properties_type_dict =
+      create_property_dict(properties_result.type_dict, properties_path)
 
     pattern_properties_path = Util.add_fragment_child(path, "patternProperties")
 
@@ -77,7 +78,10 @@ defmodule JsonSchema.Parser.ObjectParser do
       end
 
     pattern_properties_type_dict =
-      create_property_dict(pattern_properties_result.type_dict, pattern_properties_path)
+      create_property_dict(
+        pattern_properties_result.type_dict,
+        pattern_properties_path
+      )
 
     {additional_properties_path, additional_properties_result} =
       if schema_node["additionalProperties"] != nil do
@@ -95,15 +99,15 @@ defmodule JsonSchema.Parser.ObjectParser do
         {nil, ParserResult.new()}
       end
 
-    object_type =
-      ObjectType.new(
-        name,
-        path,
-        properties_type_dict,
-        pattern_properties_type_dict,
-        additional_properties_path,
-        required
-      )
+    object_type = %ObjectType{
+      name: name,
+      description: description,
+      path: path,
+      properties: properties_type_dict,
+      pattern_properties: pattern_properties_type_dict,
+      additional_properties: additional_properties_path,
+      required: required
+    }
 
     object_type
     |> Util.create_type_dict(path, id)
@@ -114,12 +118,24 @@ defmodule JsonSchema.Parser.ObjectParser do
   end
 
   @spec parse_child_types(map, URI.t(), URI.t(), boolean) :: ParserResult.t()
-  defp parse_child_types(node_properties, parent_id, child_path, name_is_regex \\ false) do
+  defp parse_child_types(
+         node_properties,
+         parent_id,
+         child_path,
+         name_is_regex \\ false
+       ) do
     init_result = ParserResult.new()
 
     node_properties
     |> Enum.reduce(init_result, fn {child_name, child_node}, acc_result ->
-      child_types = Util.parse_type(child_node, parent_id, child_path, child_name, name_is_regex)
+      child_types =
+        Util.parse_type(
+          child_node,
+          parent_id,
+          child_path,
+          child_name,
+          name_is_regex
+        )
 
       ParserResult.merge(acc_result, child_types)
     end)

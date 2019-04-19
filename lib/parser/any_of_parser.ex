@@ -67,8 +67,9 @@ defmodule JsonSchema.Parser.AnyOfParser do
           URI.t(),
           String.t()
         ) :: ParserResult.t()
-  def parse(%{"anyOf" => any_of}, parent_id, id, path, name)
+  def parse(%{"anyOf" => any_of} = schema_node, parent_id, id, path, name)
       when is_list(any_of) do
+    description = Map.get(schema_node, "description")
     child_path = Util.add_fragment_child(path, "anyOf")
 
     child_types_result =
@@ -79,7 +80,12 @@ defmodule JsonSchema.Parser.AnyOfParser do
       child_types_result.type_dict
       |> Util.create_types_list(child_path)
 
-    any_of_type = AnyOfType.new(name, path, any_of_types)
+    any_of_type = %AnyOfType{
+      name: name,
+      description: description,
+      path: path,
+      types: any_of_types
+    }
 
     any_of_type
     |> Util.create_type_dict(path, id)

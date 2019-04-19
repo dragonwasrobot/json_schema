@@ -30,6 +30,7 @@ defmodule JsonSchemaTest.Resolver do
     }
 
     schema_def = %SchemaDefinition{
+      file_path: "/path/to/schema_file",
       description: "Test schema",
       id: URI.parse("http://example.com/test.json"),
       title: "Test",
@@ -70,6 +71,7 @@ defmodule JsonSchemaTest.Resolver do
     }
 
     schema_def = %SchemaDefinition{
+      file_path: "/path/to/schema_file",
       description: "Test schema",
       id: URI.parse("http://example.com/test.json"),
       title: "Test",

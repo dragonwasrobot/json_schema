@@ -68,8 +68,9 @@ defmodule JsonSchema.Parser.AllOfParser do
           URI.t(),
           String.t()
         ) :: ParserResult.t()
-  def parse(%{"allOf" => all_of}, parent_id, id, path, name)
+  def parse(%{"allOf" => all_of} = schema_node, parent_id, id, path, name)
       when is_list(all_of) do
+    description = Map.get(schema_node, "description")
     child_path = Util.add_fragment_child(path, "allOf")
 
     child_types_result =
@@ -80,7 +81,12 @@ defmodule JsonSchema.Parser.AllOfParser do
       child_types_result.type_dict
       |> Util.create_types_list(child_path)
 
-    all_of_type = AllOfType.new(name, path, all_of_types)
+    all_of_type = %AllOfType{
+      name: name,
+      description: description,
+      path: path,
+      types: all_of_types
+    }
 
     all_of_type
     |> Util.create_type_dict(path, id)

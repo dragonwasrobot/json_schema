@@ -17,6 +17,7 @@ defmodule JsonSchemaTest.Parser.InternalReferences do
         "definitions": {
           "A": {
             "$id": "#foo",
+            "description": "Some string named 'foo'",
             "type": "string"
           },
           "B": {
@@ -49,6 +50,7 @@ defmodule JsonSchemaTest.Parser.InternalReferences do
 
     expected_type_a = %PrimitiveType{
       name: "A",
+      description: "Some string named 'foo'",
       path: URI.parse("#/definitions/A"),
       type: "string"
     }

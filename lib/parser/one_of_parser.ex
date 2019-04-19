@@ -62,8 +62,9 @@ defmodule JsonSchema.Parser.OneOfParser do
   @impl JsonSchema.Parser.ParserBehaviour
   @spec parse(Types.schemaNode(), URI.t(), URI.t(), URI.t(), String.t()) ::
           ParserResult.t()
-  def parse(%{"oneOf" => one_of}, parent_id, id, path, name)
+  def parse(%{"oneOf" => one_of} = schema_node, parent_id, id, path, name)
       when is_list(one_of) do
+    description = Map.get(schema_node, "description")
     child_path = Util.add_fragment_child(path, "oneOf")
 
     child_types_result =
@@ -74,7 +75,12 @@ defmodule JsonSchema.Parser.OneOfParser do
       child_types_result.type_dict
       |> Util.create_types_list(child_path)
 
-    one_of_type = OneOfType.new(name, path, one_of_types)
+    one_of_type = %OneOfType{
+      name: name,
+      description: description,
+      path: path,
+      types: one_of_types
+    }
 
     one_of_type
     |> Util.create_type_dict(path, id)

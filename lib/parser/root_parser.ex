@@ -43,20 +43,20 @@ defmodule JsonSchema.Parser.RootParser do
 
       root_parser_result = parse_root_object(root_node_no_def, schema_id, title)
 
-      definitions_parser_result = parse_definitions(root_node_only_def, schema_id)
+      definitions_parser_result =
+        parse_definitions(root_node_only_def, schema_id)
 
       %ParserResult{type_dict: type_dict, errors: errors, warnings: warnings} =
         ParserResult.merge(root_parser_result, definitions_parser_result)
 
       schema_dict = %{
-        to_string(schema_id) =>
-          SchemaDefinition.new(
-            schema_file_path,
-            schema_id,
-            title,
-            description,
-            type_dict
-          )
+        to_string(schema_id) => %SchemaDefinition{
+          file_path: schema_file_path,
+          id: schema_id,
+          title: title,
+          description: description,
+          types: type_dict
+        }
       }
 
       schema_errors =
@@ -85,7 +85,13 @@ defmodule JsonSchema.Parser.RootParser do
   @spec parse_definitions(Types.schemaNode(), URI.t()) :: ParserResult.t()
   defp parse_definitions(schema_root_node, schema_id) do
     if DefinitionsParser.type?(schema_root_node) do
-      DefinitionsParser.parse(schema_root_node, schema_id, nil, URI.parse("#"), "")
+      DefinitionsParser.parse(
+        schema_root_node,
+        schema_id,
+        nil,
+        URI.parse("#"),
+        ""
+      )
     else
       ParserResult.new(%{})
     end
@@ -162,7 +168,8 @@ defmodule JsonSchema.Parser.RootParser do
     if schema_version in @supported_versions do
       {:ok, schema_version}
     else
-      {:error, ErrorUtil.unsupported_schema_version(schema_str, @supported_versions)}
+      {:error,
+       ErrorUtil.unsupported_schema_version(schema_str, @supported_versions)}
     end
   end
 

@@ -21,6 +21,7 @@ defmodule JsonSchemaTest.Parser.ArrayParser do
 
     expected_array_type = %ArrayType{
       name: "rectangles",
+      description: nil,
       path: URI.parse("#/rectangles"),
       items: URI.parse("#/rectangles/items")
     }

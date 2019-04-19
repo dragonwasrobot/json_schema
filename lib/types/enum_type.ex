@@ -5,6 +5,7 @@ defmodule JsonSchema.Types.EnumType do
   JSON Schema:
 
       "color": {
+        "description": "A set of colors",
         "type": "string",
         "enum": ["none", "green", "orange", "blue", "yellow", "red"]
       }
@@ -12,23 +13,20 @@ defmodule JsonSchema.Types.EnumType do
   Resulting in the Elixir representation:
 
       %EnumType{name: "color",
+                comment: "A set of colors",
                 path: URI.parse("#/color"),
                 type: "string",
                 values: ["none", "green", "orange",
                          "blue", "yellow", "red"]}
   """
 
-  @type t :: %__MODULE__{
-          name: String.t(),
-          path: URI.t(),
-          type: String.t(),
-          values: [String.t() | number]
-        }
+  use TypedStruct
 
-  defstruct [:name, :path, :type, :values]
-
-  @spec new(String.t(), URI.t(), String.t(), [String.t() | number]) :: t
-  def new(name, path, type, values) do
-    %__MODULE__{name: name, path: path, type: type, values: values}
+  typedstruct do
+    field :name, String.t(), enforce: true
+    field :description, String.t() | nil, default: nil
+    field :path, URI.t(), enforce: true
+    field :type, String.t() | nil, default: nil
+    field :values, [String.t() | number | nil], enforce: true
   end
 end
