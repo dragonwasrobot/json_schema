@@ -13,7 +13,7 @@ defmodule JsonSchema.Types.EnumType do
   Resulting in the Elixir representation:
 
       %EnumType{name: "color",
-                comment: "A set of colors",
+                description: "A set of colors",
                 path: URI.parse("#/color"),
                 type: "string",
                 values: ["none", "green", "orange",

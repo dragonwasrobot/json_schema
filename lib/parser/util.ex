@@ -81,7 +81,8 @@ defmodule JsonSchema.Parser.Util do
   Parse a list of JSON schema objects that have a child relation to another
   schema object with the specified `parent_id`.
   """
-  @spec parse_child_types([Types.schemaNode()], URI.t(), URI.t()) :: ParserResult.t()
+  @spec parse_child_types([Types.schemaNode()], URI.t(), URI.t()) ::
+          ParserResult.t()
   def parse_child_types(child_nodes, parent_id, path)
       when is_list(child_nodes) do
     child_nodes
@@ -144,7 +145,8 @@ defmodule JsonSchema.Parser.Util do
         ParserResult.new()
       end
 
-    if Enum.empty?(definitions_result.type_dict) and Enum.empty?(node_result.type_dict) do
+    if Enum.empty?(definitions_result.type_dict) and
+         Enum.empty?(node_result.type_dict) do
       unknown_type_error = ErrorUtil.unknown_node_type(path, name, schema_node)
       ParserResult.new(%{}, [], [unknown_type_error])
     else
