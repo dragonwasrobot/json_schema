@@ -10,6 +10,7 @@ defmodule JsonSchema.Types do
     AllOfType,
     AnyOfType,
     ArrayType,
+    ConstType,
     EnumType,
     ObjectType,
     OneOfType,
@@ -24,6 +25,7 @@ defmodule JsonSchema.Types do
           AllOfType.t()
           | AnyOfType.t()
           | ArrayType.t()
+          | ConstType.t()
           | EnumType.t()
           | ObjectType.t()
           | OneOfType.t()
