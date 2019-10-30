@@ -51,7 +51,7 @@ defmodule JsonSchema.Parser.ObjectParser do
   Parses a JSON schema object type into an `JsonSchema.Types.ObjectType`.
   """
   @impl JsonSchema.Parser.ParserBehaviour
-  @spec parse(Types.schemaNode(), URI.t(), URI.t(), URI.t(), String.t()) ::
+  @spec parse(Types.schemaNode(), URI.t() | nil, URI.t(), URI.t(), String.t()) ::
           ParserResult.t()
   def parse(schema_node, parent_id, id, path, name) do
     required = Map.get(schema_node, "required", [])
@@ -64,7 +64,7 @@ defmodule JsonSchema.Parser.ObjectParser do
       |> parse_child_types(parent_id, properties_path)
 
     properties_type_dict =
-      create_property_dict(properties_result.type_dict, properties_path)
+      create_property_dict(properties_result.type_dict, properties_path, id)
 
     pattern_properties_path = Util.add_fragment_child(path, "patternProperties")
 
@@ -80,7 +80,8 @@ defmodule JsonSchema.Parser.ObjectParser do
     pattern_properties_type_dict =
       create_property_dict(
         pattern_properties_result.type_dict,
-        pattern_properties_path
+        pattern_properties_path,
+        id
       )
 
     {additional_properties_path, additional_properties_result} =
@@ -148,18 +149,38 @@ defmodule JsonSchema.Parser.ObjectParser do
 
       iex> type_dict = %{}
       ...> path = URI.parse("#")
-      ...> JsonSchema.Parser.ObjectParser.create_property_dict(type_dict, path)
+      ...> id = "http://www.example.com/root.json"
+      ...> JsonSchema.Parser.ObjectParser.create_property_dict(type_dict, path, id)
       %{}
 
   """
-  @spec create_property_dict(Types.typeDictionary(), URI.t()) ::
+  @spec create_property_dict(Types.typeDictionary(), URI.t(), URI.t() | nil) ::
           Types.propertyDictionary()
-  def create_property_dict(type_dict, path) do
+  def create_property_dict(type_dict, path, id) do
     type_dict
-    |> Enum.reduce(%{}, fn {_child_path, child_type}, acc_property_dict ->
-      child_type_path = Util.add_fragment_child(path, child_type.name)
-      child_property_dict = %{child_type.name => child_type_path}
-      Map.merge(acc_property_dict, child_property_dict)
+    |> Enum.reduce(%{}, fn {child_path, child_type}, acc_property_dict ->
+      if is_immediate_child(child_path, child_type.name, path, id) do
+        child_type_path = Util.add_fragment_child(path, child_type.name)
+        child_property_dict = %{child_type.name => child_type_path}
+        Map.merge(acc_property_dict, child_property_dict)
+      else
+        acc_property_dict
+      end
     end)
+  end
+
+  @spec is_immediate_child(URI.t(), String.t(), URI.t(), URI.t() | nil) ::
+          boolean
+  defp is_immediate_child(child_path, child_name, properties_path, id) do
+    child_path_alt = Util.add_fragment_child(properties_path, child_name)
+
+    if id == nil do
+      to_string(child_path) == to_string(child_path_alt)
+    else
+      absolute_child_path_alt = %{id | fragment: child_path_alt.fragment}
+
+      to_string(child_path) == to_string(child_path_alt) ||
+        to_string(child_path) == to_string(absolute_child_path_alt)
+    end
   end
 end

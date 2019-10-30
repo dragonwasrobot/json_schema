@@ -104,27 +104,27 @@ defmodule JsonSchema.Parser.RootParser do
     cond do
       AllOfParser.type?(schema_root_node) ->
         schema_root_node
-        |> AllOfParser.parse(schema_root_node, schema_id, type_path, name)
+        |> AllOfParser.parse(schema_id, schema_id, type_path, name)
 
       AnyOfParser.type?(schema_root_node) ->
         schema_root_node
-        |> AnyOfParser.parse(schema_root_node, schema_id, type_path, name)
+        |> AnyOfParser.parse(schema_id, schema_id, type_path, name)
 
       ArrayParser.type?(schema_root_node) ->
         schema_root_node
-        |> ArrayParser.parse(schema_root_node, schema_id, type_path, name)
+        |> ArrayParser.parse(schema_id, schema_id, type_path, name)
 
       ObjectParser.type?(schema_root_node) ->
         schema_root_node
-        |> ObjectParser.parse(schema_root_node, schema_id, type_path, name)
+        |> ObjectParser.parse(schema_id, schema_id, type_path, name)
 
       OneOfParser.type?(schema_root_node) ->
         schema_root_node
-        |> OneOfParser.parse(schema_root_node, schema_id, type_path, name)
+        |> OneOfParser.parse(schema_id, schema_id, type_path, name)
 
       TupleParser.type?(schema_root_node) ->
         schema_root_node
-        |> TupleParser.parse(schema_root_node, schema_id, type_path, name)
+        |> TupleParser.parse(schema_id, schema_id, type_path, name)
 
       TypeReferenceParser.type?(schema_root_node) ->
         schema_root_node

@@ -1,8 +1,8 @@
 defmodule JsonSchema.Mixfile do
   use Mix.Project
 
-  @version "0.2.1"
-  @elixir_version "~> 1.8"
+  @version "0.2.2"
+  @elixir_version "~> 1.9"
 
   def project do
     [

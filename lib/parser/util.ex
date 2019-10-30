@@ -239,10 +239,15 @@ defmodule JsonSchema.Parser.Util do
     old_fragment = uri.fragment
 
     new_fragment =
-      if old_fragment == "" do
-        "/#{child}"
-      else
-        Path.join(old_fragment, child)
+      case old_fragment do
+        nil ->
+          "/#{child}"
+
+        "" ->
+          "/#{child}"
+
+        old_path ->
+          Path.join(old_path, child)
       end
 
     %{uri | fragment: new_fragment}
