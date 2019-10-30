@@ -12,7 +12,7 @@ dependency.
 
 ```elixir
 defp deps do
-  [{:json_schema, "~> 0.2"}]
+  [{:json_schema, "~> 0.3"}]
 end
 ```
 

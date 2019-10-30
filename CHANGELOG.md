@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.3.0 [2019-10-30]
+
+### Added
+
+- Support for the generic `description` keyword (#14).
+- support for the `const` keyword (#21).
+
+### Fixed
+- Various bugs related to parsing nested root object (#35).
+
 ## v0.2.0 [2019-03-24]
 
 ### Added
