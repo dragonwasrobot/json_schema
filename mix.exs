@@ -35,7 +35,7 @@ defmodule JsonSchema.Mixfile do
       {:credo, "~> 1.4.0", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0.0-rc.3", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.19-rc", only: :dev, runtime: false},
-      {:excoveralls, "~> 0.12.0", only: :test},
+      {:excoveralls, "~> 0.13.0", only: :test},
       {:jason, "~> 1.1"},
       {:typed_struct, "~> 0.1.4"}
     ]
