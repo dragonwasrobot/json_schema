@@ -37,7 +37,7 @@ defmodule JsonSchema.Mixfile do
       {:ex_doc, "~> 0.19-rc", only: :dev, runtime: false},
       {:excoveralls, "~> 0.14.0", only: :test},
       {:jason, "~> 1.1"},
-      {:typed_struct, "~> 0.2.0"}
+      {:typed_struct, "~> 0.3.0"}
     ]
   end
 
