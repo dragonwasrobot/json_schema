@@ -5,16 +5,36 @@ defmodule JsonSchema.Parser do
   """
 
   require Logger
-  alias JsonSchema.Parser.{RootParser, SchemaResult}
+  alias JsonSchema.Parser.{ErrorUtil, RootParser, SchemaResult}
 
   @doc """
   Parses one or more JSON Schema files into a `SchemaResult`.
   """
   @spec parse_schema_files([Path.t()]) :: SchemaResult.t()
   def parse_schema_files(schema_paths) do
-    schema_paths
-    |> Enum.map(fn schema_path -> {schema_path, File.read!(schema_path)} end)
-    |> parse_schema_documents()
+    {ok_schemas, failed_schemas} =
+      schema_paths
+      |> Enum.reduce({[], []}, fn schema_path, {schemas, failed_schemas} ->
+        case File.read(schema_path) do
+          {:ok, schema} ->
+            {[{schema_path, schema} | schemas], failed_schemas}
+
+          {:error, _posix} ->
+            {schemas, [schema_path | failed_schemas]}
+        end
+      end)
+
+    if Enum.empty?(failed_schemas) do
+      parse_schema_documents(ok_schemas)
+    else
+      parser_errors =
+        failed_schemas
+        |> Enum.map(fn schema_path ->
+          ErrorUtil.could_not_read_file(schema_path)
+        end)
+
+      SchemaResult.new(%{}, [], parser_errors)
+    end
   end
 
   @doc """
@@ -35,8 +55,15 @@ defmodule JsonSchema.Parser do
   """
   @spec parse_schema_document(String.t(), Path.t()) :: SchemaResult.t()
   def parse_schema_document(schema_document, schema_path) do
-    schema_document
-    |> Jason.decode!()
-    |> RootParser.parse_schema(schema_path)
+    case Jason.decode(schema_document) do
+      {:ok, json} ->
+        RootParser.parse_schema(json, schema_path)
+
+      {:error, error} ->
+        decode_error =
+          {schema_path, [ErrorUtil.invalid_json(schema_path, error)]}
+
+        SchemaResult.new(%{}, [], [decode_error])
+    end
   end
 end

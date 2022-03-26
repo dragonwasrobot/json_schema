@@ -3,6 +3,7 @@ defmodule JsonSchema.Parser.ErrorUtil do
   Contains helper functions for reporting parser errors.
   """
 
+  alias Jason.DecodeError
   alias JsonSchema.{Parser, Types}
   alias Parser.{ParserError, Util}
 
@@ -34,10 +35,38 @@ defmodule JsonSchema.Parser.ErrorUtil do
   def get_type(value) when is_nil(value), do: "null"
   def get_type(_value), do: "unknown"
 
+  @spec could_not_read_file(Path.t()) :: ParserError.t()
+  def could_not_read_file(schema_path) do
+    error_msg = """
+
+    Failed to read file at #{schema_path}. Are you sure the file path is correct?
+
+    """
+
+    ParserError.new(schema_path, :could_not_read_file, error_msg)
+  end
+
+  @spec invalid_json(Path.t(), DecodeError.t()) :: ParserError.t()
+  def invalid_json(schema_path, decode_error) do
+    error_msg = """
+
+    Failed to parse file at #{schema_path} as JSON.
+
+        #{DecodeError.message(decode_error)}
+
+    """
+
+    ParserError.new(schema_path, :invalid_json, error_msg)
+  end
+
   @spec unsupported_schema_version(String.t(), [String.t()]) :: ParserError.t()
   def unsupported_schema_version(supplied_value, supported_versions) do
     root_path = URI.parse("#")
     stringified_value = sanitize_value(supplied_value)
+
+    # TODO: Add a config/option argument for `json_schema` that can be used to
+    # determine whether to return a human readable error description or a
+    # machine readable error.
 
     error_msg = """
     Unsupported JSON schema version found at '#'.
@@ -50,7 +79,7 @@ defmodule JsonSchema.Parser.ErrorUtil do
         #{inspect(supported_versions)}
 
     Hint: See the specification section 7. "The '$schema' keyword"
-    <http://json-schema.org/latest/json-schema-core.html#rfc.section.7>
+    <https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-01#section-7>
     """
 
     ParserError.new(root_path, :unsupported_schema_version, error_msg)
@@ -116,14 +145,15 @@ defmodule JsonSchema.Parser.ErrorUtil do
     error_msg = """
     Could not parse pattern '#{property}' at '#{full_identifier}' into a valid Regular Expression.
 
-    Hint: See specification section 6.5.5. "patternProperties"
-    <https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.5>
+    Hint: See specification section 6.5.5 "patternProperties"
+    <https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-validation-01#section-6.5.5>
     """
 
     ParserError.new(identifier, :name_not_a_regex, error_msg)
   end
 
-  @spec invalid_uri(Types.typeIdentifier(), String.t(), String.t()) :: ParserError.t()
+  @spec invalid_uri(Types.typeIdentifier(), String.t(), String.t()) ::
+          ParserError.t()
   def invalid_uri(identifier, property, actual) do
     full_identifier = print_identifier(identifier)
     stringified_value = sanitize_value(actual)
@@ -135,7 +165,7 @@ defmodule JsonSchema.Parser.ErrorUtil do
               #{error_markings(stringified_value)}
 
     Hint: See URI specification section 3. "Syntax Components"
-    <https://tools.ietf.org/html/rfc3986#section-3>
+    <https://datatracker.ietf.org/doc/html/rfc3986#section-3>
     """
 
     ParserError.new(identifier, :invalid_uri, error_msg)
@@ -156,9 +186,8 @@ defmodule JsonSchema.Parser.ErrorUtil do
         "$ref": #{stringified_value}
                 #{error_markings(stringified_value)}
 
-
-    Hint: See the specification section 9. "Base URI and dereferencing"
-    <http://json-schema.org/latest/json-schema-core.html#rfc.section.9>
+    Hint: See the specification section 8.2 "Base URI and Dereferencing"
+    <https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-01#section-8>
     """
 
     ParserError.new(parent, :unresolved_reference, error_msg)
@@ -211,7 +240,7 @@ defmodule JsonSchema.Parser.ErrorUtil do
         ["null", "boolean", "object", "array", "number", "integer", "string"]
 
     Hint: See the specification section 6.25. "Validation keywords - type"
-    <http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.25>
+    <https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1>
     """
 
     ParserError.new(full_identifier, :unknown_node_type, error_msg)
@@ -222,19 +251,10 @@ defmodule JsonSchema.Parser.ErrorUtil do
     to_string(identifier)
   end
 
-  @spec sanitize_value(any) :: String.t()
-  defp sanitize_value(raw_value) do
-    cond do
-      is_map(raw_value) and raw_value.__struct__ == URI ->
-        URI.to_string(raw_value)
-
-      is_map(raw_value) ->
-        Jason.encode!(raw_value)
-
-      true ->
-        inspect(raw_value)
-    end
-  end
+  @spec sanitize_value(value :: any) :: String.t()
+  defp sanitize_value(%URI{} = value), do: URI.to_string(value)
+  defp sanitize_value(value) when is_map(value), do: Jason.encode!(value)
+  defp sanitize_value(value), do: inspect(value)
 
   @spec error_markings(String.t()) :: [String.t()]
   defp error_markings(value) do

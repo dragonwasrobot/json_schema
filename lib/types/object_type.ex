@@ -38,9 +38,11 @@ defmodule JsonSchema.Types.ObjectType do
                   properties: %{
                       "color" => URI.parse("#/circle/properties/color"),
                       "title" => URI.parse("#/circle/properties/title"),
-                      "radius" => URI.parse("#/circle/properties/radius")},
+                      "radius" => URI.parse("#/circle/properties/radius")
+                  },
                   pattern_properties: %{
-                      "f.*o" => URI.parse("#/circle/patternProperties/f.*o")},
+                      "f.*o" => URI.parse("#/circle/patternProperties/f.*o")
+                  },
                   additional_properties: URI.parse("#/circle/additionalProperties")
   """
 

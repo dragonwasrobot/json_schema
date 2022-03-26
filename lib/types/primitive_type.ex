@@ -1,5 +1,5 @@
 defmodule JsonSchema.Types.PrimitiveType do
-  @moduledoc """
+  @moduledoc ~S"""
   Represents a custom `primitive` type definition in a JSON schema.
 
   JSON Schema:

@@ -3,15 +3,24 @@ defmodule JsonSchema.Parser.ParserError do
   Represents an error generated while parsing a JSON schema object.
   """
 
+  use TypedStruct
   alias JsonSchema.Types
 
-  @type t :: %__MODULE__{
-          identifier: Types.typeIdentifier(),
-          error_type: atom,
-          message: String.t()
-        }
+  @type error_type ::
+          :could_not_read_file
+          | :invalid_json
+          | :unresolved_reference
+          | :unknown_type
+          | :unexpected_type
+          | :unknown_enum_type
+          | :unknown_primitive_type
+          | :unknown_node_type
 
-  defstruct [:identifier, :error_type, :message]
+  typedstruct do
+    field :identifier, Types.typeIdentifier(), enforce: true
+    field :error_type, error_type, enforce: true
+    field :message, String.t(), enforce: true
+  end
 
   @doc """
   Constructs a `ParserError`.
@@ -31,15 +40,16 @@ defmodule JsonSchema.Parser.ParserWarning do
   Represents a warning generated while parsing a JSON schema object.
   """
 
+  use TypedStruct
   alias JsonSchema.Types
 
-  @type t :: %__MODULE__{
-          identifier: Types.typeIdentifier(),
-          warning_type: atom,
-          message: String.t()
-        }
+  @type warning_type :: atom
 
-  defstruct [:identifier, :warning_type, :message]
+  typedstruct do
+    field :identifier, Types.typeIdentifier(), enforce: true
+    field :warning_type, warning_type, enforce: true
+    field :message, String.t(), enforce: true
+  end
 
   @doc """
   Constructs a `ParserWarning`.
@@ -60,17 +70,16 @@ defmodule JsonSchema.Parser.ParserResult do
   parsed types, warnings, and errors.
   """
 
+  use TypedStruct
   require Logger
   alias JsonSchema.{Parser, Types}
   alias Parser.{ErrorUtil, ParserError, ParserWarning}
 
-  @type t :: %__MODULE__{
-          type_dict: Types.typeDictionary(),
-          warnings: [ParserWarning.t()],
-          errors: [ParserError.t()]
-        }
-
-  defstruct [:type_dict, :warnings, :errors]
+  typedstruct do
+    field :type_dict, Types.typeDictionary(), enforce: true
+    field :warnings, [ParserWarning.t()], enforce: true
+    field :errors, [ParserError.t()], enforce: true
+  end
 
   @doc """
   Returns an empty `ParserResult`.
@@ -134,17 +143,16 @@ defmodule JsonSchema.Parser.SchemaResult do
   and its members.
   """
 
+  use TypedStruct
   require Logger
   alias JsonSchema.Parser.{ErrorUtil, ParserError, ParserWarning}
   alias JsonSchema.Types
 
-  @type t :: %__MODULE__{
-          schema_dict: Types.schemaDictionary(),
-          warnings: [{Path.t(), [ParserWarning.t()]}],
-          errors: [{Path.t(), [ParserError.t()]}]
-        }
-
-  defstruct [:schema_dict, :warnings, :errors]
+  typedstruct do
+    field :schema_dict, Types.schemaDictionary(), enforce: true
+    field :warnings, [{Path.t(), [ParserWarning.t()]}], enforce: true
+    field :errors, [{Path.t(), [ParserError.t()]}], enforce: true
+  end
 
   @doc """
   Returns an empty `SchemaResult`.

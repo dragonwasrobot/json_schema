@@ -1,8 +1,8 @@
-defmodule JsonSchema.Mixfile do
+defmodule JsonSchema.MixProject do
   use Mix.Project
 
   @version "0.3.0"
-  @elixir_version "~> 1.9"
+  @elixir_version "~> 1.12"
 
   def project do
     [
@@ -23,7 +23,7 @@ defmodule JsonSchema.Mixfile do
   end
 
   def application do
-    [applications: [:logger]]
+    [extra_applications: [:logger]]
   end
 
   defp aliases do
@@ -34,9 +34,9 @@ defmodule JsonSchema.Mixfile do
     [
       {:credo, "~> 1.6.1", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1.0", only: [:dev], runtime: false},
-      {:ex_doc, "~> 0.19-rc", only: :dev, runtime: false},
-      {:excoveralls, "~> 0.14.0", only: :test},
-      {:jason, "~> 1.1"},
+      {:ex_doc, "~> 0.28.3", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.14.4", only: :test},
+      {:jason, "~> 1.3.0"},
       {:typed_struct, "~> 0.3.0"}
     ]
   end
@@ -54,12 +54,12 @@ defmodule JsonSchema.Mixfile do
   defp docs do
     [
       name: "JSON Schema",
-      main: "getting-started",
+      main: "README",
       formatter_opts: [gfm: true],
       source_ref: @version,
       source_url: "https://github.com/dragonwasrobot/json_schema",
       extras: [
-        "docs/getting-started.md",
+        "README.md",
         "CHANGELOG.md"
       ]
     ]

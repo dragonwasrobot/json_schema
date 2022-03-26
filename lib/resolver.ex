@@ -8,9 +8,30 @@ defmodule JsonSchema.Resolver do
   alias Parser.{ErrorUtil, ParserError}
   alias Types.{PrimitiveType, SchemaDefinition, TypeReference}
 
-  @doc """
-  Resolves a type given its identifier, parent identifier, its enclosing `SchemaDefinition`
-  and the schema dictionary of the whole set of parsed JSON schema files.
+  @doc ~S"""
+  Resolves a type given its `identifier`, `parent` identifier of the resolving
+  subschema, the subschema's enclosing `SchemaDefinition` and the schema
+  dictionary of the whole set of parsed JSON schema files.
+
+      {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$id": "http://example.com/circle.json",
+        "title": "Circle",
+        "description": "Schema for a circle shape",
+        "type": "object",
+        "properties": {
+          "radius": {
+            "type": "number"
+          },
+          "center": {
+            "$ref": "http://example.com/definitions.json#point"
+          },
+          "color": {
+            "$ref": "http://example.com/definitions.json#color"
+          }
+        },
+        "required": ["center", "radius"]
+      }
   """
   @spec resolve_type(
           Types.typeIdentifier(),
