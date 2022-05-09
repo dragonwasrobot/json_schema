@@ -55,7 +55,7 @@ defmodule JsonSchema.MixProject do
   defp docs do
     [
       name: "JSON Schema",
-      main: "README",
+      main: "readme",
       formatter_opts: [gfm: true],
       source_ref: @version,
       source_url: "https://github.com/dragonwasrobot/json_schema",
