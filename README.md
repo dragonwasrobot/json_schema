@@ -5,8 +5,8 @@
 [![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/json_schema/)
 [![License](https://img.shields.io/hexpm/l/json_schema.svg)](https://github.com/dragonwasrobot/json_schema/blob/master/LICENSE)
 
-A JSON schema parser for inspection and manipulation of JSON schema abstract
-syntax trees (ASTs). This library is meant as a basis for writing other
+A JSON schema parser for inspection and manipulation of JSON Schema Abstract
+Syntax Trees (ASTs). This library is meant as a basis for writing other
 libraries or tools that need to use JSON schema documents. For example, a JSON
 schema validator that validates a JSON object according to a JSON schema
 specification, or a code generator that generates a data model and accompanying
@@ -21,7 +21,7 @@ Add `:json_schema` as a dependency in `mix.exs`:
 ```elixir
 defp deps do
   [
-    {:json_schema, "~> 0.3"}
+    {:json_schema, "~> 0.4"}
   ]
 end
 ```
@@ -35,7 +35,7 @@ The main API entry point is the `JsonSchema` module, which supports parsing a
 list of JSON schema files into JSON Schema ASTs via `parse_schema_files`, or
 resolving a JSON schema type given an identifier via `resolve_type`.
 
-### Parsing a JSON schema file into an AST
+### Parsing a JSON schema file into an Abstract Syntax Tree
 
 Presuming we have the following two JSON schema files:
 
@@ -137,7 +137,7 @@ schema_result = JsonSchema.parse_schema_files(schema_paths)
           description: nil,
           name: "radius",
           path: URI.parse("#/properties/radius),
-          type: "number"
+          type: :number
         },
         "http://example.com/circle.json#" => %JsonSchema.Types.ObjectType{
           additional_properties: nil,
@@ -164,7 +164,7 @@ schema_result = JsonSchema.parse_schema_files(schema_paths)
           description: nil,
           name: "color",
           path: URI.parse("#/definitions/color"),
-          type: "string",
+          type: :string,
           values: ["red", "yellow", "green", "blue"]
         },
         "#/definitions/point" => %JsonSchema.Types.ObjectType{
@@ -183,19 +183,19 @@ schema_result = JsonSchema.parse_schema_files(schema_paths)
           description: nil,
           name: "x",
           path: URI.parse("/definitions/point/properties/x"),
-          type: "number"
+          type: :number
         },
         "#/definitions/point/properties/y" => %JsonSchema.Types.PrimitiveType{
           description: nil,
           name: "y",
           path: URI.parse("#/definitions/point/properties/y"),
-          type: "number"
+          type: :number
         },
         "http://example.com/definitions.json#color" => %JsonSchema.Types.EnumType{
           description: nil,
           name: "color",
           path: URI.parse("#/definitions/color"),
-          type: "string",
+          type: :string,
           values: ["red", "yellow", "green", "blue"]
         },
         "http://example.com/definitions.json#point" => %JsonSchema.Types.ObjectType{
@@ -263,7 +263,7 @@ color_type
     description: nil,
     name: "color",
     path: URI.parse("#/definitions/color"),
-    type: "string",
+    type: :string,
     values: ["red", "yellow", "green", "blue"]
   }
 ```

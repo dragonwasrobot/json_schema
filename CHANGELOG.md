@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.4.0 [2022-05-09]
+
+### Changed
+
+- Replaces auto-generated schema names like `zero` and `one` with `:anonymous`
+  making it easier for a consuming project to decide what to do when a subschema
+  does not have an explicit name. (#97)
+- Replaces stringly-typed `type` properties for several schema types to instead
+  use specific atoms corresponding to the set of valid JSON value type.
+- Adds better error description for invalid `union` types.
+
 ## v0.3.0 [2019-10-30]
 
 ### Added
