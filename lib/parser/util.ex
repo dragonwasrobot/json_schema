@@ -64,17 +64,43 @@ defmodule JsonSchema.Parser.Util do
         ]
   def create_types_list(type_dict, path) do
     type_dict
-    |> Enum.reduce(%{}, fn {child_abs_path, child_type}, reference_dict ->
+    |> Enum.reduce(MapSet.new(), fn {child_abs_path, child_type}, acc_set ->
       normalized_child_name = child_type.name
-      child_type_path = add_fragment_child(path, normalized_child_name)
 
-      if child_type_path == URI.parse(child_abs_path) do
-        Map.merge(reference_dict, %{normalized_child_name => child_type_path})
+      if normalized_child_name == :anonymous do
+        child_abs_path_parts =
+          child_abs_path
+          |> String.split("/")
+
+        child_prefix_path =
+          child_abs_path_parts
+          |> Enum.drop(-1)
+          |> Enum.join("/")
+          |> URI.parse()
+
+        shares_prefix = child_prefix_path == path
+
+        last_path_part_is_number =
+          child_abs_path_parts
+          |> List.last()
+          |> Integer.parse() != :error
+
+        if shares_prefix and last_path_part_is_number do
+          MapSet.put(acc_set, URI.parse(child_abs_path))
+        else
+          acc_set
+        end
       else
-        reference_dict
+        child_type_path = add_fragment_child(path, normalized_child_name)
+
+        if child_type_path == URI.parse(child_abs_path) do
+          MapSet.put(acc_set, child_type_path)
+        else
+          acc_set
+        end
       end
     end)
-    |> Map.values()
+    |> MapSet.to_list()
   end
 
   @doc """
@@ -87,8 +113,14 @@ defmodule JsonSchema.Parser.Util do
       when is_list(child_nodes) do
     child_nodes
     |> Enum.reduce({ParserResult.new(), 0}, fn child_node, {result, idx} ->
-      child_name = to_string(idx)
-      child_result = parse_type(child_node, parent_id, path, child_name)
+      child_result =
+        parse_type(
+          child_node,
+          parent_id,
+          add_fragment_child(path, to_string(idx)),
+          :anonymous
+        )
+
       {ParserResult.merge(result, child_result), idx + 1}
     end)
     |> elem(0)
@@ -97,7 +129,13 @@ defmodule JsonSchema.Parser.Util do
   @doc """
   Parses a node type.
   """
-  @spec parse_type(Types.schemaNode(), URI.t(), URI.t(), String.t(), boolean) ::
+  @spec parse_type(
+          Types.schemaNode(),
+          URI.t(),
+          URI.t(),
+          String.t() | :anonymous,
+          boolean
+        ) ::
           ParserResult.t()
   def parse_type(schema_node, parent_id, path, name, name_is_regex \\ false) do
     definitions_result =
@@ -234,7 +272,11 @@ defmodule JsonSchema.Parser.Util do
       }
 
   """
-  @spec add_fragment_child(URI.t(), String.t()) :: URI.t()
+  @spec add_fragment_child(URI.t(), String.t() | :anonymous) :: URI.t()
+  def add_fragment_child(uri, :anonymous) do
+    uri
+  end
+
   def add_fragment_child(uri, child) do
     old_fragment = uri.fragment
 

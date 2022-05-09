@@ -1,5 +1,5 @@
 defmodule JsonSchema.Types.TypeReference do
-  @moduledoc """
+  @moduledoc ~S"""
   Represents a reference to a custom type definition in a JSON schema.
 
   JSON Schema:
@@ -43,7 +43,7 @@ defmodule JsonSchema.Types.TypeReference do
   use TypedStruct
 
   typedstruct do
-    field :name, String.t(), enforce: true
+    field :name, String.t() | :anonymous, enforce: true
     field :path, Types.typeIdentifier(), enforce: true
   end
 end

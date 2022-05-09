@@ -36,6 +36,7 @@ defmodule JsonSchema.MixProject do
       {:dialyxir, "~> 1.1.0", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.28.3", only: :dev, runtime: false},
       {:excoveralls, "~> 0.14.4", only: :test},
+      {:gradient, github: "esl/gradient", only: [:dev], runtime: false},
       {:jason, "~> 1.3.0"},
       {:typed_struct, "~> 0.3.0"}
     ]
@@ -48,7 +49,7 @@ defmodule JsonSchema.MixProject do
   end
 
   defp dialyzer do
-    [plt_add_deps: :project]
+    [plt_add_deps: :apps_direct]
   end
 
   defp docs do

@@ -50,7 +50,7 @@ defmodule JsonSchema.Types.ObjectType do
   use TypedStruct
 
   typedstruct do
-    field :name, String.t(), enforce: true
+    field :name, String.t() | :anonymous, enforce: true
     field :description, String.t(), default: nil
     field :path, URI.t(), enforce: true
     field :properties, Types.propertyDictionary(), enforce: true

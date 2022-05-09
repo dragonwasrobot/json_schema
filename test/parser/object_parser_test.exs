@@ -59,25 +59,25 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
     expected_regex_primitive_type = %PrimitiveType{
       name: "f.*o",
       path: URI.parse("#/circle/patternProperties/f.*o"),
-      type: "integer"
+      type: :integer
     }
 
     expected_title_primitive_type = %PrimitiveType{
       name: "title",
       path: URI.parse("#/circle/properties/title"),
-      type: "string"
+      type: :string
     }
 
     expected_radius_primitive_type = %PrimitiveType{
       name: "radius",
       path: URI.parse("#/circle/properties/radius"),
-      type: "number"
+      type: :number
     }
 
     expected_additional_properties_type = %PrimitiveType{
       name: "additionalProperties",
       path: URI.parse("#/circle/additionalProperties"),
-      type: "boolean"
+      type: :boolean
     }
 
     assert parser_result.errors == []

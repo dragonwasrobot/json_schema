@@ -30,12 +30,12 @@ defmodule JsonSchemaTest.Parser.TupleParser do
     }
 
     expected_rectangle_type_reference = %TypeReference{
-      name: "0",
+      name: :anonymous,
       path: URI.parse("#/definitions/rectangle")
     }
 
     expected_circle_type_reference = %TypeReference{
-      name: "1",
+      name: :anonymous,
       path: URI.parse("#/definitions/circle")
     }
 

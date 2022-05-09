@@ -20,13 +20,13 @@ defmodule JsonSchemaTest.Resolver do
     primitive_type1 = %PrimitiveType{
       name: "title",
       path: URI.parse("#/properties/title"),
-      type: "string"
+      type: :string
     }
 
     primitive_type2 = %PrimitiveType{
       name: "radius",
       path: URI.parse("#/properties/radius"),
-      type: "number"
+      type: :number
     }
 
     schema_def = %SchemaDefinition{
@@ -61,13 +61,13 @@ defmodule JsonSchemaTest.Resolver do
     primitive_type1 = %PrimitiveType{
       name: "title",
       path: URI.parse("#/properties/title"),
-      type: "string"
+      type: :string
     }
 
     primitive_type2 = %PrimitiveType{
       name: "radius",
       path: URI.parse("#/properties/radius"),
-      type: "number"
+      type: :number
     }
 
     schema_def = %SchemaDefinition{

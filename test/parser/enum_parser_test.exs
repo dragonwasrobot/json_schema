@@ -14,12 +14,17 @@ defmodule JsonSchemaTest.Parser.EnumParser do
       }
       """
       |> Jason.decode!()
-      |> EnumParser.parse(nil, nil, URI.parse("#/favoriteNumber"), "favoriteNumber")
+      |> EnumParser.parse(
+        nil,
+        nil,
+        URI.parse("#/favoriteNumber"),
+        "favoriteNumber"
+      )
 
     expected_enum_type = %EnumType{
       name: "favoriteNumber",
       path: URI.parse("#/favoriteNumber"),
-      type: "integer",
+      type: :integer,
       values: [1, 2, 3]
     }
 
@@ -45,7 +50,7 @@ defmodule JsonSchemaTest.Parser.EnumParser do
     expected_enum_type = %EnumType{
       name: "color",
       path: URI.parse("#/color"),
-      type: "string",
+      type: :string,
       values: ["none", "green", "orange", "blue", "yellow", "red"]
     }
 

@@ -24,7 +24,7 @@ defmodule JsonSchemaTest.Parser.ConstParser do
     expected_const_type = %ConstType{
       name: "favoriteNumber",
       path: URI.parse("#/favoriteNumber"),
-      type: "integer",
+      type: :integer,
       const: 42
     }
 
@@ -50,7 +50,7 @@ defmodule JsonSchemaTest.Parser.ConstParser do
     expected_const_type = %ConstType{
       name: "myStruct",
       path: URI.parse("#/myStruct"),
-      type: "object",
+      type: :object,
       const: %{"foo" => 43, "bar" => "helicopter"}
     }
 

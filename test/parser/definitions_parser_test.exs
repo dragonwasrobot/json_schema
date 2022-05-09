@@ -40,7 +40,7 @@ defmodule JsonSchemaTest.Parser.DefinitionsParser do
     expected_primitive_type = %PrimitiveType{
       name: "positiveInteger",
       path: URI.parse("#/definitions/positiveInteger"),
-      type: "integer"
+      type: :integer
     }
 
     expected_schema_definition = %SchemaDefinition{

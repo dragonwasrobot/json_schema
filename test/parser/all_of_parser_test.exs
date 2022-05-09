@@ -52,12 +52,13 @@ defmodule JsonSchemaTest.Parser.AllOfParser do
     }
 
     expected_object_type = %ObjectType{
-      name: "0",
+      name: :anonymous,
       path: URI.parse(Path.join(path(), "allOf/0")),
       required: ["color"],
       properties: %{
         "color" => URI.parse(Path.join(path(), "allOf/0/properties/color")),
-        "description" => URI.parse(Path.join(path(), "allOf/0/properties/description"))
+        "description" =>
+          URI.parse(Path.join(path(), "allOf/0/properties/description"))
       },
       pattern_properties: %{},
       additional_properties: nil
@@ -71,11 +72,11 @@ defmodule JsonSchemaTest.Parser.AllOfParser do
     expected_description_type = %PrimitiveType{
       name: "description",
       path: URI.parse(Path.join(path(), "allOf/0/properties/description")),
-      type: "string"
+      type: :string
     }
 
     expected_circle_type = %TypeReference{
-      name: "1",
+      name: :anonymous,
       path: URI.parse("#/definitions/circle")
     }
 
@@ -85,7 +86,8 @@ defmodule JsonSchemaTest.Parser.AllOfParser do
     assert parser_result.type_dict == %{
              "#/definitions/fancyCircle" => expected_all_of_type,
              "#/definitions/fancyCircle/allOf/0" => expected_object_type,
-             "#/definitions/fancyCircle/allOf/0/properties/color" => expected_color_type,
+             "#/definitions/fancyCircle/allOf/0/properties/color" =>
+               expected_color_type,
              "#/definitions/fancyCircle/allOf/0/properties/description" =>
                expected_description_type,
              "#/definitions/fancyCircle/allOf/1" => expected_circle_type

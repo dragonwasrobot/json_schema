@@ -1,5 +1,5 @@
 defmodule JsonSchema.Types.ArrayType do
-  @moduledoc """
+  @moduledoc ~S"""
   Represents a custom `array` type definition in a JSON schema.
 
   JSON Schema:
@@ -23,7 +23,7 @@ defmodule JsonSchema.Types.ArrayType do
   use TypedStruct
 
   typedstruct do
-    field :name, String.t(), enforce: true
+    field :name, String.t() | :anonymous, enforce: true
     field :description, String.t() | nil, default: nil
     field :path, URI.t(), enforce: true
     field :items, URI.t(), enforce: true

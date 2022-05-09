@@ -13,6 +13,7 @@ defmodule JsonSchema.Parser.ParserError do
           | :unknown_type
           | :unexpected_type
           | :unknown_enum_type
+          | :unknown_union_type
           | :unknown_primitive_type
           | :unknown_node_type
 

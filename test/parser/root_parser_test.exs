@@ -1,6 +1,15 @@
 defmodule JsonSchemaTest.Parser.RootParser do
   use ExUnit.Case
-  alias JsonSchema.Parser.RootParser
+
+  alias JsonSchema.Parser.{RootParser, SchemaResult}
+
+  alias JsonSchema.Types.{
+    ArrayType,
+    ObjectType,
+    PrimitiveType,
+    SchemaDefinition
+  }
+
   doctest RootParser, import: true
 
   test "can parse root object with nested children" do
@@ -91,7 +100,7 @@ defmodule JsonSchemaTest.Parser.RootParser do
 
     # expected_schema_result
 
-    expected_root_type = %JsonSchema.Types.ObjectType{
+    expected_root_type = %ObjectType{
       additional_properties: nil,
       description: "An explanation about the purpose of this instance.",
       name: "The Root Schema",
@@ -171,7 +180,7 @@ defmodule JsonSchemaTest.Parser.RootParser do
       required: ["checked", "dimensions", "id", "name", "price", "tags"]
     }
 
-    expected_checked_type = %JsonSchema.Types.PrimitiveType{
+    expected_checked_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
       name: "checked",
       path: %URI{
@@ -184,10 +193,10 @@ defmodule JsonSchemaTest.Parser.RootParser do
         scheme: nil,
         userinfo: nil
       },
-      type: "boolean"
+      type: :boolean
     }
 
-    expected_dimensions_type = %JsonSchema.Types.ObjectType{
+    expected_dimensions_type = %ObjectType{
       additional_properties: nil,
       description: "An explanation about the purpose of this instance.",
       name: "dimensions",
@@ -227,7 +236,7 @@ defmodule JsonSchemaTest.Parser.RootParser do
       required: ["width", "height"]
     }
 
-    expected_height_type = %JsonSchema.Types.PrimitiveType{
+    expected_height_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
       name: "height",
       path: %URI{
@@ -240,10 +249,10 @@ defmodule JsonSchemaTest.Parser.RootParser do
         scheme: nil,
         userinfo: nil
       },
-      type: "integer"
+      type: :integer
     }
 
-    expected_width_type = %JsonSchema.Types.PrimitiveType{
+    expected_width_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
       name: "width",
       path: %URI{
@@ -256,10 +265,10 @@ defmodule JsonSchemaTest.Parser.RootParser do
         scheme: nil,
         userinfo: nil
       },
-      type: "integer"
+      type: :integer
     }
 
-    expected_id_type = %JsonSchema.Types.PrimitiveType{
+    expected_id_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
       name: "id",
       path: %URI{
@@ -272,10 +281,10 @@ defmodule JsonSchemaTest.Parser.RootParser do
         scheme: nil,
         userinfo: nil
       },
-      type: "integer"
+      type: :integer
     }
 
-    expected_name_type = %JsonSchema.Types.PrimitiveType{
+    expected_name_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
       name: "name",
       path: %URI{
@@ -288,10 +297,10 @@ defmodule JsonSchemaTest.Parser.RootParser do
         scheme: nil,
         userinfo: nil
       },
-      type: "string"
+      type: :string
     }
 
-    expected_price_type = %JsonSchema.Types.PrimitiveType{
+    expected_price_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
       name: "price",
       path: %URI{
@@ -304,10 +313,10 @@ defmodule JsonSchemaTest.Parser.RootParser do
         scheme: nil,
         userinfo: nil
       },
-      type: "number"
+      type: :number
     }
 
-    expected_tags_type = %JsonSchema.Types.ArrayType{
+    expected_tags_type = %ArrayType{
       description: "An explanation about the purpose of this instance.",
       items: %URI{
         authority: nil,
@@ -332,7 +341,7 @@ defmodule JsonSchemaTest.Parser.RootParser do
       }
     }
 
-    expected_items_type = %JsonSchema.Types.PrimitiveType{
+    expected_items_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
       name: "items",
       path: %URI{
@@ -345,13 +354,13 @@ defmodule JsonSchemaTest.Parser.RootParser do
         scheme: nil,
         userinfo: nil
       },
-      type: "string"
+      type: :string
     }
 
-    expected_schema_result = %JsonSchema.Parser.SchemaResult{
+    expected_schema_result = %SchemaResult{
       errors: [],
       schema_dict: %{
-        "http://example.com/root.json" => %JsonSchema.Types.SchemaDefinition{
+        "http://example.com/root.json" => %SchemaDefinition{
           description: "An explanation about the purpose of this instance.",
           file_path: "example.json",
           id: %URI{

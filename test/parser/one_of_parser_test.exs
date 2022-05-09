@@ -36,7 +36,7 @@ defmodule JsonSchemaTest.Parser.OneOfParser do
       |> OneOfParser.parse(nil, nil, URI.parse("#/schema"), "schema")
 
     expected_object_type = %ObjectType{
-      name: "0",
+      name: :anonymous,
       path: URI.parse("#/schema/oneOf/0"),
       required: ["color", "radius"],
       properties: %{
@@ -49,9 +49,9 @@ defmodule JsonSchemaTest.Parser.OneOfParser do
     }
 
     expected_primitive_type = %PrimitiveType{
-      name: "1",
+      name: :anonymous,
       path: URI.parse("#/schema/oneOf/1"),
-      type: "string"
+      type: :string
     }
 
     expected_color_type = %TypeReference{
@@ -62,13 +62,13 @@ defmodule JsonSchemaTest.Parser.OneOfParser do
     expected_radius_type = %PrimitiveType{
       name: "radius",
       path: URI.parse("#/schema/oneOf/0/properties/radius"),
-      type: "number"
+      type: :number
     }
 
     expected_title_type = %PrimitiveType{
       name: "title",
       path: URI.parse("#/schema/oneOf/0/properties/title"),
-      type: "string"
+      type: :string
     }
 
     expected_one_of_type = %OneOfType{

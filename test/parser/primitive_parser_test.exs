@@ -19,7 +19,7 @@ defmodule JsonSchemaTest.Parser.PrimitiveParser do
     expected_primitive_type = %PrimitiveType{
       name: "primitive",
       path: URI.parse("#/primitive"),
-      type: "string"
+      type: :string
     }
 
     assert parser_result.errors == []

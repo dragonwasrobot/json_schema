@@ -1,5 +1,5 @@
 defmodule JsonSchema.Types.AllOfType do
-  @moduledoc """
+  @moduledoc ~S"""
   Represents a custom `allOf` type definition in a JSON schema.
 
   JSON Schema:
@@ -58,7 +58,7 @@ defmodule JsonSchema.Types.AllOfType do
   use TypedStruct
 
   typedstruct do
-    field :name, String.t(), enforce: true
+    field :name, String.t() | :anonymous, enforce: true
     field :description, String.t() | nil, default: nil
     field :path, URI.t(), enforce: true
     field :types, [URI.t()], enforce: true

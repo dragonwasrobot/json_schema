@@ -49,7 +49,7 @@ defmodule JsonSchema.Parser.EnumParser do
         ) :: ParserResult.t()
   def parse(%{"enum" => values} = schema_node, _parent_id, id, path, name) do
     description = Map.get(schema_node, "description")
-    type = Map.get(schema_node, "type")
+    type = schema_node |> Map.get("type") |> parse_enum_type()
 
     enum_type = %EnumType{
       name: name,
@@ -62,5 +62,14 @@ defmodule JsonSchema.Parser.EnumParser do
     enum_type
     |> Util.create_type_dict(path, id)
     |> ParserResult.new()
+  end
+
+  @spec parse_enum_type(String.t()) :: EnumType.value_type()
+  defp parse_enum_type(raw_type) do
+    case raw_type do
+      "string" -> :string
+      "integer" -> :integer
+      "number" -> :number
+    end
   end
 end

@@ -38,7 +38,7 @@ defmodule JsonSchema.Parser.PrimitiveParser do
   @spec type?(map) :: boolean
   def type?(schema_node) do
     type = schema_node["type"]
-    type in ["null", "boolean", "string", "number", "integer"]
+    type in ["null", "boolean", "integer", "number", "string"]
   end
 
   @doc """
@@ -54,11 +54,22 @@ defmodule JsonSchema.Parser.PrimitiveParser do
       name: name,
       description: description,
       path: path,
-      type: type
+      type: value_type_from_string(type)
     }
 
     primitive_type
     |> Util.create_type_dict(path, id)
     |> ParserResult.new()
+  end
+
+  @spec value_type_from_string(String.t()) :: PrimitiveType.value_type()
+  defp value_type_from_string(type) do
+    case type do
+      "null" -> :null
+      "boolean" -> :boolean
+      "integer" -> :integer
+      "number" -> :number
+      "string" -> :string
+    end
   end
 end

@@ -34,10 +34,38 @@ defmodule JsonSchema.Types do
           | TypeReference.t()
           | UnionType.t()
 
-  @type schemaNode :: map
-  @type typeIdentifier :: String.t() | URI.t()
+  # Note: while all type identifiers are URIs, their fragments may be either
+  # plain names, used for referencing named subschemas, or JSON pointers, used
+  # for pointing down into the document at a specific subschema. See
+  # https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-01#section-5
+  #
+  # The reason a type identifier *can* also be a String is because
+  # PrimitiveTypes are currently identified in a similar way to the other types,
+  # which should ideally be changed.
+  @type typeIdentifier :: URI.t() | String.t()
+
+  @type json_value :: nil | boolean | map | list | integer | number | String.t()
+  @type schemaNode :: %{required(String.t()) => json_value}
   @type propertyDictionary :: %{required(String.t()) => typeIdentifier}
+
+  # Keys should be URI in these below
   @type typeDictionary :: %{required(String.t()) => typeDefinition}
   @type schemaDictionary :: %{required(String.t()) => SchemaDefinition.t()}
-  @type fileDictionary :: %{required(String.t()) => String.t()}
+
+  defmodule SchemaDefinition do
+    @moduledoc """
+    An intermediate representation of the root of a whole JSON schema document.
+    """
+
+    alias JsonSchema.Types
+    use TypedStruct
+
+    typedstruct do
+      field :file_path, Path.t(), enforce: true
+      field :id, URI.t(), enforce: true
+      field :title, String.t(), enforce: true
+      field :description, String.t(), enforce: nil
+      field :types, Types.typeDictionary(), enforce: true
+    end
+  end
 end

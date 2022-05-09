@@ -39,7 +39,7 @@ resolving a JSON schema type given an identifier via `resolve_type`.
 
 Presuming we have the following two JSON schema files:
 
-```elixir
+```json
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "http://example.com/circle.json",
@@ -63,7 +63,7 @@ Presuming we have the following two JSON schema files:
 
 and
 
-```elixir
+```json
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "Definitions",
@@ -242,7 +242,7 @@ the schema dictionary. The `resolve_type` function expects:
 
 In the example below, we resolve the reference to `color`:
 
-```elixir
+```json
 "color": {
   "$ref": "http://example.com/definitions.json#color"
 }

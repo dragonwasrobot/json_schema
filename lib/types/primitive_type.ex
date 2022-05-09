@@ -14,15 +14,17 @@ defmodule JsonSchema.Types.PrimitiveType do
       %PrimitiveType{name: "name",
                      description: "A name",
                      path: URI.parse("#/name"),
-                     type: "string"}
+                     type: :string}
   """
 
   use TypedStruct
 
+  @type value_type :: :null | :boolean | :integer | :number | :string
+
   typedstruct do
-    field :name, String.t(), enforce: true
+    field :name, String.t() | :anonymous, enforce: true
     field :description, String.t() | nil, default: nil
-    field :path, String.t() | URI.t(), enforce: true
-    field :type, String.t(), enforce: true
+    field :path, URI.t(), enforce: true
+    field :type, value_type, enforce: true
   end
 end

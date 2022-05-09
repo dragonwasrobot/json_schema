@@ -19,7 +19,7 @@ defmodule JsonSchemaTest.Parser.UnionParser do
     expected_union_type = %UnionType{
       name: "union",
       path: URI.parse("#/union"),
-      types: ["number", "integer", "null"]
+      types: [:number, :integer, :null]
     }
 
     assert parser_result.errors == []

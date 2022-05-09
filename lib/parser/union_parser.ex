@@ -12,7 +12,7 @@ defmodule JsonSchema.Parser.UnionParser do
 
   require Logger
   alias JsonSchema.{Parser, Types}
-  alias Parser.{ParserResult, Util}
+  alias Parser.{ErrorUtil, ParserResult, Util}
   alias Types.UnionType
 
   @doc """
@@ -41,15 +41,47 @@ defmodule JsonSchema.Parser.UnionParser do
   def parse(%{"type" => types} = schema_node, _parent_id, id, path, name) do
     description = Map.get(schema_node, "description")
 
+    unknown_type =
+      types
+      |> Enum.find(fn type ->
+        type not in [
+          "null",
+          "boolean",
+          "number",
+          "integer",
+          "string",
+          "array",
+          "object"
+        ]
+      end)
+
+    errors =
+      if unknown_type do
+        [ErrorUtil.unknown_union_type(path, unknown_type)]
+      else
+        []
+      end
+
     union_type = %UnionType{
       name: name,
       description: description,
       path: path,
-      types: types
+      types: types |> Enum.map(&value_type_from_string/1)
     }
 
     union_type
     |> Util.create_type_dict(path, id)
-    |> ParserResult.new()
+    |> ParserResult.new([], errors)
+  end
+
+  @spec value_type_from_string(String.t()) :: UnionType.value_type()
+  defp value_type_from_string(type) do
+    case type do
+      "null" -> :null
+      "boolean" -> :boolean
+      "integer" -> :integer
+      "number" -> :number
+      "string" -> :string
+    end
   end
 end

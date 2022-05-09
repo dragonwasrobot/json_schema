@@ -204,6 +204,25 @@ defmodule JsonSchema.Parser.ErrorUtil do
     ParserError.new(identifier, :unexpected_type, error_msg)
   end
 
+  @spec unknown_union_type(Types.typeIdentifier(), String.t()) ::
+          ParserError.t()
+  def unknown_union_type(identifier, type_name) do
+    printed_path = to_string(identifier)
+
+    error_msg = """
+
+    Encountered unknown union type at `#{printed_path}`
+
+    "type": [#{type_name}]
+    #{error_markings(type_name)}
+
+    Hint: See the specification section 6. "Validation Keywords"
+    <https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-validation-01#section-6.1.1>
+    """
+
+    ParserError.new(identifier, :unknown_union_type, error_msg)
+  end
+
   @spec unknown_enum_type(String.t()) :: ParserError.t()
   def unknown_enum_type(type_name) do
     error_msg = "Unknown or unsupported enum type: '#{type_name}'"
@@ -218,14 +237,18 @@ defmodule JsonSchema.Parser.ErrorUtil do
 
   @spec unknown_node_type(
           Types.typeIdentifier(),
-          String.t(),
+          String.t() | :anonymous,
           Types.schemaNode()
         ) :: ParserError.t()
   def unknown_node_type(identifier, name, schema_node) do
     full_identifier =
-      identifier
-      |> Util.add_fragment_child(name)
-      |> to_string()
+      if name == :anonymous do
+        identifier |> to_string()
+      else
+        identifier
+        |> Util.add_fragment_child(name)
+        |> to_string()
+      end
 
     stringified_value = sanitize_value(schema_node["type"])
 

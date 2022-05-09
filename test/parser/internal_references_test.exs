@@ -52,25 +52,25 @@ defmodule JsonSchemaTest.Parser.InternalReferences do
       name: "A",
       description: "Some string named 'foo'",
       path: URI.parse("#/definitions/A"),
-      type: "string"
+      type: :string
     }
 
     expected_type_x = %PrimitiveType{
       name: "X",
       path: URI.parse("#/definitions/B/definitions/X"),
-      type: "boolean"
+      type: :boolean
     }
 
     expected_type_y = %PrimitiveType{
       name: "Y",
       path: URI.parse("#/definitions/B/definitions/Y"),
-      type: "number"
+      type: :number
     }
 
     expected_type_c = %PrimitiveType{
       name: "C",
       path: URI.parse("#/definitions/C"),
-      type: "integer"
+      type: :integer
     }
 
     expected_schema_definition = %SchemaDefinition{

@@ -21,29 +21,30 @@ defmodule JsonSchema.Parser.ConstParser do
 
   ## Examples
 
-  iex> type?(%{})
-  false
+      iex> type?(%{})
+      false
 
-  iex> type?(%{"const" => nil})
-  true
+      iex> type?(%{"const" => nil})
+      true
 
-  iex> type?(%{"const" => false})
-  true
+      iex> type?(%{"const" => false})
+      true
 
-  iex> type?(%{"const" => "23.4"})
-  true
+      iex> type?(%{"const" => "23.4"})
+      true
 
-  iex> type?(%{"const" => "This is a constant"})
-  true
+      iex> type?(%{"const" => "This is a constant"})
+      true
 
-  iex> type?(%{"const" => %{"foo" => 42}})
-  true
+      iex> type?(%{"const" => %{"foo" => 42}})
+      true
   """
   @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
   def type?(%{"const" => const})
-      when is_nil(const) or is_boolean(const) or is_number(const) or
-             is_binary(const) or is_list(const) or is_map(const),
+      when is_nil(const) or is_boolean(const) or is_integer(const) or
+             is_number(const) or is_binary(const) or is_list(const) or
+             is_map(const),
       do: true
 
   def type?(_schema_node), do: false
@@ -67,12 +68,25 @@ defmodule JsonSchema.Parser.ConstParser do
       name: name,
       description: description,
       path: path,
-      type: type,
+      type: value_type_from_string(type),
       const: const
     }
 
     const_type
     |> Util.create_type_dict(path, id)
     |> ParserResult.new()
+  end
+
+  @spec value_type_from_string(String.t()) :: ConstType.value_type()
+  defp value_type_from_string(type) do
+    case type do
+      "null" -> :null
+      "boolean" -> :boolean
+      "integer" -> :integer
+      "number" -> :number
+      "string" -> :string
+      "object" -> :object
+      "array" -> :array
+    end
   end
 end
