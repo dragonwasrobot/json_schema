@@ -89,8 +89,7 @@ defmodule JsonSchemaTest.Parser.ObjectParser do
              "#/circle/properties/title" => expected_title_primitive_type,
              "#/circle/properties/radius" => expected_radius_primitive_type,
              "#/circle/patternProperties/f.*o" => expected_regex_primitive_type,
-             "#/circle/additionalProperties" =>
-               expected_additional_properties_type
+             "#/circle/additionalProperties" => expected_additional_properties_type
            }
   end
 

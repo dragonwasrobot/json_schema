@@ -55,7 +55,7 @@ defmodule JsonSchema.Types.ObjectType do
     field :path, URI.t(), enforce: true
     field :properties, Types.propertyDictionary(), enforce: true
     field :pattern_properties, Types.propertyDictionary(), enforce: true
-    field :additional_properties, URI.t() | nil, default: nil
+    field :additional_properties, URI.t() | boolean | nil, default: nil
     field :required, [String.t()], default: []
   end
 end

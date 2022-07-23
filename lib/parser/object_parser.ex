@@ -41,7 +41,7 @@ defmodule JsonSchema.Parser.ObjectParser do
 
   """
   @impl JsonSchema.Parser.ParserBehaviour
-  @spec type?(map) :: boolean
+  @spec type?(Types.schemaNode()) :: boolean
   def type?(schema_node) do
     properties = schema_node["properties"]
     is_map(properties)
@@ -63,15 +63,15 @@ defmodule JsonSchema.Parser.ObjectParser do
       |> Map.get("properties")
       |> parse_child_types(parent_id, properties_path)
 
-    properties_type_dict =
-      create_property_dict(properties_result.type_dict, properties_path, id)
+    properties_type_dict = create_property_dict(properties_result.type_dict, properties_path, id)
 
     pattern_properties_path = Util.add_fragment_child(path, "patternProperties")
 
+    pattern_properties = schema_node["patternProperties"]
+
     pattern_properties_result =
-      if schema_node["patternProperties"] != nil do
-        schema_node
-        |> Map.get("patternProperties")
+      if is_map(pattern_properties) do
+        pattern_properties
         |> parse_child_types(parent_id, pattern_properties_path, true)
       else
         ParserResult.new()
@@ -84,20 +84,27 @@ defmodule JsonSchema.Parser.ObjectParser do
         id
       )
 
-    {additional_properties_path, additional_properties_result} =
-      if schema_node["additionalProperties"] != nil do
-        parser_result =
-          schema_node
-          |> Map.get("additionalProperties")
-          |> Util.parse_type(parent_id, path, "additionalProperties")
+    additional_properties = schema_node["additionalProperties"]
 
-        if parser_result != nil do
-          {Util.add_fragment_child(path, "additionalProperties"), parser_result}
-        else
+    {additional_properties_value, additional_properties_result} =
+      cond do
+        is_boolean(additional_properties) ->
+          {additional_properties, ParserResult.new()}
+
+        is_map(additional_properties) ->
+          parser_result =
+            schema_node
+            |> Map.get("additionalProperties")
+            |> Util.parse_type(parent_id, path, "additionalProperties")
+
+          if parser_result != nil do
+            {Util.add_fragment_child(path, "additionalProperties"), parser_result}
+          else
+            {nil, ParserResult.new()}
+          end
+
+        true ->
           {nil, ParserResult.new()}
-        end
-      else
-        {nil, ParserResult.new()}
       end
 
     object_type = %ObjectType{
@@ -106,7 +113,7 @@ defmodule JsonSchema.Parser.ObjectParser do
       path: path,
       properties: properties_type_dict,
       pattern_properties: pattern_properties_type_dict,
-      additional_properties: additional_properties_path,
+      additional_properties: additional_properties_value,
       required: required
     }
 
