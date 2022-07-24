@@ -1,5 +1,5 @@
 defmodule JsonSchema.Types.ObjectType do
-  @moduledoc """
+  @moduledoc ~S"""
   Represents a custom `object` type definition in a JSON schema.
 
   JSON Schema:
@@ -52,6 +52,7 @@ defmodule JsonSchema.Types.ObjectType do
   typedstruct do
     field :name, String.t() | :anonymous, enforce: true
     field :description, String.t(), default: nil
+    field :default, map | nil, default: nil
     field :path, URI.t(), enforce: true
     field :properties, Types.propertyDictionary(), enforce: true
     field :pattern_properties, Types.propertyDictionary(), enforce: true

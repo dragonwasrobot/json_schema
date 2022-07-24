@@ -54,6 +54,7 @@ defmodule JsonSchema.Parser.TupleParser do
   def parse(%{"items" => items} = schema_node, parent_id, id, path, name)
       when is_list(items) do
     description = Map.get(schema_node, "description")
+    default = Map.get(schema_node, "default")
     child_path = Util.add_fragment_child(path, "items")
 
     child_types_result =
@@ -67,6 +68,7 @@ defmodule JsonSchema.Parser.TupleParser do
     tuple_type = %TupleType{
       name: name,
       description: description,
+      default: default,
       path: path,
       items: tuple_types
     }

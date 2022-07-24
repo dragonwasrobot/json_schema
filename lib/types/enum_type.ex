@@ -6,6 +6,7 @@ defmodule JsonSchema.Types.EnumType do
 
       "color": {
         "description": "A set of colors",
+        "default": "green",
         "type": "string",
         "enum": ["none", "green", "orange", "blue", "yellow", "red"]
       }
@@ -14,6 +15,7 @@ defmodule JsonSchema.Types.EnumType do
 
       %EnumType{name: "color",
                 description: "A set of colors",
+                "default": "green",
                 path: URI.parse("#/color"),
                 type: "string",
                 values: ["none", "green", "orange",
@@ -22,11 +24,13 @@ defmodule JsonSchema.Types.EnumType do
 
   use TypedStruct
 
+  @type default_value :: integer | float | binary
   @type value_type :: :integer | :number | :string
 
   typedstruct do
     field :name, String.t() | :anonymous, enforce: true
     field :description, String.t() | nil, default: nil
+    field :default, default_value | nil, default: nil
     field :path, URI.t(), enforce: true
     field :type, value_type() | nil, default: nil
     field :values, [String.t() | number | nil], enforce: true

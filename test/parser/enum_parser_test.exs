@@ -10,7 +10,8 @@ defmodule JsonSchemaTest.Parser.EnumParser do
       """
       {
         "type": "integer",
-        "enum": [1, 2, 3]
+        "enum": [1, 2, 3],
+        "default": 2
       }
       """
       |> Jason.decode!()
@@ -25,7 +26,8 @@ defmodule JsonSchemaTest.Parser.EnumParser do
       name: "favoriteNumber",
       path: URI.parse("#/favoriteNumber"),
       type: :integer,
-      values: [1, 2, 3]
+      values: [1, 2, 3],
+      default: 2
     }
 
     assert parser_result.errors == []
@@ -41,7 +43,8 @@ defmodule JsonSchemaTest.Parser.EnumParser do
       """
       {
         "type": "string",
-        "enum": ["none", "green", "orange", "blue", "yellow", "red"]
+        "enum": ["none", "green", "orange", "blue", "yellow", "red"],
+        "default": "green"
       }
       """
       |> Jason.decode!()
@@ -51,7 +54,8 @@ defmodule JsonSchemaTest.Parser.EnumParser do
       name: "color",
       path: URI.parse("#/color"),
       type: :string,
-      values: ["none", "green", "orange", "blue", "yellow", "red"]
+      values: ["none", "green", "orange", "blue", "yellow", "red"],
+      default: "green"
     }
 
     assert parser_result.errors == []

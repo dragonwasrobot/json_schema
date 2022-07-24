@@ -19,7 +19,8 @@ defmodule JsonSchema.Parser.RootParser do
     ParserResult,
     SchemaResult,
     TupleParser,
-    TypeReferenceParser
+    TypeReferenceParser,
+    Util
   }
 
   alias Types.SchemaDefinition
@@ -43,8 +44,7 @@ defmodule JsonSchema.Parser.RootParser do
 
       root_parser_result = parse_root_object(root_node_no_def, schema_id, title)
 
-      definitions_parser_result =
-        parse_definitions(root_node_only_def, schema_id)
+      definitions_parser_result = parse_definitions(root_node_only_def, schema_id)
 
       %ParserResult{type_dict: type_dict, errors: errors, warnings: warnings} =
         ParserResult.merge(root_parser_result, definitions_parser_result)
@@ -168,13 +168,12 @@ defmodule JsonSchema.Parser.RootParser do
     if schema_version in @supported_versions do
       {:ok, schema_version}
     else
-      {:error,
-       ErrorUtil.unsupported_schema_version(schema_str, @supported_versions)}
+      {:error, ErrorUtil.unsupported_schema_version(schema_str, @supported_versions)}
     end
   end
 
   def parse_schema_version(%{"$schema" => schema}) do
-    schema_type = ErrorUtil.get_type(schema)
+    schema_type = Util.get_type(schema)
     {:error, ErrorUtil.invalid_type("#", "$schema", "string", schema_type)}
   end
 

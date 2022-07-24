@@ -10,7 +10,8 @@ defmodule JsonSchemaTest.Parser.UnionParser do
     parser_result =
       """
       {
-        "type": ["number", "integer", "null"]
+        "type": ["number", "integer", "null"],
+        "default": 42
       }
       """
       |> Jason.decode!()
@@ -19,6 +20,7 @@ defmodule JsonSchemaTest.Parser.UnionParser do
     expected_union_type = %UnionType{
       name: "union",
       path: URI.parse("#/union"),
+      default: 42,
       types: [:number, :integer, :null]
     }
 

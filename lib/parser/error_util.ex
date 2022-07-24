@@ -7,34 +7,6 @@ defmodule JsonSchema.Parser.ErrorUtil do
   alias JsonSchema.{Parser, Types}
   alias Parser.{ParserError, Util}
 
-  @doc """
-  Returns the name of the type of the given value.
-
-  ## Examples
-
-      iex> get_type([1,2,3])
-      "list"
-
-      iex> get_type(%{"type" => "string"})
-      "object"
-
-      iex> get_type("name")
-      "string"
-
-      iex> get_type(42)
-      "integer"
-
-  """
-  @spec get_type(any) :: String.t()
-  def get_type(value) when is_list(value), do: "list"
-  def get_type(value) when is_map(value), do: "object"
-  def get_type(value) when is_binary(value), do: "string"
-  def get_type(value) when is_boolean(value), do: "boolean"
-  def get_type(value) when is_float(value), do: "float"
-  def get_type(value) when is_integer(value), do: "integer"
-  def get_type(value) when is_nil(value), do: "null"
-  def get_type(_value), do: "unknown"
-
   @spec could_not_read_file(Path.t()) :: ParserError.t()
   def could_not_read_file(schema_path) do
     error_msg = """
@@ -96,24 +68,45 @@ defmodule JsonSchema.Parser.ErrorUtil do
     ParserError.new(identifier, :missing_property, error_msg)
   end
 
-  @spec invalid_type(Types.typeIdentifier(), String.t(), String.t(), String.t()) ::
+  @spec invalid_enum(Types.typeIdentifier(), String.t(), [String.t()], Types.json_value()) ::
           ParserError.t()
-  def invalid_type(identifier, property, expected_type, actual_value) do
-    actual_type = get_type(actual_value)
+  def invalid_enum(identifier, property, expected_values, actual_value) do
     stringified_value = sanitize_value(actual_value)
 
     full_identifier = print_identifier(identifier)
+    padding = whitespace(property)
+
+    error_msg = """
+    Expected value of property '#{property}' at '#{full_identifier}'
+    to be in #{inspect(expected_values)} but found the value #{stringified_value}
+
+        "#{property}": #{stringified_value}
+         #{padding}   #{error_markings(stringified_value)}
+
+    """
+
+    ParserError.new(identifier, :unexpected_value, error_msg)
+  end
+
+  @spec invalid_type(Types.typeIdentifier(), String.t(), String.t(), Types.json_value()) ::
+          ParserError.t()
+  def invalid_type(identifier, property, expected_type, actual_value) do
+    actual_type = Util.get_type(actual_value)
+    stringified_value = sanitize_value(actual_value)
+
+    full_identifier = print_identifier(identifier)
+    padding = whitespace(property)
 
     error_msg = """
     Expected value of property '#{property}' at '#{full_identifier}'
     to be of type '#{expected_type}' but found a value of type '#{actual_type}'
 
         "#{property}": #{stringified_value}
-                       #{error_markings(stringified_value)}
+         #{padding}   #{error_markings(stringified_value)}
 
     """
 
-    ParserError.new(identifier, :type_mismatch, error_msg)
+    ParserError.new(identifier, :unexpected_type, error_msg)
   end
 
   @spec schema_name_collision(Types.typeIdentifier()) :: ParserError.t()
@@ -213,8 +206,8 @@ defmodule JsonSchema.Parser.ErrorUtil do
 
     Encountered unknown union type at `#{printed_path}`
 
-    "type": [#{type_name}]
-    #{error_markings(type_name)}
+        "type": [#{type_name}]
+                #{error_markings(type_name)}
 
     Hint: See the specification section 6. "Validation Keywords"
     <https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-validation-01#section-6.1.1>
@@ -276,12 +269,18 @@ defmodule JsonSchema.Parser.ErrorUtil do
 
   @spec sanitize_value(value :: any) :: String.t()
   defp sanitize_value(%URI{} = value), do: URI.to_string(value)
+  defp sanitize_value(value) when is_list(value), do: Jason.encode!(value)
   defp sanitize_value(value) when is_map(value), do: Jason.encode!(value)
   defp sanitize_value(value), do: inspect(value)
 
   @spec error_markings(String.t()) :: [String.t()]
   defp error_markings(value) do
     red(String.duplicate("^", String.length(value)))
+  end
+
+  @spec whitespace(String.t()) :: [String.t()]
+  defp whitespace(value) do
+    String.duplicate(" ", String.length(value))
   end
 
   @spec red(String.t()) :: [String.t()]

@@ -40,6 +40,7 @@ defmodule JsonSchema.Parser.UnionParser do
           ParserResult.t()
   def parse(%{"type" => types} = schema_node, _parent_id, id, path, name) do
     description = Map.get(schema_node, "description")
+    default = Map.get(schema_node, "default")
 
     unknown_type =
       types
@@ -56,15 +57,21 @@ defmodule JsonSchema.Parser.UnionParser do
       end)
 
     errors =
-      if unknown_type do
-        [ErrorUtil.unknown_union_type(path, unknown_type)]
-      else
-        []
+      cond do
+        unknown_type != nil ->
+          [ErrorUtil.unknown_union_type(path, unknown_type)]
+
+        default != nil && not default_value_has_proper_type?(default, types) ->
+          [ErrorUtil.invalid_type(path, "default", to_string(types), default)]
+
+        true ->
+          []
       end
 
     union_type = %UnionType{
       name: name,
       description: description,
+      default: default,
       path: path,
       types: types |> Enum.map(&value_type_from_string/1)
     }
@@ -83,5 +90,12 @@ defmodule JsonSchema.Parser.UnionParser do
       "number" -> :number
       "string" -> :string
     end
+  end
+
+  @spec default_value_has_proper_type?(UnionType.default_value(), [String.t()]) ::
+          boolean
+  defp default_value_has_proper_type?(default, types) do
+    default_type = Util.get_type(default)
+    Enum.member?(types, default_type)
   end
 end

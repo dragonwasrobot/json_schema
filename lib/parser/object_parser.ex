@@ -56,6 +56,7 @@ defmodule JsonSchema.Parser.ObjectParser do
   def parse(schema_node, parent_id, id, path, name) do
     required = Map.get(schema_node, "required", [])
     description = Map.get(schema_node, "description")
+    default = Map.get(schema_node, "default")
     properties_path = Util.add_fragment_child(path, "properties")
 
     properties_result =
@@ -110,6 +111,7 @@ defmodule JsonSchema.Parser.ObjectParser do
     object_type = %ObjectType{
       name: name,
       description: description,
+      default: default,
       path: path,
       properties: properties_type_dict,
       pattern_properties: pattern_properties_type_dict,
@@ -125,7 +127,7 @@ defmodule JsonSchema.Parser.ObjectParser do
     |> ParserResult.merge(additional_properties_result)
   end
 
-  @spec parse_child_types(map, URI.t(), URI.t(), boolean) :: ParserResult.t()
+  @spec parse_child_types(map, URI.t(), URI.t() | nil, boolean) :: ParserResult.t()
   defp parse_child_types(
          node_properties,
          parent_id,
