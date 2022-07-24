@@ -56,11 +56,12 @@ defmodule JsonSchema.Types.AnyOfType do
   """
 
   use TypedStruct
+  alias JsonSchema.Types
 
   typedstruct do
     field :name, String.t() | :anonymous, enforce: true
     field :description, String.t() | nil, default: nil
-    field :default, any, default: nil
+    field :default, Types.json_value(), default: nil
     field :path, URI.t(), enforce: true
     field :types, [URI.t()], enforce: true
   end

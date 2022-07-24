@@ -21,11 +21,12 @@ defmodule JsonSchema.Types.ArrayType do
   """
 
   use TypedStruct
+  alias JsonSchema.Types
 
   typedstruct do
     field :name, String.t() | :anonymous, enforce: true
     field :description, String.t() | nil, default: nil
-    field :default, [any] | nil, default: nil
+    field :default, [Types.json_value()] | nil, default: nil
     field :path, URI.t(), enforce: true
     field :items, URI.t(), enforce: true
   end

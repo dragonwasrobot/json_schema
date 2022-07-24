@@ -54,7 +54,7 @@ defmodule JsonSchema.Parser.ArrayParser do
 
     errors =
       if default != nil && not is_list(default) do
-        [ErrorUtil.invalid_type(path, "default", "list", default)]
+        [ErrorUtil.invalid_type(path, "default", "array", default)]
       else
         []
       end

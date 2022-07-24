@@ -68,7 +68,7 @@ defmodule JsonSchema.Parser.ErrorUtil do
     ParserError.new(identifier, :missing_property, error_msg)
   end
 
-  @spec invalid_enum(Types.typeIdentifier(), String.t(), [String.t()], any) ::
+  @spec invalid_enum(Types.typeIdentifier(), String.t(), [String.t()], Types.json_value()) ::
           ParserError.t()
   def invalid_enum(identifier, property, expected_values, actual_value) do
     stringified_value = sanitize_value(actual_value)
@@ -88,7 +88,7 @@ defmodule JsonSchema.Parser.ErrorUtil do
     ParserError.new(identifier, :unexpected_value, error_msg)
   end
 
-  @spec invalid_type(Types.typeIdentifier(), String.t(), String.t(), any) ::
+  @spec invalid_type(Types.typeIdentifier(), String.t(), String.t(), Types.json_value()) ::
           ParserError.t()
   def invalid_type(identifier, property, expected_type, actual_value) do
     actual_type = Util.get_type(actual_value)
@@ -280,7 +280,7 @@ defmodule JsonSchema.Parser.ErrorUtil do
 
   @spec whitespace(String.t()) :: [String.t()]
   defp whitespace(value) do
-    red(String.duplicate(" ", String.length(value)))
+    String.duplicate(" ", String.length(value))
   end
 
   @spec red(String.t()) :: [String.t()]
