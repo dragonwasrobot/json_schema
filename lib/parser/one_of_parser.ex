@@ -65,6 +65,7 @@ defmodule JsonSchema.Parser.OneOfParser do
   def parse(%{"oneOf" => one_of} = schema_node, parent_id, id, path, name)
       when is_list(one_of) do
     description = Map.get(schema_node, "description")
+    default = Map.get(schema_node, "default")
     child_path = Util.add_fragment_child(path, "oneOf")
 
     child_types_result =
@@ -78,6 +79,7 @@ defmodule JsonSchema.Parser.OneOfParser do
     one_of_type = %OneOfType{
       name: name,
       description: description,
+      default: default,
       path: path,
       types: one_of_types
     }

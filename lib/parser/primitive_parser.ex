@@ -1,9 +1,11 @@
 defmodule JsonSchema.Parser.PrimitiveParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc """
+  @moduledoc ~S"""
   Parses a JSON schema primitive type:
 
       {
+        "description": "A name",
+        "default": "Steve",
         "type": "string"
       }
 
@@ -13,10 +15,10 @@ defmodule JsonSchema.Parser.PrimitiveParser do
   require Logger
 
   alias JsonSchema.{Parser, Types}
-  alias Parser.{ParserResult, Util}
+  alias Parser.{ErrorUtil, ParserResult, Util}
   alias Types.PrimitiveType
 
-  @doc """
+  @doc ~S"""
   Returns true if the json subschema represents a primitive type.
 
   ## Examples
@@ -35,7 +37,7 @@ defmodule JsonSchema.Parser.PrimitiveParser do
 
   """
   @impl JsonSchema.Parser.ParserBehaviour
-  @spec type?(map) :: boolean
+  @spec type?(Types.schemaNode()) :: boolean
   def type?(schema_node) do
     type = schema_node["type"]
     type in ["null", "boolean", "integer", "number", "string"]
@@ -45,21 +47,31 @@ defmodule JsonSchema.Parser.PrimitiveParser do
   Parses a JSON schema primitive type into an `JsonSchema.Types.PrimitiveType`.
   """
   @impl JsonSchema.Parser.ParserBehaviour
-  @spec parse(map, URI.t(), URI.t(), URI.t(), String.t()) ::
+  @spec parse(Types.schemaNode(), URI.t(), URI.t(), URI.t(), String.t()) ::
           ParserResult.t()
   def parse(%{"type" => type} = schema_node, _parent_id, id, path, name) do
     description = Map.get(schema_node, "description")
+    default = Map.get(schema_node, "default")
+    value_type = value_type_from_string(type)
+
+    errors =
+      if default != nil && not default_value_has_proper_type?(default, value_type) do
+        [ErrorUtil.invalid_type(path, "default", to_string(value_type), default)]
+      else
+        []
+      end
 
     primitive_type = %PrimitiveType{
       name: name,
       description: description,
+      default: default,
       path: path,
-      type: value_type_from_string(type)
+      type: value_type
     }
 
     primitive_type
     |> Util.create_type_dict(path, id)
-    |> ParserResult.new()
+    |> ParserResult.new([], errors)
   end
 
   @spec value_type_from_string(String.t()) :: PrimitiveType.value_type()
@@ -70,6 +82,18 @@ defmodule JsonSchema.Parser.PrimitiveParser do
       "integer" -> :integer
       "number" -> :number
       "string" -> :string
+    end
+  end
+
+  @spec default_value_has_proper_type?(PrimitiveType.default_value(), PrimitiveType.value_type()) ::
+          boolean
+  defp default_value_has_proper_type?(default, value_type) do
+    cond do
+      value_type == :boolean and not is_boolean(default) -> false
+      value_type == :integer and not is_integer(default) -> false
+      value_type == :number and not is_number(default) -> false
+      value_type == :string and not is_binary(default) -> false
+      true -> true
     end
   end
 end

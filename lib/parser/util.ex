@@ -27,6 +27,34 @@ defmodule JsonSchema.Parser.Util do
           (Types.schemaNode(), URI.t(), URI.t(), URI.t(), String.t() ->
              ParserResult.t())
 
+  @doc ~S"""
+  Returns the name of the type of the given value.
+
+  ## Examples
+
+  iex> get_type([1,2,3])
+  "list"
+
+  iex> get_type(%{"type" => "string"})
+  "object"
+
+  iex> get_type("name")
+  "string"
+
+  iex> get_type(42)
+  "integer"
+
+  """
+  @spec get_type(any) :: String.t()
+  def get_type(value) when is_list(value), do: "list"
+  def get_type(value) when is_map(value), do: "object"
+  def get_type(value) when is_binary(value), do: "string"
+  def get_type(value) when is_boolean(value), do: "boolean"
+  def get_type(value) when is_float(value), do: "float"
+  def get_type(value) when is_integer(value), do: "integer"
+  def get_type(value) when is_nil(value), do: "null"
+  def get_type(_value), do: "unknown"
+
   @doc """
   Creates a new type dictionary based on the given type definition
   and an optional ID.
@@ -131,7 +159,7 @@ defmodule JsonSchema.Parser.Util do
   """
   @spec parse_type(
           Types.schemaNode(),
-          URI.t(),
+          URI.t() | nil,
           URI.t(),
           String.t() | :anonymous,
           boolean

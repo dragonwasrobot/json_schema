@@ -1,6 +1,6 @@
 defmodule JsonSchema.Parser.EnumParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc """
+  @moduledoc ~S"""
   Parse a JSON schema enum type:
 
       {
@@ -13,10 +13,10 @@ defmodule JsonSchema.Parser.EnumParser do
 
   require Logger
   alias JsonSchema.{Parser, Types}
-  alias Parser.{ParserResult, Util}
+  alias Parser.{ErrorUtil, ParserResult, Util}
   alias Types.EnumType
 
-  @doc """
+  @doc ~S"""
   Returns true if the json subschema represents an enum type.
 
   ## Examples
@@ -49,11 +49,20 @@ defmodule JsonSchema.Parser.EnumParser do
         ) :: ParserResult.t()
   def parse(%{"enum" => values} = schema_node, _parent_id, id, path, name) do
     description = Map.get(schema_node, "description")
+    default = Map.get(schema_node, "default")
     type = schema_node |> Map.get("type") |> parse_enum_type()
+
+    errors =
+      if default != nil && not Enum.member?(values, default) do
+        [ErrorUtil.invalid_enum(path, "default", values, default)]
+      else
+        []
+      end
 
     enum_type = %EnumType{
       name: name,
       description: description,
+      default: default,
       path: path,
       type: type,
       values: values
@@ -61,7 +70,7 @@ defmodule JsonSchema.Parser.EnumParser do
 
     enum_type
     |> Util.create_type_dict(path, id)
-    |> ParserResult.new()
+    |> ParserResult.new([], errors)
   end
 
   @spec parse_enum_type(String.t()) :: EnumType.value_type()

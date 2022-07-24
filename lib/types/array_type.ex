@@ -25,6 +25,7 @@ defmodule JsonSchema.Types.ArrayType do
   typedstruct do
     field :name, String.t() | :anonymous, enforce: true
     field :description, String.t() | nil, default: nil
+    field :default, [any] | nil, default: nil
     field :path, URI.t(), enforce: true
     field :items, URI.t(), enforce: true
   end

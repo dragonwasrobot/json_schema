@@ -45,12 +45,12 @@ defmodule JsonSchema.Types do
   @type typeIdentifier :: URI.t() | String.t()
 
   @type json_value :: nil | boolean | map | list | integer | number | String.t()
-  @type schemaNode :: %{required(String.t()) => json_value}
-  @type propertyDictionary :: %{required(String.t()) => typeIdentifier}
+  @type schemaNode :: %{optional(String.t()) => json_value}
+  @type propertyDictionary :: %{optional(String.t()) => typeIdentifier}
 
   # Keys should be URI in these below
-  @type typeDictionary :: %{required(String.t()) => typeDefinition}
-  @type schemaDictionary :: %{required(String.t()) => SchemaDefinition.t()}
+  @type typeDictionary :: %{optional(String.t()) => typeDefinition}
+  @type schemaDictionary :: %{optional(String.t()) => SchemaDefinition.t()}
 
   defmodule SchemaDefinition do
     @moduledoc """

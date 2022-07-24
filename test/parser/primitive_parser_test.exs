@@ -10,6 +10,8 @@ defmodule JsonSchemaTest.Parser.PrimitiveParser do
     parser_result =
       """
       {
+        "description": "A name",
+        "default": "Steve",
         "type": "string"
       }
       """
@@ -18,6 +20,8 @@ defmodule JsonSchemaTest.Parser.PrimitiveParser do
 
     expected_primitive_type = %PrimitiveType{
       name: "primitive",
+      description: "A name",
+      default: "Steve",
       path: URI.parse("#/primitive"),
       type: :string
     }

@@ -19,11 +19,13 @@ defmodule JsonSchema.Types.UnionType do
 
   use TypedStruct
 
+  @type default_value :: nil | boolean | integer | float | binary
   @type value_type :: :null | :boolean | :integer | :number | :string
 
   typedstruct do
     field :name, String.t() | :anonymous, enforce: true
     field :description, String.t() | nil, default: nil
+    field :default, default_value, default: nil
     field :path, URI.t(), enforce: true
     field :types, [value_type()], enforce: true
   end

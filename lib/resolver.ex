@@ -117,7 +117,7 @@ defmodule JsonSchema.Resolver do
 
   @spec resolve_fully_qualified_uri_identifier(
           URI.t(),
-          Types.typeIdentifier(),
+          URI.t(),
           Types.schemaDictionary()
         ) ::
           {:ok, {Types.typeDefinition(), SchemaDefinition.t()}}
