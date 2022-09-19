@@ -37,7 +37,7 @@ defmodule JsonSchema.MixProject do
       {:ex_doc, "~> 0.28.3", only: :dev, runtime: false},
       {:excoveralls, "~> 0.14.4", only: :test},
       {:gradient, github: "esl/gradient", only: [:dev], runtime: false},
-      {:jason, "~> 1.3.0"},
+      {:jason, "~> 1.4.0"},
       {:typed_struct, "~> 0.3.0"}
     ]
   end
