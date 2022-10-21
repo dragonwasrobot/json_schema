@@ -24,16 +24,13 @@ defmodule JsonSchema.Parser.EnumParser do
   iex> type?(%{})
   false
 
-  iex> type?(%{"enum" => ["red", "yellow", "green"], "type" => "string"})
+  iex> type?(%{"enum" => ["red", "yellow", "green"]})
   true
 
   """
   @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
-  def type?(%{"enum" => enum, "type" => type})
-      when is_list(enum) and is_binary(type),
-      do: true
-
+  def type?(%{"enum" => enum}) when is_list(enum), do: true
   def type?(_schema_node), do: false
 
   @doc """
@@ -50,7 +47,7 @@ defmodule JsonSchema.Parser.EnumParser do
   def parse(%{"enum" => values} = schema_node, _parent_id, id, path, name) do
     description = Map.get(schema_node, "description")
     default = Map.get(schema_node, "default")
-    type = schema_node |> Map.get("type") |> parse_enum_type()
+    type = parse_enum_type(values)
 
     errors =
       if default != nil && not Enum.member?(values, default) do
@@ -73,12 +70,14 @@ defmodule JsonSchema.Parser.EnumParser do
     |> ParserResult.new([], errors)
   end
 
-  @spec parse_enum_type(String.t()) :: EnumType.value_type()
-  defp parse_enum_type(raw_type) do
-    case raw_type do
-      "string" -> :string
-      "integer" -> :integer
-      "number" -> :number
+  @spec parse_enum_type([term]) :: EnumType.value_type()
+  defp parse_enum_type(values) do
+    first_value = hd(values)
+
+    cond do
+      is_binary(first_value) -> :string
+      is_integer(first_value) -> :integer
+      is_number(first_value) -> :number
     end
   end
 end

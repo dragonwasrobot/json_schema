@@ -35,10 +35,8 @@ defmodule JsonSchema.Parser.TupleParser do
   """
   @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
-  def type?(schema_node) do
-    items = schema_node["items"]
-    is_list(items)
-  end
+  def type?(%{"items" => items}) when is_list(items), do: true
+  def type?(_schema_node), do: false
 
   @doc """
   Parses a JSON schema array type into an `JsonSchema.Types.TupleType`.

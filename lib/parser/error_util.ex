@@ -243,7 +243,7 @@ defmodule JsonSchema.Parser.ErrorUtil do
         |> to_string()
       end
 
-    stringified_value = sanitize_value(schema_node["type"])
+    stringified_value = sanitize_value(schema_node)
 
     error_msg = """
     The value of "type" at '#{full_identifier}' did not match a known node type
@@ -278,7 +278,7 @@ defmodule JsonSchema.Parser.ErrorUtil do
     red(String.duplicate("^", String.length(value)))
   end
 
-  @spec whitespace(String.t()) :: [String.t()]
+  @spec whitespace(String.t()) :: String.t()
   defp whitespace(value) do
     String.duplicate(" ", String.length(value))
   end

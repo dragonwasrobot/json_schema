@@ -18,6 +18,8 @@ defmodule JsonSchema.Parser.PrimitiveParser do
   alias Parser.{ErrorUtil, ParserResult, Util}
   alias Types.PrimitiveType
 
+  @primitive_types ["null", "boolean", "integer", "number", "string"]
+
   @doc ~S"""
   Returns true if the json subschema represents a primitive type.
 
@@ -38,10 +40,8 @@ defmodule JsonSchema.Parser.PrimitiveParser do
   """
   @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
-  def type?(schema_node) do
-    type = schema_node["type"]
-    type in ["null", "boolean", "integer", "number", "string"]
-  end
+  def type?(%{"type" => type}) when type in @primitive_types, do: true
+  def type?(_schema_node), do: false
 
   @doc """
   Parses a JSON schema primitive type into an `JsonSchema.Types.PrimitiveType`.

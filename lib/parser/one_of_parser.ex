@@ -51,10 +51,8 @@ defmodule JsonSchema.Parser.OneOfParser do
   """
   @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
-  def type?(schema_node) do
-    one_of = schema_node["oneOf"]
-    is_list(one_of) && length(one_of) > 0
-  end
+  def type?(%{"oneOf" => one_of}) when is_list(one_of) and length(one_of) > 0, do: true
+  def type?(_schema_node), do: false
 
   @doc """
   Parses a JSON schema oneOf type into an `JsonSchema.Types.OneOfType`.

@@ -51,10 +51,8 @@ defmodule JsonSchema.Parser.AnyOfParser do
   """
   @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
-  def type?(schema_node) do
-    any_of = schema_node["anyOf"]
-    is_list(any_of) && length(any_of) > 0
-  end
+  def type?(%{"anyOf" => any_of}) when is_list(any_of) and length(any_of) > 0, do: true
+  def type?(_schema_node), do: false
 
   @doc """
   Parses a JSON schema anyOf type into an `JsonSchema.Types.AnyOfType`.

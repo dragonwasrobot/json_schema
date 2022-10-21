@@ -42,10 +42,8 @@ defmodule JsonSchema.Parser.ObjectParser do
   """
   @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
-  def type?(schema_node) do
-    properties = schema_node["properties"]
-    is_map(properties)
-  end
+  def type?(%{"properties" => properties}) when is_map(properties), do: true
+  def type?(_schema_node), do: false
 
   @doc """
   Parses a JSON schema object type into an `JsonSchema.Types.ObjectType`.

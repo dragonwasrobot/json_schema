@@ -60,8 +60,7 @@ defmodule JsonSchema.Parser do
         RootParser.parse_schema(json, schema_path)
 
       {:error, error} ->
-        decode_error =
-          {schema_path, [ErrorUtil.invalid_json(schema_path, error)]}
+        decode_error = {schema_path, [ErrorUtil.invalid_json(schema_path, error)]}
 
         SchemaResult.new(%{}, [], [decode_error])
     end

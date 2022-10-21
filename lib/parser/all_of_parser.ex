@@ -51,10 +51,7 @@ defmodule JsonSchema.Parser.AllOfParser do
   """
   @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
-  def type?(%{"allOf" => all_of})
-      when is_list(all_of) and length(all_of) > 0,
-      do: true
-
+  def type?(%{"allOf" => all_of}) when is_list(all_of) and length(all_of) > 0, do: true
   def type?(_schema_node), do: false
 
   @doc """

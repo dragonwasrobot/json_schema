@@ -124,7 +124,9 @@ defmodule JsonSchema.Parser.ParserResult do
     collisions =
       keys1
       |> MapSet.intersection(keys2)
-      |> Enum.map(&ErrorUtil.name_collision/1)
+      |> Enum.map(fn schema_path ->
+        {schema_path, [ErrorUtil.name_collision(schema_path)]}
+      end)
 
     merged_type_dict = type_dict1 |> Map.merge(type_dict2)
     merged_warnings = warnings1 |> Enum.concat(warnings2)
@@ -197,7 +199,9 @@ defmodule JsonSchema.Parser.SchemaResult do
     collisions =
       keys1
       |> MapSet.intersection(keys2)
-      |> Enum.map(&ErrorUtil.name_collision/1)
+      |> Enum.map(fn schema_path ->
+        {schema_path, [ErrorUtil.name_collision(schema_path)]}
+      end)
 
     merged_schema_dict = Map.merge(schema_dict1, schema_dict2)
     merged_warnings = Enum.uniq(warnings1 ++ warnings2)

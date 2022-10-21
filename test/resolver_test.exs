@@ -48,8 +48,9 @@ defmodule JsonSchemaTest.Resolver do
   end
 
   test "can resolve type with fully qualified URI identifier" do
-    id = URI.parse("http://example.com/test.json#/properties/color")
     parent_id = URI.parse("http://example.com/test.json#/properties")
+    enum_id = URI.parse("http://example.com/test.json#/properties/color")
+    primitive_id = URI.parse("http://example.com/test.json#/properties/title")
 
     enum_type = %EnumType{
       name: "color",
@@ -85,6 +86,9 @@ defmodule JsonSchemaTest.Resolver do
     schema_dict = %{"http://example.com/test.json" => schema_def}
 
     {:ok, {^enum_type, ^schema_def}} =
-      Resolver.resolve_type(id, parent_id, schema_def, schema_dict)
+      Resolver.resolve_type(enum_id, parent_id, schema_def, schema_dict)
+
+    {:ok, {^primitive_type1, ^schema_def}} =
+      Resolver.resolve_type(primitive_id, parent_id, schema_def, schema_dict)
   end
 end
