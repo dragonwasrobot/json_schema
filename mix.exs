@@ -35,7 +35,7 @@ defmodule JsonSchema.MixProject do
       {:credo, "~> 1.6.1", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.2.0", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.29.0", only: :dev, runtime: false},
-      {:excoveralls, "~> 0.15.2", only: :test},
+      {:excoveralls, "~> 0.16.0", only: :test},
       {:gradient, github: "esl/gradient", only: [:dev], runtime: false},
       {:jason, "~> 1.4.0"},
       {:typed_struct, "~> 0.3.0"}
