@@ -125,7 +125,7 @@ defmodule JsonSchema.Parser.ObjectParser do
     |> ParserResult.merge(additional_properties_result)
   end
 
-  @spec parse_child_types(map, URI.t(), URI.t() | nil, boolean) :: ParserResult.t()
+  @spec parse_child_types(map, URI.t() | nil, URI.t(), boolean) :: ParserResult.t()
   defp parse_child_types(
          node_properties,
          parent_id,

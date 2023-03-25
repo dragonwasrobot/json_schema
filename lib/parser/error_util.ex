@@ -11,24 +11,24 @@ defmodule JsonSchema.Parser.ErrorUtil do
   def could_not_read_file(schema_path) do
     error_msg = """
 
-    Failed to read file at #{schema_path}. Are you sure the file path is correct?
+    Failed to read file at #{to_string(schema_path)}. Are you sure the file path is correct?
 
     """
 
-    ParserError.new(schema_path, :could_not_read_file, error_msg)
+    ParserError.new(to_string(schema_path), :could_not_read_file, error_msg)
   end
 
   @spec invalid_json(Path.t(), DecodeError.t()) :: ParserError.t()
   def invalid_json(schema_path, decode_error) do
     error_msg = """
 
-    Failed to parse file at #{schema_path} as JSON.
+    Failed to parse file at #{to_string(schema_path)} as JSON.
 
         #{DecodeError.message(decode_error)}
 
     """
 
-    ParserError.new(schema_path, :invalid_json, error_msg)
+    ParserError.new(to_string(schema_path), :invalid_json, error_msg)
   end
 
   @spec unsupported_schema_version(String.t(), [String.t()]) :: ParserError.t()
@@ -229,7 +229,7 @@ defmodule JsonSchema.Parser.ErrorUtil do
   end
 
   @spec unknown_node_type(
-          Types.typeIdentifier(),
+          URI.t(),
           String.t() | :anonymous,
           Types.schemaNode()
         ) :: ParserError.t()

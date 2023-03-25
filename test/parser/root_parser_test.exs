@@ -104,78 +104,15 @@ defmodule JsonSchemaTest.Parser.RootParser do
       additional_properties: nil,
       description: "An explanation about the purpose of this instance.",
       name: "The Root Schema",
-      path: %URI{
-        authority: nil,
-        fragment: "",
-        host: nil,
-        path: nil,
-        port: nil,
-        query: nil,
-        scheme: nil,
-        userinfo: nil
-      },
+      path: URI.parse("#"),
       pattern_properties: %{},
       properties: %{
-        "checked" => %URI{
-          authority: nil,
-          fragment: "/properties/checked",
-          host: nil,
-          path: nil,
-          port: nil,
-          query: nil,
-          scheme: nil,
-          userinfo: nil
-        },
-        "dimensions" => %URI{
-          authority: nil,
-          fragment: "/properties/dimensions",
-          host: nil,
-          path: nil,
-          port: nil,
-          query: nil,
-          scheme: nil,
-          userinfo: nil
-        },
-        "id" => %URI{
-          authority: nil,
-          fragment: "/properties/id",
-          host: nil,
-          path: nil,
-          port: nil,
-          query: nil,
-          scheme: nil,
-          userinfo: nil
-        },
-        "name" => %URI{
-          authority: nil,
-          fragment: "/properties/name",
-          host: nil,
-          path: nil,
-          port: nil,
-          query: nil,
-          scheme: nil,
-          userinfo: nil
-        },
-        "price" => %URI{
-          authority: nil,
-          fragment: "/properties/price",
-          host: nil,
-          path: nil,
-          port: nil,
-          query: nil,
-          scheme: nil,
-          userinfo: nil
-        },
-        "tags" => %URI{
-          authority: nil,
-          fragment: "/properties/tags",
-          host: nil,
-          path: nil,
-          port: nil,
-          query: nil,
-          scheme: nil,
-          userinfo: nil
-        }
+        "checked" => URI.parse("#/properties/checked"),
+        "dimensions" => URI.parse("#/properties/dimensions"),
+        "id" => URI.parse("#/properties/id"),
+        "name" => URI.parse("#/properties/name"),
+        "price" => URI.parse("#/properties/price"),
+        "tags" => URI.parse("#/properties/tags")
       },
       required: ["checked", "dimensions", "id", "name", "price", "tags"]
     }
@@ -183,16 +120,7 @@ defmodule JsonSchemaTest.Parser.RootParser do
     expected_checked_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
       name: "checked",
-      path: %URI{
-        authority: nil,
-        fragment: "/properties/checked",
-        host: nil,
-        path: nil,
-        port: nil,
-        query: nil,
-        scheme: nil,
-        userinfo: nil
-      },
+      path: URI.parse("#/properties/checked"),
       type: :boolean
     }
 
@@ -200,38 +128,11 @@ defmodule JsonSchemaTest.Parser.RootParser do
       additional_properties: nil,
       description: "An explanation about the purpose of this instance.",
       name: "dimensions",
-      path: %URI{
-        authority: nil,
-        fragment: "/properties/dimensions",
-        host: nil,
-        path: nil,
-        port: nil,
-        query: nil,
-        scheme: nil,
-        userinfo: nil
-      },
+      path: URI.parse("#/properties/dimensions"),
       pattern_properties: %{},
       properties: %{
-        "height" => %URI{
-          authority: nil,
-          fragment: "/properties/dimensions/properties/height",
-          host: nil,
-          path: nil,
-          port: nil,
-          query: nil,
-          scheme: nil,
-          userinfo: nil
-        },
-        "width" => %URI{
-          authority: nil,
-          fragment: "/properties/dimensions/properties/width",
-          host: nil,
-          path: nil,
-          port: nil,
-          query: nil,
-          scheme: nil,
-          userinfo: nil
-        }
+        "height" => URI.parse("#/properties/dimensions/properties/height"),
+        "width" => URI.parse("#/properties/dimensions/properties/width")
       },
       required: ["width", "height"]
     }
@@ -239,121 +140,49 @@ defmodule JsonSchemaTest.Parser.RootParser do
     expected_height_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
       name: "height",
-      path: %URI{
-        authority: nil,
-        fragment: "/properties/dimensions/properties/height",
-        host: nil,
-        path: nil,
-        port: nil,
-        query: nil,
-        scheme: nil,
-        userinfo: nil
-      },
+      path: URI.parse("#/properties/dimensions/properties/height"),
       type: :integer
     }
 
     expected_width_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
       name: "width",
-      path: %URI{
-        authority: nil,
-        fragment: "/properties/dimensions/properties/width",
-        host: nil,
-        path: nil,
-        port: nil,
-        query: nil,
-        scheme: nil,
-        userinfo: nil
-      },
+      path: URI.parse("#/properties/dimensions/properties/width"),
       type: :integer
     }
 
     expected_id_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
       name: "id",
-      path: %URI{
-        authority: nil,
-        fragment: "/properties/id",
-        host: nil,
-        path: nil,
-        port: nil,
-        query: nil,
-        scheme: nil,
-        userinfo: nil
-      },
+      path: URI.parse("#/properties/id"),
       type: :integer
     }
 
     expected_name_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
       name: "name",
-      path: %URI{
-        authority: nil,
-        fragment: "/properties/name",
-        host: nil,
-        path: nil,
-        port: nil,
-        query: nil,
-        scheme: nil,
-        userinfo: nil
-      },
+      path: URI.parse("#/properties/name"),
       type: :string
     }
 
     expected_price_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
       name: "price",
-      path: %URI{
-        authority: nil,
-        fragment: "/properties/price",
-        host: nil,
-        path: nil,
-        port: nil,
-        query: nil,
-        scheme: nil,
-        userinfo: nil
-      },
+      path: URI.parse("#/properties/price"),
       type: :number
     }
 
     expected_tags_type = %ArrayType{
       description: "An explanation about the purpose of this instance.",
-      items: %URI{
-        authority: nil,
-        fragment: "/properties/tags/items",
-        host: nil,
-        path: nil,
-        port: nil,
-        query: nil,
-        scheme: nil,
-        userinfo: nil
-      },
+      items: URI.parse("#/properties/tags/items"),
       name: "tags",
-      path: %URI{
-        authority: nil,
-        fragment: "/properties/tags",
-        host: nil,
-        path: nil,
-        port: nil,
-        query: nil,
-        scheme: nil,
-        userinfo: nil
-      }
+      path: URI.parse("#/properties/tags")
     }
 
     expected_items_type = %PrimitiveType{
       description: "An explanation about the purpose of this instance.",
-      name: "items",
-      path: %URI{
-        authority: nil,
-        fragment: "/properties/tags/items",
-        host: nil,
-        path: nil,
-        port: nil,
-        query: nil,
-        scheme: nil,
-        userinfo: nil
-      },
+      name: :anonymous,
+      path: URI.parse("#/properties/tags/items"),
       type: :string
     }
 
@@ -363,16 +192,7 @@ defmodule JsonSchemaTest.Parser.RootParser do
         "http://example.com/root.json" => %SchemaDefinition{
           description: "An explanation about the purpose of this instance.",
           file_path: "example.json",
-          id: %URI{
-            authority: "example.com",
-            fragment: nil,
-            host: "example.com",
-            path: "/root.json",
-            port: 80,
-            query: nil,
-            scheme: "http",
-            userinfo: nil
-          },
+          id: URI.parse("http://example.com/root.json"),
           title: "The Root Schema",
           types: %{
             "#" => expected_root_type,
@@ -386,23 +206,17 @@ defmodule JsonSchemaTest.Parser.RootParser do
             "#/properties/tags" => expected_tags_type,
             "#/properties/tags/items" => expected_items_type,
             "http://example.com/root.json#" => expected_root_type,
-            "http://example.com/root.json#/properties/checked" =>
-              expected_checked_type,
-            "http://example.com/root.json#/properties/dimensions" =>
-              expected_dimensions_type,
+            "http://example.com/root.json#/properties/checked" => expected_checked_type,
+            "http://example.com/root.json#/properties/dimensions" => expected_dimensions_type,
             "http://example.com/root.json#/properties/dimensions/properties/height" =>
               expected_height_type,
             "http://example.com/root.json#/properties/dimensions/properties/width" =>
               expected_width_type,
             "http://example.com/root.json#/properties/id" => expected_id_type,
-            "http://example.com/root.json#/properties/name" =>
-              expected_name_type,
-            "http://example.com/root.json#/properties/price" =>
-              expected_price_type,
-            "http://example.com/root.json#/properties/tags" =>
-              expected_tags_type,
-            "http://example.com/root.json#/properties/tags/items" =>
-              expected_items_type
+            "http://example.com/root.json#/properties/name" => expected_name_type,
+            "http://example.com/root.json#/properties/price" => expected_price_type,
+            "http://example.com/root.json#/properties/tags" => expected_tags_type,
+            "http://example.com/root.json#/properties/tags/items" => expected_items_type
           }
         }
       },

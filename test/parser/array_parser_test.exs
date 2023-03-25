@@ -27,7 +27,7 @@ defmodule JsonSchemaTest.Parser.ArrayParser do
     }
 
     expected_primitive_type = %PrimitiveType{
-      name: "items",
+      name: :anonymous,
       description: nil,
       default: nil,
       path: URI.parse("#/notes/items"),
@@ -64,7 +64,7 @@ defmodule JsonSchemaTest.Parser.ArrayParser do
     }
 
     expected_type_reference = %TypeReference{
-      name: "items",
+      name: :anonymous,
       path: URI.parse("#/definitions/rectangle")
     }
 

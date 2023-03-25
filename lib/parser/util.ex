@@ -246,7 +246,7 @@ defmodule JsonSchema.Parser.Util do
     node_parser
   end
 
-  @spec determine_id(map, URI.t()) :: URI.t() | nil
+  @spec determine_id(map, URI.t() | nil) :: URI.t() | nil
   defp determine_id(%{"$id" => id}, parent_id) when is_binary(id) do
     do_determine_id(id, parent_id)
   end
@@ -278,26 +278,8 @@ defmodule JsonSchema.Parser.Util do
 
   ## Examples
 
-      iex> add_fragment_child(%URI{
-      ...> authority: nil,
-      ...> fragment: "/definitions/foo",
-      ...> host: nil,
-      ...> path: nil,
-      ...> port: nil,
-      ...> query: nil,
-      ...> scheme: nil,
-      ...> userinfo: nil
-      ...> }, "bar")
-      %URI{
-        authority: nil,
-        fragment: "/definitions/foo/bar",
-        host: nil,
-        path: nil,
-        port: nil,
-        query: nil,
-        scheme: nil,
-        userinfo: nil
-      }
+      iex> add_fragment_child(URI.parse("#/definitions/foo"), "bar")
+      URI.parse("#/definitions/foo/bar")
 
   """
   @spec add_fragment_child(URI.t(), String.t() | :anonymous) :: URI.t()

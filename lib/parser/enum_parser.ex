@@ -30,7 +30,7 @@ defmodule JsonSchema.Parser.EnumParser do
   """
   @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
-  def type?(%{"enum" => enum}) when is_list(enum), do: true
+  def type?(%{"enum" => values}) when is_list(values) and length(values) > 0, do: true
   def type?(_schema_node), do: false
 
   @doc """
@@ -70,7 +70,7 @@ defmodule JsonSchema.Parser.EnumParser do
     |> ParserResult.new([], errors)
   end
 
-  @spec parse_enum_type([term]) :: EnumType.value_type()
+  @spec parse_enum_type(nonempty_list(term)) :: EnumType.value_type_name()
   defp parse_enum_type(values) do
     first_value = hd(values)
 

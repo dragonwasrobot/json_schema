@@ -9,14 +9,18 @@ defmodule JsonSchema.Parser.ParserError do
   @type error_type ::
           :could_not_read_file
           | :invalid_json
-          | :unresolved_reference
-          | :unknown_type
+          | :invalid_uri
+          | :missing_property
+          | :name_collision
+          | :name_not_a_regex
           | :unexpected_type
           | :unexpected_value
           | :unknown_enum_type
-          | :unknown_union_type
-          | :unknown_primitive_type
           | :unknown_node_type
+          | :unknown_primitive_type
+          | :unknown_type
+          | :unknown_union_type
+          | :unresolved_reference
 
   typedstruct do
     field :identifier, Types.typeIdentifier(), enforce: true
@@ -27,7 +31,7 @@ defmodule JsonSchema.Parser.ParserError do
   @doc """
   Constructs a `ParserError`.
   """
-  @spec new(Types.typeIdentifier(), atom, String.t()) :: t
+  @spec new(Types.typeIdentifier(), error_type, String.t()) :: t
   def new(identifier, error_type, message) do
     %__MODULE__{
       identifier: identifier,

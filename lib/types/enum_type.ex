@@ -24,15 +24,15 @@ defmodule JsonSchema.Types.EnumType do
 
   use TypedStruct
 
-  @type default_value :: integer | float | binary
-  @type value_type :: :integer | :number | :string
+  @type value_type :: String.t() | number() | integer()
+  @type value_type_name :: :integer | :number | :string
 
   typedstruct do
     field :name, String.t() | :anonymous, enforce: true
     field :description, String.t() | nil, default: nil
-    field :default, default_value | nil, default: nil
+    field :default, value_type() | nil, default: nil
     field :path, URI.t(), enforce: true
-    field :type, value_type() | nil, default: nil
-    field :values, [String.t() | number | nil], enforce: true
+    field :type, value_type_name() | nil, default: nil
+    field :values, [value_type()], enforce: true
   end
 end

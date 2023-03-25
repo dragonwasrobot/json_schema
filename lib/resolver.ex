@@ -45,24 +45,31 @@ defmodule JsonSchema.Resolver do
     resolved_result =
       cond do
         identifier in ["string", "number", "integer", "boolean"] ->
-          resolve_primitive_identifier(identifier, schema_def)
+          primitive_type = %PrimitiveType{
+            name: identifier,
+            path: identifier,
+            type: identifier
+          }
+
+          {:ok, {primitive_type, schema_def}}
 
         URI.parse(identifier).scheme == nil ->
           resolve_uri_fragment_identifier(
             URI.parse(identifier),
-            parent,
+            URI.parse(parent),
             schema_def
           )
 
         URI.parse(identifier).scheme != nil ->
           resolve_fully_qualified_uri_identifier(
             URI.parse(identifier),
-            parent,
+            URI.parse(parent),
             schema_dict
           )
 
         true ->
-          {:error, ErrorUtil.unresolved_reference(identifier, parent)}
+          error = ErrorUtil.unresolved_reference(URI.parse(identifier), URI.parse(parent))
+          {:error, error}
       end
 
     case resolved_result do
@@ -83,18 +90,6 @@ defmodule JsonSchema.Resolver do
       {:error, error} ->
         {:error, error}
     end
-  end
-
-  @spec resolve_primitive_identifier(String.t(), SchemaDefinition.t()) ::
-          {:ok, {Types.typeDefinition(), SchemaDefinition.t()}}
-  defp resolve_primitive_identifier(identifier, schema_def) do
-    primitive_type = %PrimitiveType{
-      name: identifier,
-      path: identifier,
-      type: identifier
-    }
-
-    {:ok, {primitive_type, schema_def}}
   end
 
   @spec resolve_uri_fragment_identifier(

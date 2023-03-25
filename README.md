@@ -1,6 +1,5 @@
 # JSON Schema
 
-[![Build Status](https://travis-ci.org/dragonwasrobot/json_schema.svg?branch=master)](https://travis-ci.org/dragonwasrobot/json_schema)
 [![Module Version](https://img.shields.io/hexpm/v/json_schema.svg)](https://hex.pm/packages/json_schema)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/json_schema/)
 [![License](https://img.shields.io/hexpm/l/json_schema.svg)](https://github.com/dragonwasrobot/json_schema/blob/master/LICENSE)

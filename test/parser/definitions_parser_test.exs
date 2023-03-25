@@ -33,7 +33,7 @@ defmodule JsonSchemaTest.Parser.DefinitionsParser do
     }
 
     expected_type_reference = %TypeReference{
-      name: "items",
+      name: :anonymous,
       path: URI.parse("#/definitions/positiveInteger")
     }
 

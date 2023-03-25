@@ -49,7 +49,7 @@ defmodule JsonSchema.Parser.PrimitiveParser do
   @impl JsonSchema.Parser.ParserBehaviour
   @spec parse(Types.schemaNode(), URI.t(), URI.t(), URI.t(), String.t()) ::
           ParserResult.t()
-  def parse(%{"type" => type} = schema_node, _parent_id, id, path, name) do
+  def parse(%{"type" => type} = schema_node, _parent_id, id, path, name) when is_binary(type) do
     description = Map.get(schema_node, "description")
     default = Map.get(schema_node, "default")
     value_type = value_type_from_string(type)

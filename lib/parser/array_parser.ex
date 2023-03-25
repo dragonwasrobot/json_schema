@@ -63,7 +63,7 @@ defmodule JsonSchema.Parser.ArrayParser do
 
     items_result =
       items
-      |> Util.parse_type(parent_id, path, "items")
+      |> Util.parse_type(parent_id, items_abs_path, :anonymous)
 
     array_type = %ArrayType{
       name: name,

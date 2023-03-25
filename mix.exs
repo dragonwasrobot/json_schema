@@ -1,7 +1,7 @@
 defmodule JsonSchema.MixProject do
   use Mix.Project
 
-  @version "0.4.0"
+  @version "0.4.1"
   @elixir_version "1.14.3"
 
   def project do
@@ -32,13 +32,13 @@ defmodule JsonSchema.MixProject do
 
   defp deps do
     [
-      {:credo, "~> 1.6.1", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.2.0", only: [:dev], runtime: false},
-      {:ex_doc, "~> 0.29.0", only: :dev, runtime: false},
-      {:excoveralls, "~> 0.16.0", only: :test},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.2", only: [:dev], runtime: false},
+      {:ex_doc, "~> 0.29", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.16", only: :test},
       {:gradient, github: "esl/gradient", only: [:dev], runtime: false},
-      {:jason, "~> 1.4.0"},
-      {:typed_struct, "~> 0.3.0"}
+      {:jason, "~> 1.4"},
+      {:typed_struct, "~> 0.3"}
     ]
   end
 
