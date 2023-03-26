@@ -20,7 +20,7 @@ Add `:json_schema` as a dependency in `mix.exs`:
 ```elixir
 defp deps do
   [
-    {:json_schema, "~> 0.4"}
+    {:json_schema, "~> 0.5"}
   ]
 end
 ```

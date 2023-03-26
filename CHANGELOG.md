@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.5.0 [2023-03-26]
+
+### Added
+
+- Now supports the `default` keyword for each schema node type.
+- Now supports boolean values for the `additionalProperties` keyword.
+
+### Changed
+
+- When defining an anonymous type using the `items` keyword, it is now named
+  `:anonymous` rather than `items` in the parsed document.
+
+### Fixed
+
+- Fixed a bug where the parser would throw an unexpected error if the `items`
+  property contained a primitive type.
+
 ## v0.4.0 [2022-05-09]
 
 ### Changed
