@@ -136,6 +136,7 @@ defmodule JsonSchema.Parser.RootParser do
   end
 
   @supported_versions [
+    "http://json-schema.org/draft-04/schema#",
     "http://json-schema.org/draft-07/schema#"
   ]
 
