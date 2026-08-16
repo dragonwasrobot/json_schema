@@ -1,6 +1,6 @@
 defmodule JsonSchema.Parser.ObjectParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc """
+  @moduledoc ~S"""
   Parses a JSON schema object type:
 
       {
@@ -22,7 +22,6 @@ defmodule JsonSchema.Parser.ObjectParser do
   Into an `JsonSchema.Types.ObjectType`
   """
 
-  require Logger
   alias JsonSchema.{Parser, Types}
   alias Parser.{ParserResult, Util}
   alias Types.ObjectType
@@ -92,15 +91,10 @@ defmodule JsonSchema.Parser.ObjectParser do
 
         is_map(additional_properties) ->
           parser_result =
-            schema_node
-            |> Map.get("additionalProperties")
+            additional_properties
             |> Util.parse_type(parent_id, path, "additionalProperties")
 
-          if parser_result != nil do
-            {Util.add_fragment_child(path, "additionalProperties"), parser_result}
-          else
-            {nil, ParserResult.new()}
-          end
+          {Util.add_fragment_child(path, "additionalProperties"), parser_result}
 
         true ->
           {nil, ParserResult.new()}
@@ -166,7 +160,7 @@ defmodule JsonSchema.Parser.ObjectParser do
   def create_property_dict(type_dict, path, id) do
     type_dict
     |> Enum.reduce(%{}, fn {child_path, child_type}, acc_property_dict ->
-      if is_immediate_child(child_path, child_type.name, path, id) do
+      if immediate_child?(child_path, child_type.name, path, id) do
         child_type_path = Util.add_fragment_child(path, child_type.name)
         child_property_dict = %{child_type.name => child_type_path}
         Map.merge(acc_property_dict, child_property_dict)
@@ -176,9 +170,9 @@ defmodule JsonSchema.Parser.ObjectParser do
     end)
   end
 
-  @spec is_immediate_child(URI.t(), String.t(), URI.t(), URI.t() | nil) ::
+  @spec immediate_child?(URI.t(), String.t(), URI.t(), URI.t() | nil) ::
           boolean
-  defp is_immediate_child(child_path, child_name, properties_path, id) do
+  defp immediate_child?(child_path, child_name, properties_path, id) do
     child_path_alt = Util.add_fragment_child(properties_path, child_name)
 
     if id == nil do

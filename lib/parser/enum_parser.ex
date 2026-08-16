@@ -11,7 +11,6 @@ defmodule JsonSchema.Parser.EnumParser do
   Into an `JsonSchema.Types.EnumType`.
   """
 
-  require Logger
   alias JsonSchema.{Parser, Types}
   alias Parser.{ErrorUtil, ParserResult, Util}
   alias Types.EnumType
@@ -30,7 +29,7 @@ defmodule JsonSchema.Parser.EnumParser do
   """
   @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
-  def type?(%{"enum" => values}) when is_list(values) and length(values) > 0, do: true
+  def type?(%{"enum" => values}) when is_list(values) and values != [], do: true
   def type?(_schema_node), do: false
 
   @doc """

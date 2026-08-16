@@ -77,7 +77,6 @@ defmodule JsonSchema.Parser.ParserResult do
   """
 
   use TypedStruct
-  require Logger
   alias JsonSchema.{Parser, Types}
   alias Parser.{ErrorUtil, ParserError, ParserWarning}
 
@@ -152,7 +151,6 @@ defmodule JsonSchema.Parser.SchemaResult do
   """
 
   use TypedStruct
-  require Logger
   alias JsonSchema.Parser.{ErrorUtil, ParserError, ParserWarning}
   alias JsonSchema.Types
 

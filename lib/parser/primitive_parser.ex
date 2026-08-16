@@ -12,8 +12,6 @@ defmodule JsonSchema.Parser.PrimitiveParser do
   Into an `JsonSchema.Types.PrimitiveType`.
   """
 
-  require Logger
-
   alias JsonSchema.{Parser, Types}
   alias Parser.{ErrorUtil, ParserResult, Util}
   alias Types.PrimitiveType
@@ -39,7 +37,7 @@ defmodule JsonSchema.Parser.PrimitiveParser do
 
   """
   @impl JsonSchema.Parser.ParserBehaviour
-  @spec type?(Types.schemaNode()) :: boolean
+  @spec type?(Types.schemaNode()) :: boolean()
   def type?(%{"type" => type}) when type in @primitive_types, do: true
   def type?(_schema_node), do: false
 
@@ -85,15 +83,14 @@ defmodule JsonSchema.Parser.PrimitiveParser do
     end
   end
 
-  @spec default_value_has_proper_type?(PrimitiveType.default_value(), PrimitiveType.value_type()) ::
-          boolean
-  defp default_value_has_proper_type?(default, value_type) do
-    cond do
-      value_type == :boolean and not is_boolean(default) -> false
-      value_type == :integer and not is_integer(default) -> false
-      value_type == :number and not is_number(default) -> false
-      value_type == :string and not is_binary(default) -> false
-      true -> true
-    end
-  end
+  @spec default_value_has_proper_type?(
+          PrimitiveType.default_value(),
+          PrimitiveType.value_type()
+        ) :: boolean()
+  defp default_value_has_proper_type?(default, value_type)
+  defp default_value_has_proper_type?(default, :boolean) when is_boolean(default), do: true
+  defp default_value_has_proper_type?(default, :integer) when is_integer(default), do: true
+  defp default_value_has_proper_type?(default, :number) when is_number(default), do: true
+  defp default_value_has_proper_type?(default, :string) when is_binary(default), do: true
+  defp default_value_has_proper_type?(_default, _value_type), do: false
 end

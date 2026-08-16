@@ -2,7 +2,6 @@ defmodule JsonSchemaTest.Parser.AllOfParser do
   use ExUnit.Case
   doctest JsonSchema.Parser.AllOfParser, import: true
 
-  require Logger
   alias JsonSchema.{Parser, Types}
   alias Parser.AllOfParser
   alias Types.{AllOfType, ObjectType, PrimitiveType, TypeReference}
@@ -57,8 +56,7 @@ defmodule JsonSchemaTest.Parser.AllOfParser do
       required: ["color"],
       properties: %{
         "color" => URI.parse(Path.join(path(), "allOf/0/properties/color")),
-        "description" =>
-          URI.parse(Path.join(path(), "allOf/0/properties/description"))
+        "description" => URI.parse(Path.join(path(), "allOf/0/properties/description"))
       },
       pattern_properties: %{},
       additional_properties: nil
@@ -86,8 +84,7 @@ defmodule JsonSchemaTest.Parser.AllOfParser do
     assert parser_result.type_dict == %{
              "#/definitions/fancyCircle" => expected_all_of_type,
              "#/definitions/fancyCircle/allOf/0" => expected_object_type,
-             "#/definitions/fancyCircle/allOf/0/properties/color" =>
-               expected_color_type,
+             "#/definitions/fancyCircle/allOf/0/properties/color" => expected_color_type,
              "#/definitions/fancyCircle/allOf/0/properties/description" =>
                expected_description_type,
              "#/definitions/fancyCircle/allOf/1" => expected_circle_type

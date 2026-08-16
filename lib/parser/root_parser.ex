@@ -3,8 +3,6 @@ defmodule JsonSchema.Parser.RootParser do
   Contains logic for verifying the schema version of a JSON schema file.
   """
 
-  require Logger
-
   alias JsonSchema.{Parser, Types}
 
   alias Parser.{
@@ -60,14 +58,14 @@ defmodule JsonSchema.Parser.RootParser do
       }
 
       schema_errors =
-        if length(errors) > 0 do
+        if errors != [] do
           [{schema_file_path, errors}]
         else
           []
         end
 
       schema_warnings =
-        if length(warnings) > 0 do
+        if warnings != [] do
           [{schema_file_path, warnings}]
         else
           []

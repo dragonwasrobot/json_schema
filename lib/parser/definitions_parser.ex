@@ -15,8 +15,6 @@ defmodule JsonSchema.Parser.DefinitionsParser do
   Into a type dictionary.
   """
 
-  require Logger
-
   alias JsonSchema.Parser
   alias Parser.{ParserResult, Util}
 

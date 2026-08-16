@@ -2,7 +2,6 @@ defmodule JsonSchemaTest.Resolver do
   use ExUnit.Case
   doctest JsonSchema.Resolver, import: true
 
-  require Logger
   alias JsonSchema.{Resolver, Types}
   alias Types.{EnumType, PrimitiveType, SchemaDefinition}
 
