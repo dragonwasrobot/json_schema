@@ -11,7 +11,6 @@ defmodule JsonSchema.Parser.ConstParser do
   Into an `JsonSchema.Types.ConstType`.
   """
 
-  require Logger
   alias JsonSchema.{Parser, Types}
   alias Parser.{ParserResult, Util}
   alias Types.ConstType

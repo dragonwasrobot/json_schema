@@ -1,6 +1,6 @@
 defmodule JsonSchema.Parser.TypeReferenceParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc """
+  @moduledoc ~S"""
   Parses a JSON schema type reference:
 
       {
@@ -10,7 +10,6 @@ defmodule JsonSchema.Parser.TypeReferenceParser do
   Into an `JsonSchema.Types.TypeReference`.
   """
 
-  require Logger
   alias JsonSchema.{Parser, Types}
   alias Parser.{ParserResult, Util}
   alias Types.TypeReference

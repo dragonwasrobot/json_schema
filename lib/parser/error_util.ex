@@ -36,10 +36,6 @@ defmodule JsonSchema.Parser.ErrorUtil do
     root_path = URI.parse("#")
     stringified_value = sanitize_value(supplied_value)
 
-    # TODO: Add a config/option argument for `json_schema` that can be used to
-    # determine whether to return a human readable error description or a
-    # machine readable error.
-
     error_msg = """
     Unsupported JSON schema version found at '#'.
 

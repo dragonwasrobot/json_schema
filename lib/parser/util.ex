@@ -3,8 +3,6 @@ defmodule JsonSchema.Parser.Util do
   A module containing utility functions for JSON schema parsers.
   """
 
-  require Logger
-
   alias JsonSchema.{Parser, Types}
 
   alias Parser.{
@@ -95,40 +93,57 @@ defmodule JsonSchema.Parser.Util do
     |> Enum.reduce(MapSet.new(), fn {child_abs_path, child_type}, acc_set ->
       normalized_child_name = child_type.name
 
-      if normalized_child_name == :anonymous do
-        child_abs_path_parts =
-          child_abs_path
-          |> String.split("/")
-
-        child_prefix_path =
-          child_abs_path_parts
-          |> Enum.drop(-1)
-          |> Enum.join("/")
-          |> URI.parse()
-
-        shares_prefix = child_prefix_path == path
-
-        last_path_part_is_number =
-          child_abs_path_parts
-          |> List.last()
-          |> Integer.parse() != :error
-
-        if shares_prefix and last_path_part_is_number do
-          MapSet.put(acc_set, URI.parse(child_abs_path))
+      new_child_path =
+        if normalized_child_name == :anonymous do
+          handle_anonymous_child(child_abs_path, path)
         else
-          acc_set
+          handle_named_child(normalized_child_name, child_abs_path, path)
         end
+
+      if new_child_path != nil do
+        MapSet.put(acc_set, new_child_path)
       else
-        child_type_path = add_fragment_child(path, normalized_child_name)
-
-        if child_type_path == URI.parse(child_abs_path) do
-          MapSet.put(acc_set, child_type_path)
-        else
-          acc_set
-        end
+        acc_set
       end
     end)
     |> MapSet.to_list()
+  end
+
+  @spec handle_anonymous_child(String.t(), URI.t()) :: URI.t() | nil
+  defp handle_anonymous_child(child_abs_path, path) do
+    child_abs_path_parts =
+      child_abs_path
+      |> String.split("/")
+
+    child_prefix_path =
+      child_abs_path_parts
+      |> Enum.drop(-1)
+      |> Enum.join("/")
+      |> URI.parse()
+
+    shares_prefix = child_prefix_path == path
+
+    last_path_part_is_number =
+      child_abs_path_parts
+      |> List.last()
+      |> Integer.parse() != :error
+
+    if shares_prefix and last_path_part_is_number do
+      URI.parse(child_abs_path)
+    else
+      nil
+    end
+  end
+
+  @spec handle_named_child(String.t(), String.t(), URI.t()) :: URI.t() | nil
+  defp handle_named_child(normalized_child_name, child_abs_path, path) do
+    child_type_path = add_fragment_child(path, normalized_child_name)
+
+    if child_type_path == URI.parse(child_abs_path) do
+      child_type_path
+    else
+      nil
+    end
   end
 
   @doc """

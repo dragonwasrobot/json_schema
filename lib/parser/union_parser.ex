@@ -1,6 +1,6 @@
 defmodule JsonSchema.Parser.UnionParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc """
+  @moduledoc ~S"""
   Parses a JSON schema union type:
 
       {
@@ -10,7 +10,6 @@ defmodule JsonSchema.Parser.UnionParser do
   Into an `JsonSchema.Types.UnionType`.
   """
 
-  require Logger
   alias JsonSchema.{Parser, Types}
   alias Parser.{ErrorUtil, ParserResult, Util}
   alias Types.UnionType

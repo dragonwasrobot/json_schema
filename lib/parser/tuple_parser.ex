@@ -1,6 +1,6 @@
 defmodule JsonSchema.Parser.TupleParser do
   @behaviour JsonSchema.Parser.ParserBehaviour
-  @moduledoc """
+  @moduledoc ~S"""
   Parses a JSON schema array type:
 
       {
@@ -13,8 +13,6 @@ defmodule JsonSchema.Parser.TupleParser do
 
   Into a `JsonSchema.Types.TupleType`.
   """
-
-  require Logger
 
   alias JsonSchema.{Parser, Types}
   alias Parser.{ParserResult, Util}

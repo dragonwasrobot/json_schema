@@ -4,7 +4,6 @@ defmodule JsonSchema.Parser do
   e.g. printing elm decoders.
   """
 
-  require Logger
   alias JsonSchema.Parser.{ErrorUtil, RootParser, SchemaResult}
 
   @doc """

@@ -13,8 +13,6 @@ defmodule JsonSchema.Parser.ArrayParser do
   Into an `JsonSchema.Types.ArrayType`.
   """
 
-  require Logger
-
   alias JsonSchema.{Parser, Types}
   alias Parser.{ErrorUtil, ParserResult, Util}
   alias Types.ArrayType

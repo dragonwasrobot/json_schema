@@ -4,7 +4,7 @@ defmodule JsonSchemaTest.Parser.ArrayParser do
 
   alias JsonSchema.{Parser, Types}
   alias Parser.ArrayParser
-  alias Types.{ArrayType, TypeReference, PrimitiveType}
+  alias Types.{ArrayType, PrimitiveType, TypeReference}
 
   test "parse array with primitive type" do
     parser_result =

@@ -29,7 +29,6 @@ defmodule JsonSchema.Parser.AnyOfParser do
   Into an `JsonSchema.Types.AnyOfType`.
   """
 
-  require Logger
   alias JsonSchema.{Parser, Types}
   alias Parser.{ParserResult, Util}
   alias Types.AnyOfType
@@ -51,7 +50,7 @@ defmodule JsonSchema.Parser.AnyOfParser do
   """
   @impl JsonSchema.Parser.ParserBehaviour
   @spec type?(Types.schemaNode()) :: boolean
-  def type?(%{"anyOf" => any_of}) when is_list(any_of) and length(any_of) > 0, do: true
+  def type?(%{"anyOf" => any_of}) when is_list(any_of) and any_of != [], do: true
   def type?(_schema_node), do: false
 
   @doc """
