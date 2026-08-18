@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.6.0 [2026-08-17]
+
+### Changed
+
+- Bumped the elixir version from 1.14 to 1.20 and.
+
+### Fixed
+
+- Fixed all compiler, credo and dialyzer warnings.
+
 ## v0.5.0 [2023-03-26]
 
 ### Added

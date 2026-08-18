@@ -77,7 +77,6 @@ defmodule JsonSchema.MixProject do
 
   defp package do
     [
-      maintainers: ["Peter Urbak"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/dragonwasrobot/json_schema"}
     ]
